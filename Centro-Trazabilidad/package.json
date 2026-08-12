@@ -1,0 +1,21 @@
+{
+  "name": "orquestia-centro-trazabilidad",
+  "version": "1.0.0",
+  "description": "Centro de trazabilidad y visualizador en tiempo real de agentes OrquestIA-MX",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "inicio": "node servidor/index.js",
+    "demo": "node herramientas/sembrar-demo.js && node servidor/index.js",
+    "sembrar": "node herramientas/sembrar-demo.js",
+    "registrar": "node herramientas/registrar-evento.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}

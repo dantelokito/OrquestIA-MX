@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "orquestia://esquema/evento-traza",
+  "title": "Evento de traza OrquestIA",
+  "description": "Formato único para registrar qué hace cada agente, de quién recibe trabajo y a quién se lo entrega.",
+  "type": "object",
+  "required": [
+    "id",
+    "marca_tiempo",
+    "proyecto",
+    "agente_id",
+    "tipo",
+    "titulo",
+    "mensaje"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Identificador único del evento (ej. EVT-20260812-001)."
+    },
+    "marca_tiempo": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fecha y hora ISO-8601 en UTC."
+    },
+    "proyecto": {
+      "type": "string",
+      "description": "Nombre del proyecto en kebab-case (ej. laborregamarket)."
+    },
+    "agente_id": {
+      "type": "string",
+      "description": "Clave del agente según catalogo-agentes.json."
+    },
+    "tipo": {
+      "type": "string",
+      "enum": [
+        "inicio_sesion",
+        "descubrimiento",
+        "artefacto_creado",
+        "handoff_enviado",
+        "handoff_recibido",
+        "calidad_evaluada",
+        "bloqueo",
+        "desbloqueo",
+        "completado",
+        "nota"
+      ],
+      "description": "Clase del evento para filtrar y colorear en el visualizador."
+    },
+    "titulo": {
+      "type": "string",
+      "description": "Resumen corto en español (máx. ~80 caracteres)."
+    },
+    "mensaje": {
+      "type": "string",
+      "description": "Explicación clara de lo ocurrido, en español latino."
+    },
+    "fase": {
+      "type": "string",
+      "description": "Fase del trabajo (ej. fase-1, fase-2, mvp)."
+    },
+    "modulo": {
+      "type": "string",
+      "description": "Código de módulo (AUTH, NOTIFY, MEDIA, etc.)."
+    },
+    "origen_agente_id": {
+      "type": ["string", "null"],
+      "description": "Agente del que se recibió el trabajo (si aplica)."
+    },
+    "destino_agente_id": {
+      "type": ["string", "null"],
+      "description": "Agente al que se entrega el trabajo (si aplica)."
+    },
+    "ruta_artefacto": {
+      "type": ["string", "null"],
+      "description": "Ruta relativa al artefacto tocado dentro del monorepo."
+    },
+    "estado": {
+      "type": "string",
+      "enum": ["en_curso", "listo", "bloqueado", "rechazado", "info"],
+      "description": "Estado resultante después del evento."
+    },
+    "etiquetas": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Etiquetas libres para búsqueda (ej. quality-gate, sprint-0)."
+    }
+  },
+  "additionalProperties": false
+}
