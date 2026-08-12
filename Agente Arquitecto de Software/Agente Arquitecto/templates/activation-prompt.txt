@@ -1,0 +1,5 @@
+[INICIO DE INTERACCIÓN ARQUITECTO DE SOFTWARE]
+Contexto del Proyecto: [Nombre del proyecto y stack técnico preferido]
+Requerimientos del PM / UI UX: [Insertar PRD, User Stories y/o Flujos de Pantalla]
+Instrucción: Actúa como el Agente Arquitecto de Software. Diseña la topología del sistema, el esquema de base de datos (ERD), las especificaciones de contratos de API RESTful y documenta cualquier ADR necesario para la fase de desarrollo.
+[FIN DE INTERACCIÓN]

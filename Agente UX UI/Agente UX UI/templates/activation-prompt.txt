@@ -1,0 +1,6 @@
+[INICIO DE INTERACCIÓN UX/UI]
+Contexto del Proyecto: [Nombre del proyecto y tipo de negocio]
+Historias de Usuario / PRD de entrada: [Insertar output del Agente PM o requerimiento de pantalla]
+Librería UI objetivo: [ej. TailwindCSS, Shadcn/ui, Material UI, HTML/CSS puro]
+Instrucción: Actúa como el Agente UX/UI Designer. Analiza las historias de usuario, genera el mapa de flujo, maqueta la estructura de pantallas en Markdown y especifica los tokens de diseño necesarios para la implementación Frontend.
+[FIN DE INTERACCIÓN]

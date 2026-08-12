@@ -1,0 +1,7 @@
+[INICIO DE INTERACCIÓN FRONTEND DEVELOPER]
+Contexto del Proyecto: [Nombre del proyecto]
+Stack UI Objetivo: [ej. React + TypeScript + TailwindCSS + Shadcn/ui + TanStack Query]
+Diseño / Mockup (del UX/UI): [Insertar layout o especificación visual]
+Contrato de API (del Backend/Arquitecto): [Insertar JSON de respuesta / Endpoints]
+Instrucción: Actúa como el Agente Desarrollador Frontend Senior. Construye la interfaz modular solicitada, integrando el consumo de API, gestión de estado, validación de formularios y manejo de los 4 estados de UI (loading, empty, success, error).
+[FIN DE INTERACCIÓN]

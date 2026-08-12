@@ -1,0 +1,164 @@
+[HANDOFF FRONTEND → UX/UI — Quality Gate Fase 2]
+
+@UX_UI_Designer Hola Diseñador UX/UI.
+
+He finalizado el desarrollo e implementación de la interfaz de usuario correspondiente a la Fase 2 — Transacciones de LaBorregaMarket (v0.2.0). Te hago entrega formal de la estafeta para ejecutar la revisión de calidad visual y experiencia de usuario (Quality Gate).
+
+═══════════════════════════════════════════════════════════════
+OBJETIVO
+═══════════════════════════════════════════════════════════════
+
+Validar que la implementación Frontend de Fase 2 respete fielmente los diseños, flujos de usuario, guía de estilos y estados de interfaz definidos en las etapas previas — incluyendo el cierre de observaciones P0/P1 de Fase 1 (Sprint 0) y los módulos NOTIFY, MEDIA y EXPLORE.
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL ENTREGABLE
+═══════════════════════════════════════════════════════════════
+
+Producto:     LaBorregaMarket
+Versión:      0.2.0
+Código:       C:\Users\PC GAMER\LaBorregaMarket
+Comando:      npm run dev (reiniciar si cambió next.config.ts)
+
+Handoff UX origen (tu entrega v0.2.0):
+  Agente UX UI\Agente UX UI\outputs\laborregamarket\handoff-frontend.md
+
+Handoffs Frontend (evidencia de implementación):
+  Agente frontend\Agente Frontend\outputs\laborregamarket\feature-handoffs\
+    FEAT-SPRINT0-handoff.md
+    FEAT-NOTIFY-handoff.md
+    FEAT-MEDIA-handoff.md
+    FEAT-EXPLORE-handoff.md
+
+Bitácora Frontend:
+  Agente frontend\Agente Frontend\outputs\laborregamarket\OBSERVABILITY.md
+
+Fuera de alcance (no auditar como defecto):
+  checkout, carrito, POST /api/orders, WhatsApp Business API, push/SMS,
+  galerías múltiples, pedidos en /cuenta (placeholder Fase 3).
+
+═══════════════════════════════════════════════════════════════
+TUS TAREAS DE AUDITORÍA
+═══════════════════════════════════════════════════════════════
+
+1. FIDELIDAD VISUAL Y DE INTERFAZ
+─────────────────────────────────
+Comparar implementación vs wireframes y design-tokens.md v0.2.0:
+
+  Módulo     | Rutas                          | Wireframe / Flow              | Componentes clave
+  -----------|--------------------------------|-------------------------------|------------------------------------------
+  Sprint 0   | /explorar, /proveedor, /login  | WF-explorar, WF-proveedor-panel, WF-login | mapa móvil ~300px, PriceInput, hint password, demo gate
+  NOTIFY     | /fruteria/[id], /explorar, /admin | WF-contacto-cta, UF-NOTIFY-01 | ContactCTA, Toast, WhatsApp wa.me, badge email admin
+  MEDIA      | /proveedor, /admin, explorar + detalle | WF-proveedor-media, WF-admin-panel, UF-MEDIA-01 | MediaUpload, ImagePlaceholder, hero cover/logo, thumbs producto
+  EXPLORE    | /explorar + Header búsqueda    | WF-explorar, UF-EXPLORE-02    | chips categoría/verificado, URL sync, empty filtrado
+
+Verificar: tipografía Inter, --brand / --brand-dark, espaciados, rounded-lg,
+chips activos (border-[var(--brand)] bg-[var(--brand)]/10), responsividad móvil/desktop.
+
+2. MANEJO DE ESTADOS DE UI
+──────────────────────────
+Matriz del handoff UX (sección "Estados obligatorios Fase 2"):
+
+  Superficie           | Loading        | Empty                    | Success                        | Error
+  ---------------------|----------------|--------------------------|--------------------------------|----------------------------------
+  ContactCTA / Toast   | —              | —                        | "La frutería fue notificada"   | soft "No pudimos notificar…"; 429 silencioso
+  Media proveedor      | overlay upload | placeholder + Subir      | preview post-upload            | inline formato/tamaño
+  Admin producto img   | overlay        | placeholder              | thumb actualizado              | inline
+  Explorar filtros     | SkeletonCard   | "No encontramos…" + Limpiar | grid + mapa                 | ErrorBanner (solo red)
+
+Reglas críticas:
+  - Empty filtrado ≠ ErrorBanner
+  - tel: nunca bloqueado por rate limit ni fallo de notify
+
+3. USABILIDAD Y ACCESIBILIDAD
+─────────────────────────────
+Checklist DoD UX Fase 2 (handoff-frontend.md):
+
+  [ ] Toast aria-live="polite" / role="status"
+  [ ] Chips aria-pressed; touch targets ≥44px
+  [ ] Labels en file inputs (MediaUpload)
+  [ ] CTA dominante Llamar en detalle; WhatsApp secundario
+  [ ] Mapa móvil visible + lista como alternativa
+  [ ] Placeholders con dims fijas (sin CLS)
+  [ ] Lazy load imágenes en cards
+  [ ] Sin UI de checkout
+
+4. FLUJOS MANUALES OBLIGATORIOS
+───────────────────────────────
+Cuentas demo (password: Demo1234!):
+
+  1. CLIENT cliente@demo.mx
+     → /explorar → chip Frutas → búsqueda "mango" (≥2 chars)
+     → URL compartible → Limpiar filtros
+
+  2. CLIENT → /fruteria/[id]
+     → Llamar (abre tel:) → toast éxito
+     → repetir hasta 429 y confirmar que la llamada sigue funcionando
+
+  3. PROVIDER frutas@elparaiso.mx
+     → /proveedor → subir logo y portada
+     → preview inmediato + persistencia al recargar → "Ver mi negocio"
+
+  4. ADMIN admin@laborregamarket.mx
+     → catálogo Productos → upload imagen
+     → proveedores con badge "Sin email válido"
+     → bitácora filtro CONTACT
+
+5. RE-AUDITORÍA FASE 1 (SPRINT 0)
+─────────────────────────────────
+Confirmar cierre de OBS-01 a OBS-06 (auditoría 08/08/2026). Si persisten, documentar como regresión.
+
+  OBS-01 | Mapa ~300px debajo de lista en móvil /explorar
+  OBS-02 | Chips categoría conectados a API (no solo client-side)
+  OBS-03 | Hint password en login
+  OBS-04 | PriceInput editable en /proveedor
+  OBS-05 | Demo gate solo en dev
+  OBS-06 | CLIENT post-login → /
+
+6. REGISTRO EN OBSERVABILIDAD
+─────────────────────────────
+Actualizar la sección "Auditoría de Diseño y UX (Frontend)" en:
+
+  Agente UX UI\Agente UX UI\outputs\laborregamarket\OBSERVABILITY.md
+
+Incluir obligatoriamente:
+
+  1. Veredicto: APROBADO / APROBADO CON OBSERVACIONES / RECHAZADO + % fidelidad
+  2. Tabla por pantalla (ruta, wireframe, % cumplimiento, notas)
+  3. Matriz de estados UI (Loading / Empty / Success / Error por superficie F2)
+  4. Tabla de observaciones OBS-F2-XX (P0/P1/P2), pantalla, descripción, acción, referencia WF/UF/US
+  5. Elementos aprobados (lista explícita)
+  6. Criterio de re-aprobación (checkboxes concretos)
+  7. Entrada en Log de actividad UX con fecha 12/08/2026
+
+Numeración: OBS-F2-01… para hallazgos nuevos Fase 2; OBS-01…06 solo si son regresiones Sprint 0.
+
+7. REFERENCIAS A LEER ANTES DE AUDITAR
+──────────────────────────────────────
+  - outputs/laborregamarket/handoff-frontend.md
+  - outputs/laborregamarket/design-tokens.md
+  - user-flows/UF-NOTIFY-01, UF-MEDIA-01, UF-EXPLORE-02
+  - wireframes/WF-contacto-cta, WF-proveedor-media, WF-explorar,
+    WF-fruteria-detalle, WF-proveedor-panel, WF-admin-panel
+  - Product Manager/outputs/laborregamarket/user-stories/US-NOTIFY-*, US-MEDIA-*, US-EXPLORE-*
+  - Agente Frontend/outputs/laborregamarket/feature-handoffs/
+
+═══════════════════════════════════════════════════════════════
+NOTA PARA EL AUDITOR
+═══════════════════════════════════════════════════════════════
+
+El Frontend reporta fix reciente en carga/actualización de logo y portada
+(MediaUpload: preview blob, cache-bust, re-fetch /api/provider/me).
+
+Validar específicamente:
+  subir → preview inmediato → persistencia tras reload
+  → visualización en /fruteria/[id] y cards de /explorar
+
+Dependencias de entorno para prueba completa MEDIA/NOTIFY:
+  CLOUDINARY_* y RESEND_API_KEY en .env
+Sin ellas, documentar si el error UI es aceptable o requiere mensaje más claro.
+
+═══════════════════════════════════════════════════════════════
+
+Gracias. Quedo atento a tu dictamen en OBSERVABILITY.md para cerrar el Quality Gate de Fase 2 o atender observaciones.
+
+@Frontend_Developer

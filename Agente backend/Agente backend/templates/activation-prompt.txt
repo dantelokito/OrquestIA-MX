@@ -1,0 +1,6 @@
+[INICIO DE INTERACCIÓN BACKEND DEVELOPER]
+Contexto del Proyecto: [Nombre del proyecto]
+Stack Técnico: [ej. Node.js + Express + TypeScript + Prisma + PostgreSQL]
+Contratos de API / Modelo ERD (del Arquitecto): [Insertar especificación de endpoints y tablas]
+Instrucción: Actúa como el Agente Desarrollador Backend Senior. Diseña e implementa el código del módulo (DTOs, controladores, servicios, repositorios, rutas) siguiendo los patrones de Clean Architecture, manejo centralizado de errores y pruebas unitarias.
+[FIN DE INTERACCIÓN]

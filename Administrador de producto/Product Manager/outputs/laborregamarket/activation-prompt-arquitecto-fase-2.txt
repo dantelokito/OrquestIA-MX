@@ -1,0 +1,130 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 2]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local para fruterías y verdulerías en Monterrey, México.
+
+Stack técnico actual:
+  - Monolito modular Next.js 15 + API Routes
+  - PostgreSQL 15+ con Prisma 6
+  - JWT httpOnly + bcrypt, RBAC en DB y route handlers
+  - Envelope API ADR-003: { data, meta } / { error, details }
+
+Código: C:\Users\PC GAMER\LaBorregaMarket\
+Arquitectura Fase 1: C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Agentes de desarrollo test\Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\
+  (sad.md, api/API-*.md, adrs/, data-model/, OBSERVABILITY.md con auditoría Backend 08/08/2026)
+
+Visión producto: C:\Users\PC GAMER\LaBorregaMarket\PRODUCT.md
+
+Fase actual: Fase 2 — Transacciones (v0.2.0). Discovery PM completado 09/08/2026.
+
+Decisión cerrada: contacto directo tel/WhatsApp — NO implementar POST /api/orders ni checkout en Fase 2. Modelo Order en schema queda para Fase 3.
+
+═══════════════════════════════════════════════════════════════
+ESTADO FASE 1 (contexto previo)
+═══════════════════════════════════════════════════════════════
+
+Sprint 1 Backend implementó: onboarding Provider, paginación providers, detalle frutería, users/me, guards RBAC, password min 8, índices búsqueda.
+
+Quality Gate Backend (08/08/2026): Rechazado con observaciones. Sprint 0 obligatorio antes de build Fase 2:
+  - OBS-001: /api/catalogs sin envelope ADR-003
+  - OBS-002: nombres catálogos divergentes de API-ADMIN-01
+  - OBS-003: lógica provider/products en route handler, no en servicio
+
+Tu arquitectura Fase 2 debe asumir Sprint 0 cerrado o documentar dependencia explícita.
+
+═══════════════════════════════════════════════════════════════
+OBJETIVO FASE 2 ARQUITECTO (esta sesión)
+═══════════════════════════════════════════════════════════════
+
+Definir arquitectura, ADRs y contratos API para:
+
+1. NOTIFY — POST contacto, email async al proveedor, rate limit, AUDIT
+2. MEDIA — Upload logo/portada (Provider), imagen producto (Admin); Cloudinary o S3
+3. EXPLORE — Extender GET /api/providers: category, q/producto, verified (alinear con UI)
+
+NO diseñar: módulo ORDERS, pagos, WhatsApp Business API (solo wa.me link en Frontend).
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS A LEER (orden sugerido)
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM Fase 2 (punto de entrada):
+   C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\handoff-arquitecto-fase-2.md
+
+2. PRD Fase 2:
+   ...\Administrador de producto\Product Manager\outputs\laborregamarket\prd-fase-2.md
+
+3. User stories Fase 2:
+   ...\Administrador de producto\Product Manager\outputs\laborregamarket\user-stories\
+   (US-NOTIFY-*, US-MEDIA-*, US-EXPLORE-*)
+
+4. Arquitectura existente (NO duplicar; extender):
+   ...\Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\sad.md
+   ...\Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\api\API-PROVIDERS-01.md
+   ...\Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\adrs\ADR-003-error-envelope.md
+   ...\Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\OBSERVABILITY.md
+
+5. Esquema dominio:
+   C:\Users\PC GAMER\LaBorregaMarket\prisma\schema.prisma
+   (Provider.logoUrl, coverUrl; Product.imageUrl ya existen)
+
+6. Backlog priorizado:
+   ...\Administrador de producto\Product Manager\outputs\laborregamarket\backlog.md
+   (Sprint 0 BL-S0-*; Fase 2 BL-021 a BL-036)
+
+Skill del agente: Activa @software-architect y lee
+  Agente Arquitecto de Software\Agente Arquitecto\.cursor\skills\software-architect\SKILL.md
+
+═══════════════════════════════════════════════════════════════
+DECISIONES PM PARA ADR (recomendación; confirmar o documentar alternativa)
+═══════════════════════════════════════════════════════════════
+
+  D-F2-1 Email: Resend o SendGrid (no SMTP propio en MVP)
+  D-F2-2 Storage: Cloudinary (menor esfuerzo MVP)
+  D-F2-3 WhatsApp: wa.me en Frontend only — sin API Backend Fase 2
+  D-F2-4 Notificación: incluir productos vistos en detalle, sin PII del cliente
+  D-F2-5 Notificación async: in-process MVP; cola/worker Fase 3
+
+═══════════════════════════════════════════════════════════════
+ENTREGABLES ESPERADOS (convención salida)
+═══════════════════════════════════════════════════════════════
+
+Guardar en: Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\
+
+ADRs nuevos:
+  - adrs/ADR-005-email-provider.md
+  - adrs/ADR-006-image-storage.md
+  - adrs/ADR-007-contact-audit-action.md (si aplica)
+  - adrs/ADR-008-notification-async.md (si aplica)
+
+Contratos API:
+  - api/API-NOTIFY-01.md
+  - api/API-MEDIA-01.md
+  - Actualizar api/API-PROVIDERS-01.md (category, q)
+
+Handoff Backend:
+  - handoff-backend-fase-2.md
+
+Actualizar OBSERVABILITY.md del Arquitecto con Fase 2.
+
+NFR clave: respuesta contacto <200ms (email background); upload max 5MB JPEG/PNG/WebP; filtros explorar <2s; envelope ADR-003 en todos los endpoints nuevos.
+
+═══════════════════════════════════════════════════════════════
+RESTRICCIONES
+═══════════════════════════════════════════════════════════════
+
+- NO diseñar POST /api/orders, pasarela de pagos ni cambios al modelo Order.
+- NO invocar DevOps deploy ni QA en esta fase documental.
+- Mantener compatibilidad con guards requireRole existentes y lib/api/response.ts.
+- Coordinar con handoff-ux-ui-fase-2.md (contratos deben soportar flujos UX).
+
+═══════════════════════════════════════════════════════════════
+INSTRUCCIÓN
+═══════════════════════════════════════════════════════════════
+
+Actúa como el Agente Arquitecto de Software. Lee los documentos listados, produce ADRs y contratos API de Fase 2 según handoff-arquitecto-fase-2.md, genera handoff-backend-fase-2.md, actualiza OBSERVABILITY.md, y confirma listo para Backend Developer.
+
+[FIN DE INTERACCIÓN ARQUITECTO]

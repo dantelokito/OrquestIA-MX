@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Playwright / test artifacts
+playwright-report/
+test-results/
+
+# Secrets and local env (keep *.example)
+.env
+.env.test
+.env.local
+.env.*.local
+
+# OS junk
+.DS_Store
+Thumbs.db

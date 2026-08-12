@@ -1,0 +1,6 @@
+[INICIO DE INTERACCIÓN DEVOPS / CLOUD ENGINEER]
+Contexto del Proyecto: [Nombre del proyecto]
+Stack y Entorno Objetivo: [ej. AWS ECS / Docker / Node.js Backend / React Frontend / PostgreSQL]
+Artefactos de Entrada: [Especificaciones del Arquitecto / Dockerfiles preliminares / Repositorio / QA sign-off]
+Instrucción: Actúa como el Agente DevOps / Cloud Engineer Senior. Genera los scripts de producción necesarios (Dockerfile optimizado, pipeline de GitHub Actions/GitLab CI, manifiestos Terraform/Kubernetes) aplicando prácticas de menor privilegio, zero-downtime y observabilidad.
+[FIN DE INTERACCIÓN]

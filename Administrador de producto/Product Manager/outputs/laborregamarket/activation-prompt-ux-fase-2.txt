@@ -1,0 +1,101 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 2]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local tipo Airbnb para fruterías, verdulerías y productores agrícolas en Monterrey, México.
+
+Stack UI existente: Next.js 15, React 19, Tailwind CSS 4, Leaflet (mapas). Código en:
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+
+Visión de producto: C:\Users\PC GAMER\LaBorregaMarket\PRODUCT.md
+
+Fase actual: Fase 2 — Transacciones (v0.2.0). Discovery PM completado 09/08/2026.
+
+Decisión de producto cerrada: los clientes contactan fruterías por teléfono/WhatsApp directo. NO hay checkout ni pagos in-app en Fase 2.
+
+═══════════════════════════════════════════════════════════════
+ESTADO FASE 1 (contexto previo)
+═══════════════════════════════════════════════════════════════
+
+Fase 1 entregó: auth JWT, explorar con API, detalle frutería (/fruteria/[id]), cuenta cliente (/cuenta), panel proveedor y admin, onboarding proveedor en 2 pasos, Header con sesión.
+
+Quality Gate Fase 1: Rechazado con observaciones (~78% fidelidad UX). Sprint 0 debe cerrar antes de build Fase 2:
+  - OBS-01 (P0): mapa oculto en móvil en /explorar
+  - OBS-04 (P0): precio no editable en panel proveedor
+  - OBS-02, OBS-03, OBS-05, OBS-06 (P1): filtros chips, hint password, cuentas demo, redirect login
+
+Tu trabajo Fase 2 debe coordinarse con esas correcciones (especificar en wireframes si aplica).
+
+═══════════════════════════════════════════════════════════════
+OBJETIVO FASE 2 UX (esta sesión)
+═══════════════════════════════════════════════════════════════
+
+Diseñar flujos, wireframes y estados para tres módulos — SIN checkout:
+
+1. NOTIFY — Contacto en detalle frutería + feedback "Frutería notificada" + WhatsApp wa.me (Should)
+2. MEDIA — Upload logo/portada proveedor; admin imagen producto (Should)
+3. EXPLORE — Filtros avanzados (chips categoría, búsqueda producto, URL persistente, empty state)
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS A LEER (orden sugerido)
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM Fase 2 (punto de entrada):
+   C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\handoff-ux-ui-fase-2.md
+
+2. PRD Fase 2:
+   ...\Administrador de producto\Product Manager\outputs\laborregamarket\prd-fase-2.md
+
+3. User stories (14 archivos):
+   ...\Administrador de producto\Product Manager\outputs\laborregamarket\user-stories\
+   - US-NOTIFY-01 a US-NOTIFY-05
+   - US-MEDIA-01 a US-MEDIA-05
+   - US-EXPLORE-01 a US-EXPLORE-04
+
+4. Design tokens y wireframes Fase 1 (extender, no reinventar):
+   C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Agentes de desarrollo test\Agente UX UI\Agente UX UI\outputs\laborregamarket\design-tokens.md
+   C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Agentes de desarrollo test\Agente UX UI\Agente UX UI\outputs\laborregamarket\wireframes\
+   C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Agentes de desarrollo test\Agente UX UI\Agente UX UI\outputs\laborregamarket\OBSERVABILITY.md (auditoría Frontend OBS-01 a OBS-12)
+
+5. Bitácora PM:
+   ...\Administrador de producto\Product Manager\outputs\laborregamarket\OBSERVABILITY.md
+
+Skill del agente: Activa @ux-ui-designer y lee
+  Agente UX UI\Agente UX UI\.cursor\skills\ux-ui-designer\SKILL.md
+
+═══════════════════════════════════════════════════════════════
+ENTREGABLES ESPERADOS (convención salida)
+═══════════════════════════════════════════════════════════════
+
+Guardar en: Agente UX UI\Agente UX UI\outputs\laborregamarket\
+
+User flows:
+  - user-flows/UF-NOTIFY-01-contacto.md
+  - user-flows/UF-MEDIA-01-upload-proveedor.md
+  - user-flows/UF-EXPLORE-02-filtros.md
+
+Wireframes (nuevos o actualizados):
+  - wireframes/WF-contacto-cta.md
+  - wireframes/WF-proveedor-media.md
+  - Actualizar wireframes/WF-explorar.md (filtros + mapa móvil OBS-01)
+
+DoD UX: WCAG AA, un CTA dominante por pantalla, estados Loading/Empty/Success/Error, mobile-first (<=640px) y desktop (>=1024px).
+
+═══════════════════════════════════════════════════════════════
+RESTRICCIONES
+═══════════════════════════════════════════════════════════════
+
+- NO diseñar checkout, carrito ni flujo de pedidos (Fase 3).
+- NO invocar QA ni DevOps en esta fase.
+- Mantener coherencia con --brand (#e23744) y componentes existentes (Button, Input, EmptyState, SkeletonCard).
+- Coordinar con handoff-arquitecto-fase-2.md (API contacto y upload) sin asumir endpoints no documentados.
+
+═══════════════════════════════════════════════════════════════
+INSTRUCCIÓN
+═══════════════════════════════════════════════════════════════
+
+Actúa como el Agente UX/UI Designer. Lee los documentos listados, genera los user flows y wireframes de Fase 2 según handoff-ux-ui-fase-2.md, actualiza OBSERVABILITY.md del agente UX si corresponde, y confirma handoff listo para Frontend Developer.
+
+[FIN DE INTERACCIÓN UX/UI]

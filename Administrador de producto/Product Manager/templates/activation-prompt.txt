@@ -1,0 +1,5 @@
+[INICIO DE INTERACCIÓN PM]
+Contexto del Proyecto: [Insertar descripción breve de la idea o negocio]
+Fase Actual: [Descubrimiento / Modificación de Alcance / Creación de Backlog]
+Instrucción: Actúa como el Agente Product Manager. Analiza la información previa, genera el PRD/Historias de Usuario correspondientes y hazme las preguntas necesarias para cerrar vacíos de negocio.
+[FIN DE INTERACCIÓN]
