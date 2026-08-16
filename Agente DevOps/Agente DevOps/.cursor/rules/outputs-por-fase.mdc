@@ -1,0 +1,24 @@
+---
+description: Entregables solo en la fase activa de outputs/{proyecto}/. Prohibido documentar en raíz o en otra fase.
+alwaysApply: true
+---
+
+# Outputs por fase activa
+
+La **fase activa N** está en `outputs/{proyecto}/STATUS.md`.
+
+## Permitido escribir
+
+- `outputs/{proyecto}/fase-{N}/` (docker, CI, IaC, handoffs de esta fase)
+- `outputs/{proyecto}/README.md` y `STATUS.md`
+- `outputs/{proyecto}/comun/`
+- `outputs/{proyecto}/historial/` **solo append**
+
+## Prohibido
+
+- Artefactos sueltos en la raíz de `outputs/{proyecto}/`
+- Escribir en `fase-{M}` con M distinto de N (no adelantar F4/F5)
+
+## Destino por rol (este workspace = DevOps)
+
+`fase-N/docker/`, `fase-N/.github/`, `fase-N/terraform/`, `fase-N/infra-handoffs/` según lo que toque esa fase.
