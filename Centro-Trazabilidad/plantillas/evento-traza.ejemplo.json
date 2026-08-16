@@ -1,0 +1,16 @@
+{
+  "id": "EVT-PROYECTO-001",
+  "marca_tiempo": "2026-08-12T22:00:00.000Z",
+  "proyecto": "nombre-del-proyecto",
+  "agente_id": "product-manager",
+  "tipo": "handoff_enviado",
+  "titulo": "Handoff de PRD a UX/UI",
+  "mensaje": "Se entrega el PRD corto y el backlog priorizado para diseñar los flujos del MVP.",
+  "fase": "fase-1",
+  "modulo": "AUTH",
+  "origen_agente_id": "product-manager",
+  "destino_agente_id": "ux-ui-designer",
+  "ruta_artefacto": "Administrador de producto/Product Manager/outputs/nombre-del-proyecto/prd.md",
+  "estado": "listo",
+  "etiquetas": ["handoff", "mvp"]
+}

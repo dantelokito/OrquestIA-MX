@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OrquestIA — Centro de Trazabilidad</title>
+    <meta
+      name="description"
+      content="Visualizador en tiempo real del flujo entre agentes de OrquestIA-MX."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./estilos/panel.css" />
+  </head>
+  <body>
+    <div class="atmosfera" aria-hidden="true"></div>
+
+    <header class="cabecera">
+      <div class="marca">
+        <p class="marca__nombre">OrquestIA</p>
+        <p class="marca__subtitulo">Centro de Trazabilidad</p>
+      </div>
+      <div class="cabecera__controles">
+        <label class="campo">
+          <span>Proyecto</span>
+          <select id="selector-proyecto" aria-label="Seleccionar proyecto"></select>
+        </label>
+        <p id="estado-conexion" class="estado-conexion" role="status">
+          Conectando…
+        </p>
+      </div>
+    </header>
+
+    <main class="lienzo">
+      <section class="seccion seccion--flujo" aria-labelledby="titulo-flujo">
+        <div class="seccion__encabezado">
+          <h1 id="titulo-flujo">Flujo de agentes</h1>
+          <p>
+            Sigue de un vistazo quién trabaja, quién entregó handoff y dónde
+            hay un bloqueo.
+          </p>
+        </div>
+        <ol id="pista-agentes" class="pista-agentes"></ol>
+      </section>
+
+      <section class="seccion seccion--handoffs" aria-labelledby="titulo-handoffs">
+        <div class="seccion__encabezado">
+          <h2 id="titulo-handoffs">Cadena de handoffs</h2>
+          <p>Trazabilidad entre agentes: de quién sale el trabajo y a quién llega.</p>
+        </div>
+        <div id="lista-handoffs" class="lista-handoffs"></div>
+      </section>
+
+      <section class="seccion seccion--linea" aria-labelledby="titulo-linea">
+        <div class="seccion__encabezado seccion__encabezado--fila">
+          <div>
+            <h2 id="titulo-linea">Proceso en tiempo real</h2>
+            <p>Cada evento aparece al instante cuando un agente registra actividad.</p>
+          </div>
+          <div class="filtros">
+            <label class="campo campo--compacto">
+              <span>Agente</span>
+              <select id="filtro-agente">
+                <option value="">Todos</option>
+              </select>
+            </label>
+            <label class="campo campo--compacto">
+              <span>Tipo</span>
+              <select id="filtro-tipo">
+                <option value="">Todos</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div id="linea-tiempo" class="linea-tiempo" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer class="pie">
+      <p>
+        OrquestIA-MX · Eventos en
+        <code>Centro-Trazabilidad/datos/&lt;proyecto&gt;/eventos.jsonl</code>
+      </p>
+    </footer>
+
+    <script type="module" src="./scripts/panel.js"></script>
+  </body>
+</html>

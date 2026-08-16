@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "descripcion": "Catálogo oficial de agentes del ecosistema OrquestIA-MX y su orden en el flujo de entrega.",
+  "flujo_canónico": [
+    "product-manager",
+    "ux-ui-designer",
+    "software-architect",
+    "backend-developer",
+    "frontend-developer",
+    "qa-tester-senior",
+    "devops-cloud-engineer"
+  ],
+  "agentes": {
+    "product-manager": {
+      "id": "product-manager",
+      "nombre": "Product Manager",
+      "nombre_corto": "PM",
+      "rol": "Descubre necesidades de negocio, escribe el PRD y prioriza historias de usuario.",
+      "carpeta_relativa": "Administrador de producto/Product Manager",
+      "skill": "@product-manager",
+      "color": "#E8A838",
+      "recibe_de": [],
+      "entrega_a": ["ux-ui-designer", "software-architect"]
+    },
+    "ux-ui-designer": {
+      "id": "ux-ui-designer",
+      "nombre": "Diseñador UX/UI",
+      "nombre_corto": "UX",
+      "rol": "Convierte historias en flujos, wireframes y tokens de diseño.",
+      "carpeta_relativa": "Agente UX UI/Agente UX UI",
+      "skill": "@ux-ui-designer",
+      "color": "#F07167",
+      "recibe_de": ["product-manager"],
+      "entrega_a": ["software-architect", "frontend-developer"]
+    },
+    "software-architect": {
+      "id": "software-architect",
+      "nombre": "Arquitecto de Software",
+      "nombre_corto": "ARQ",
+      "rol": "Define topología, contratos API, modelo de datos y ADRs.",
+      "carpeta_relativa": "Agente Arquitecto de Software/Agente Arquitecto",
+      "skill": "@software-architect",
+      "color": "#2EC4B6",
+      "recibe_de": ["product-manager", "ux-ui-designer"],
+      "entrega_a": ["backend-developer", "frontend-developer", "devops-cloud-engineer"]
+    },
+    "backend-developer": {
+      "id": "backend-developer",
+      "nombre": "Desarrollador Backend",
+      "nombre_corto": "BE",
+      "rol": "Implementa APIs, persistencia, seguridad y pruebas del servidor.",
+      "carpeta_relativa": "Agente backend/Agente backend",
+      "skill": "@backend-developer",
+      "color": "#4D96FF",
+      "recibe_de": ["software-architect", "product-manager"],
+      "entrega_a": ["frontend-developer", "qa-tester-senior", "devops-cloud-engineer"]
+    },
+    "frontend-developer": {
+      "id": "frontend-developer",
+      "nombre": "Desarrollador Frontend",
+      "nombre_corto": "FE",
+      "rol": "Construye la interfaz modular, accesible y conectada a los contratos.",
+      "carpeta_relativa": "Agente frontend/Agente Frontend",
+      "skill": "@frontend-developer",
+      "color": "#FF8C42",
+      "recibe_de": ["ux-ui-designer", "software-architect", "backend-developer"],
+      "entrega_a": ["qa-tester-senior", "devops-cloud-engineer"]
+    },
+    "qa-tester-senior": {
+      "id": "qa-tester-senior",
+      "nombre": "QA Tester Senior",
+      "nombre_corto": "QA",
+      "rol": "Diseña matrices, automatiza regresión y emite el sign-off de calidad.",
+      "carpeta_relativa": "QA Automation Engineer/Agente Tester",
+      "skill": "@qa-tester-senior",
+      "color": "#00BBF9",
+      "recibe_de": ["backend-developer", "frontend-developer", "product-manager"],
+      "entrega_a": ["product-manager", "devops-cloud-engineer"]
+    },
+    "devops-cloud-engineer": {
+      "id": "devops-cloud-engineer",
+      "nombre": "DevOps / Cloud Engineer",
+      "nombre_corto": "OPS",
+      "rol": "Conteneriza, automatiza CI/CD y despliega con observabilidad.",
+      "carpeta_relativa": "Agente DevOps/Agente DevOps",
+      "skill": "@devops-cloud-engineer",
+      "color": "#06D6A0",
+      "recibe_de": ["software-architect", "backend-developer", "frontend-developer", "qa-tester-senior"],
+      "entrega_a": []
+    }
+  }
+}
