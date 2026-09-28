@@ -125,7 +125,7 @@ Tras cada handoff (entrega o recepción), el agente debe:
 - [ ] Actualizar `outputs/{proyecto}/STATUS.md`
 - [ ] Actualizar la fecha de última entrega/recepción
 - [ ] Registrar los hechos clave de la fase (bugs vivos, pendientes, enlaces)
-- [ ] Actualizar el historial (`historial/`) solo en modo **append**
+- [ ] Actualizar el historial (`historial/`) solo en modo **append**, y sobre el archivo que ya existe. No crees una copia del estado completo con nombre de versión (ver `04-control-fase.mdc`); registra el delta.
 
 ## Criterios para declarar "lista para PR" (cross-agent)
 

@@ -41,6 +41,10 @@ Cada agente escribe en su **propio workspace** dentro de `outputs/{proyecto}/`. 
 - `outputs/{proyecto}/README.md` y `STATUS.md` — índices y estado
 - `outputs/{proyecto}/comun/` — documentos vivos compartidos (design-tokens, SAD, infra-requirements, integration-readme, env-requirements)
 - `outputs/{proyecto}/historial/` — **solo append** (observabilidad, notas registradas, nunca editar historial previo)
+  - Añade al archivo de historial que ya existe (p. ej. `OBSERVABILITY.md`). No crees un archivo nuevo por fase.
+  - **Nunca copies el estado completo de un documento a un archivo nuevo** con nombre de versión (`design-tokens-v0.9.0.md`, `algo-v1.2.3.md`). Eso crea copias que compiten con la fuente de verdad y un agente puede leer una versión obsoleta sin darse cuenta.
+  - Lo que cambió se registra como **delta**: qué se añadió, qué se cambió y de qué valor a qué valor. Una línea basta.
+  - El estado vigente de un documento vive en un único archivo, en `comun/`. Si necesitas recuperar una versión anterior, está en el historial de git: `git show <commit>:<ruta>`.
 
 ### Prohibido
 - **Archivos nuevos en la raíz** de `outputs/{proyecto}/` (solo se permiten los listados arriba)
