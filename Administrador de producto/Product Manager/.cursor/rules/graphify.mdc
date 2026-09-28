@@ -1,0 +1,62 @@
+---
+description: Graphify dual corpus — orquestación y código de LaBorregaMarket. Paso 0 de todos los agentes.
+alwaysApply: true
+---
+
+# Graphify — dos corpus, nunca mezclar
+
+Hay **dos grafos**. No uses `graphify merge-graphs`. Consulta cada uno con `--graph` para no depender del cwd.
+
+| Corpus | Qué mapea | `graph.json` |
+|--------|-----------|--------------|
+| Orquestación | Reglas, STATUS, fase, handoffs, `comun/` | `C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json` |
+| App | Código de LaBorregaMarket (`src/`, Prisma, API routes, tests) | `C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json` |
+
+Aplica a **los 7 roles**: PM, UX/UI, Arquitecto, Backend, Frontend, QA y DevOps. También al orquestador y a todo subagente. Incluye esta regla en cada prompt de exploración.
+
+## Paso 0 (puerta dura)
+
+Antes de Read, Grep, Glob o Bash exploratorio:
+
+1. Consultar el grafo de **orquestación**.
+2. Consultar el grafo de **LaBorregaMarket**.
+3. Recién entonces leer STATUS, PRD, contratos o código puntual.
+
+Si falta `graph.json` de la app: **STOP** (mismo nivel que un handoff ausente). Regenerar con `graphify update .` en `C:\Users\PC GAMER\LaBorregaMarket` y volver a consultar. No analices entregables ni código sin ambos grafos.
+
+Si falta el grafo de orquestación: `graphify update .` en este repo, o `comun/PROCESO.md` + `STATUS.md` solo como fallback de emergencia.
+
+## Comandos
+
+Orquestación:
+
+```
+graphify query "quién actúa en la fase activa" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
+graphify path "STATUS PM" "STATUS QA" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
+graphify explain "BUG-015" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
+```
+
+App:
+
+```
+graphify query "<módulo o feature>" --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"
+graphify path "<A>" "<B>" --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"
+graphify explain "<concepto>" --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"
+```
+
+Queries de ejemplo por rol (grafo de la app):
+
+- PM: alcance, módulos, personas, PRODUCT.md
+- UX/UI: rutas, pantallas, componentes de flujo
+- Arquitecto: API, Prisma, módulos
+- Backend: servicios, repositorios, rutas API
+- Frontend: componentes, hooks, pages
+- QA: flujo o `BUG-NNN` en código
+- DevOps: Docker, CI, health, env
+
+Read/Grep/Glob solo cuando Graphify ya orientó y hace falta una línea concreta. Si existe `graphify-out/wiki/index.md` en ese corpus, návelo antes de leer archivos crudos. `GRAPH_REPORT.md` solo para revisión amplia de arquitectura.
+
+## Tras modificar
+
+- Handoffs / STATUS / reglas de este repo: `graphify update .` aquí.
+- Código de la app: `graphify update .` en `C:\Users\PC GAMER\LaBorregaMarket`.

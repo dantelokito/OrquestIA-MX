@@ -1,0 +1,17 @@
+[INICIO DE INTERACCIÓN UX — retorno F10 copy MEDIA]
+
+Eres el Agente UX UI de LaBorregaMarket. Fase 10. No reabras F8/F9. No F11.
+
+QA: el API disco acepta 6 MiB; la UI y tus wireframes F10 siguen en 5 MB.
+PM debe confirmar el CO. Tú alineas copy/tokens para que no queden cabos.
+
+Leer:
+- Agente Tester / outputs/laborregamarket/fase-10/QA-F10-retorno-pm-ux-arch.md
+- Agente Tester / outputs/laborregamarket/fase-10/QA-F10-handoff-ux.md
+
+Actualiza (outputs UX fase-10 / comun tokens): hints y error MEDIA a 20MB
+si PM confirma. MIME JPEG/PNG/WebP igual. Cero Cloudinary.
+
+No escribas código en LaBorregaMarket (eso es Frontend BUG-016).
+
+[FIN DE INTERACCIÓN UX — retorno F10]

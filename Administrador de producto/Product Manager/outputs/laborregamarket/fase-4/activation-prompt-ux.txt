@@ -1,0 +1,48 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 4]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local tipo Airbnb para fruterías en Monterrey.
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código:
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+
+Fase actual: Fase 4 — Reseñas, Geo/Google Maps, Notify-scale, Admin analytics, POS báscula (v0.4.0).
+Fase 3 (pedidos, POS, dashboard) ya está implementada y cerrada documentalmente. F4 arranca de cero: NO hay código todavía de lo que vas a diseñar.
+
+Decisiones cerradas (14/08/2026):
+- Reseñas: nativas post-entrega + enlace/embed a Google Maps EXCLUSIVO de proveedores verificados (isVerified=true). Los no verificados ven el mismo control BLOQUEADO con copy "Requiere verificación".
+- Mapa: Google Maps JS API reemplaza Leaflet en /explorar. Radio ajustable 1-25km, picker de ubicación, direcciones favoritas guardables (requiere login).
+- ETA: tiempo de preparación (config del proveedor) + traslado estimado por distancia, visible en checkout, detalle de pedido y notificaciones.
+- Delivery a domicilio es SHOULD (no Must): diseñar después de los flujos de geo/direcciones.
+- Báscula digital: conectar por WebSerial/WebHID con autodetección de modelo; si no se reconoce, selector manual.
+
+NO diseñar: pasarela de pagos, CFDI, PWA, logística de reparto real (rutas/flotilla), importación de reseñas de Google vía API.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff:
+   Administrador de producto\Product Manager\outputs\laborregamarket\fase-4\handoff-ux-ui.md
+2. PRD:
+   ...\fase-4\prd.md
+3. User stories:
+   ...\fase-4\user-stories\US-REV-*, US-GEO-*, US-NOTIFY-09, US-ADMIN-01, US-POS-05/06, US-ORDERS-05
+4. Índice general (no cargar fases anteriores completas):
+   ...\Product Manager\outputs\laborregamarket\README.md + STATUS.md
+
+Skill: @ux-ui-designer
+
+═══════════════════════════════════════════════════════════════
+ENTREGABLES
+═══════════════════════════════════════════════════════════════
+
+UF-GEO-01, UF-REV-01, UF-REV-02, UF-NOTIFY-01, UF-ADMIN-01, UF-POS-02, UF-ORDERS-02 (Should)
+Wireframes: explorar (mapa Google + radio + favoritas), config proveedor (reseñas Google), reseña post-entrega, checkout con ETA, dashboard admin, POS con báscula
+Actualizar information-architecture.md y handoff-frontend.md a v0.4.0
+Quality Gate: fase-4/quality/REVIEW-UX.md
+
+[FIN DE INTERACCIÓN UX/UI]

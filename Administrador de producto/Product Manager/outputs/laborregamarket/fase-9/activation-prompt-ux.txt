@@ -1,0 +1,51 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 9 · Deuda Explorar]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código:
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+  ExplorePageClient.tsx, ProviderCard.tsx, ProviderPreviewPopover.tsx,
+  ProviderPreviewContent.tsx, FilterBar.tsx, LocationBar.tsx, Header explorar
+
+Fase actual: Fase 9 v0.9.0. TÚ diseñas deuda DT-F9-001…005:
+  US-EXPLORE-08 — preview IN-CARD (animación; mismos triggers F8)
+  US-EXPLORE-09 — typeahead solo fruterías (portada+nombre); radio completo; chip+tacha
+  US-EXPLORE-10 — card: distancia + ETA; SIN minPrice visual
+  US-EXPLORE-11 — Mayoreo/Domicilio ON; Orgánico y «Filtros» RETIRADOS
+  US-GEO-24 — una barra horizontal + mapa ~+10–20%
+
+Fase 8 SOLO LECTURA (sign-off intacto). Fase 7 SOLO LECTURA.
+CO-F7-001: pan/zoom NO cambian radiusKm.
+CO-F9-001: paquete deuda. D-F9-2: sin Orgánico ni chip Filtros.
+Contenido preview = US-EXPLORE-05 (NO recortar).
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM: ...\fase-9\handoff-ux-ui.md
+2. PRD: ...\fase-9\prd.md
+3. CO-F9-001
+4. User stories: US-EXPLORE-08…11, US-GEO-24
+5. US-EXPLORE-05 (F7, solo lectura — contenido)
+6. QA (contexto): Agente Tester\...\fase-9\deuda-tecnica\DT-F9-001…005
+7. STATUS.md + README.md del PM
+
+Skill: agente UX/UI de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. Delta UF/WF: in-card, typeahead, distancia card, chips, chrome+mapa.
+2. Handoff frontend fase-9 con tokens, breakpoint, DoD.
+3. Quality Gate cuando FE implemente (no bloquear handoff inicial).
+
+NO diseñar: typeahead SKUs, sampleProducts en card, orgánico, DASH,
+    Maps JS, Places, clustering, reopen F8.
+
+[FIN DE INTERACCIÓN UX/UI — Fase 9]

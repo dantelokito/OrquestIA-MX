@@ -17,6 +17,7 @@ Skill bajo demanda para transformar historias de usuario y requerimientos del PM
 
 Ante una nueva solicitud de diseño, sigue esta secuencia:
 
+0. **Graphify (puerta dura):** Consulta el grafo de orquestación y el de LaBorregaMarket antes de leer STATUS, PRD, wireframes o código. Comandos: `.cursor/rules/graphify.mdc`. Si falta `C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json`: STOP y `graphify update .` en el repo de la app.
 1. **Mapeo del Flujo de Usuario:** Define el camino paso a paso desde el punto de entrada hasta el objetivo cumplido.
 2. **Arquitectura de Información:** Organiza menús, encabezados y CTAs de forma jerárquica.
 3. **Wireframes en Markdown:** Crea la maqueta esquemática de las pantallas principales.
@@ -39,18 +40,24 @@ Usa estrictamente estas plantillas al generar entregables:
 
 ## Convención de salida
 
-Guarda artefactos generados en:
+La **fase activa N** está en `STATUS.md`. No crear documentos fuera de esa fase.
 
 ```
 outputs/{nombre-proyecto}/
-├── user-flows/
-│   └── UF-*.md
-├── wireframes/
-│   └── WF-*.md
-└── design-tokens.md
+├── README.md
+├── STATUS.md
+├── comun/              # design-tokens.md, information-architecture.md
+├── historial/          # solo append
+└── fase-{N}/
+    ├── user-flows/UF-*.md
+    ├── wireframes/WF-*.md
+    ├── quality/
+    └── handoff-*.md
 ```
 
-Usa kebab-case para `{nombre-proyecto}` (ej. `outputs/tienda-online/`).
+Usa kebab-case para `{nombre-proyecto}`. Prohibido: flows/wireframes/handoffs en la raíz; escribir otra `fase-M`.
+
+Regla persistente: [outputs-por-fase.mdc](../../.cursor/rules/outputs-por-fase.mdc).
 
 ## Handoff checklist (DoD UX/UI)
 
@@ -61,6 +68,7 @@ Antes de traspasar al Agente Frontend o Arquitecto, verifica:
 - [ ] **Feedback de Interacción:** Botones y campos tienen estados claros (`hover`, `focus`, `active`, `disabled`).
 - [ ] **Manejo de Errores y Estados Vacíos:** Se especificó Empty state y Error state.
 - [ ] **Responsividad Garantizada:** Disposición definida para móvil (`<= 640px`) y escritorio (`>= 1024px`).
+- [ ] **Post-APROBADO QA:** `fase-{N}/quality/QG-correcciones.md` documenta cambios de UI/flujo/tokens por bugs (o declara que no hubo). Sin este archivo el PM no promueve.
 
 ## Handoff por rol
 

@@ -12,7 +12,42 @@ Antes de autorizar el paso de un paquete de software o módulo al ambiente de pr
 3. **Estabilidad de Regresión:**
    - Todas las pruebas automatizadas de regresión (API y E2E) deben pasar en un 100% en el entorno de Staging/QA.
 
-Documenta el dictamen en `outputs/{nombre-proyecto}/qa-signoffs/QA-{Module}-signoff.md` usando [templates/qa-signoff.md](../../templates/qa-signoff.md).
+Documenta el dictamen en `outputs/{nombre-proyecto}/fase-{N}/qa-signoffs/QA-{Module}-signoff.md` usando [templates/qa-signoff.md](../../templates/qa-signoff.md).
+
+### Sign-off parcial (fase en curso)
+
+Cuando la fase **no cumple** todos los quality gates, no emitas APROBADO. En su lugar, documenta el estado en `fase-{N}/qa-signoffs/QA-F{N}-progreso.md`:
+
+- **Dictamen:** EN PROGRESO (no APROBADO)
+- **Métricas:** happy path, edge/negativos, regresión con pass/fail por spec
+- **Comando de re-run:** comando Playwright exacto y `cwd`
+- **Bugs vivos:** lista con severidad y TCs bloqueados
+- **Siguiente paso:** qué debe corregir Backend/Frontend antes de re-test
+
+Usa la misma estructura de [templates/qa-signoff.md](../../templates/qa-signoff.md) adaptando la sección de dictamen.
+
+### Handoffs a Backend y Frontend
+
+Cuando haya bugs abiertos que requieran acción de desarrollo, genera handoffs priorizados en `fase-{N}/` (misma fase activa que el bug report):
+
+- `QA-F{N}-handoff-backend.md` — cola de tickets BE, archivos sugeridos, endpoints afectados, pasos de verificación post-fix
+- `QA-F{N}-handoff-frontend.md` — cola de tickets FE, componentes/rutas afectadas, pasos de verificación post-fix
+- `activation-prompt-*-BUG-{NNN}.txt` — prompt en español para copiar en el chat del agente downstream
+
+Cada handoff debe enlazar a `fase-{N}/bug-reports/BUG-{NNN}.md` y listar los TCs a re-ejecutar tras el fix.
+
+**Entregable incompleto:** bug documentado solo en chat o en la raíz de `outputs/{proyecto}/` → no cerrar la sesión QA hasta completar el paquete en `fase-{N}/`.
+
+### Cierre de bug (verificación de fix)
+
+Cuando un fix sea implementado:
+
+0. **Bloqueo:** no re-probar si falta `fase-{N}/quality/EVIDENCIA-BUG-{NNN}.md` en el workspace FE y/o BE responsable (archivos, commit o diff, re-prueba local).
+1. Marcar checklist en `fase-{N}/bug-reports/BUG-{NNN}.md` (verificación de fix) y enlazar la evidencia.
+2. Actualizar `QA-F{N}-progreso.md` (bugs vivos, métricas, quality gates).
+3. Actualizar `STATUS.md` (cerrar o mantener abierto según re-prueba).
+4. Si Blocker/Critical: confirmar Zero Blocker antes de emitir APROBADO.
+5. **APROBADO no cierra la fase.** Tras el sign-off a PM, UX y Arquitecto deben escribir `fase-{N}/quality/QG-correcciones.md` en sus workspaces. Sin esos dos archivos el PM no promueve N→N+1.
 
 ### Criterios de bloqueo para release
 
@@ -23,7 +58,9 @@ Documenta el dictamen en `outputs/{nombre-proyecto}/qa-signoffs/QA-{Module}-sign
 | Happy path < 100% ejecutado | **RECHAZADO** — completar ejecución |
 | Edge/negativos < 85% ejecutados | **APROBADO CON CONDICIONES** — documentar casos pendientes |
 | Regresión automatizada < 100% pass | **RECHAZADO** — estabilizar suite antes de release |
-| Todos los gates cumplidos | **APROBADO** |
+| Bug documentado solo en chat o sin paquete `fase-{N}/` | **INCOMPLETO** — completar handoffs y STATUS |
+| Fix sin `EVIDENCIA-BUG-{NNN}.md` de FE/BE | **NO RE-PROBAR** — esperar evidencia |
+| Todos los gates cumplidos | **APROBADO** (no cierra la fase: faltan QG-correcciones UX+Arch) |
 
 ---
 
@@ -32,7 +69,7 @@ Antes de dar por finalizada la validación de un sprint, módulo o funcionalidad
 
 - [ ] **Matriz Diseñada:** Casos de prueba positivos, negativos, edge cases y permisos documentados.
 - [ ] **Ejecución Completa:** Pruebas manuales y/o exploratorias realizadas en entornos de staging/QA.
-- [ ] **Bugs Documentados:** Cualquier falla encontrada fue reportada con pasos de reproducción, logs y payloads.
+- [ ] **Bugs Documentados:** Paquete completo en `fase-{N}/` (bug + handoffs + STATUS + progreso; prompts si aplica).
 - [ ] **Verificación de Fixes:** Re-prueba de defectos solucionados por Backend y Frontend verificada.
 - [ ] **Automatización Actualizada:** Scripts de pruebas (API / E2E) agregados al repositorio de pruebas.
 - [ ] **Dictamen Emitido:** Reporte ejecutivo de pruebas y firma de aprobación (QA Sign-off) compartida con el PM.
@@ -59,6 +96,7 @@ Para iniciar una sesión QA completa, usa el prompt extendido de [templates/acti
 
 | Agente downstream | Entregable |
 |-------------------|------------|
-| PM | `QA-{Module}-signoff.md` con dictamen APROBADO / RECHAZADO / APROBADO CON CONDICIONES |
-| DevOps | [templates/env-requirements.md](../../templates/env-requirements.md) con URLs staging, credenciales de prueba, comandos CI |
-| Backend / Frontend | `bug-reports/BUG-{NNN}.md` con pasos de reproducción y evidencia para re-probar fixes |
+| PM | `QA-{Module}-signoff.md` (APROBADO / RECHAZADO / APROBADO CON CONDICIONES) o `QA-F{N}-progreso.md` (EN PROGRESO) |
+| Backend | `fase-{N}/QA-F{N}-handoff-backend.md` + `bug-reports/BUG-{NNN}.md` + prompt si aplica |
+| Frontend | `fase-{N}/QA-F{N}-handoff-frontend.md` + `bug-reports/BUG-{NNN}.md` + prompt si aplica |
+| DevOps | [templates/env-requirements.md](../../templates/env-requirements.md) en `comun/` con URLs staging, credenciales de prueba, comandos CI |

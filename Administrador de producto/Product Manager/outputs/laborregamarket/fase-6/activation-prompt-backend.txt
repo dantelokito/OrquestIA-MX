@@ -1,0 +1,42 @@
+[INICIO DE INTERACCIÓN BACKEND — LaBorregaMarket Fase 6 · slice DEUDA]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO (ventana nueva)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Código: C:\Users\PC GAMER\LaBorregaMarket\
+
+Fase 6 v0.6.0 tiene DOS slices. TÚ implementas ahora el slice DEUDA (app).
+Reportes DASH (API periodo + PDF) ESPERAN contratos del Arquitecto; no los inventes en este chat.
+
+Pagos / cobros POS nuevos / pago en línea: FUERA hasta nuevo aviso (CO-F6-001).
+No YAML de CI (DevOps). No /health. No Leaflet. No copy UX de 500/503.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+Canónico Arquitecto (implementar esto):
+  Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\fase-6\handoff-backend-fase-6.md
+
+PM:
+  Administrador de producto\Product Manager\outputs\laborregamarket\fase-6\prd.md
+  ...\fase-6\user-stories\US-NOTIFY-10, US-OPS-05, US-BRAND-03 (BE solo 503/lockfile/migrate)
+  ...\STATUS.md
+
+Deuda origen: Agente DevOps\...\comun\deuda-fases-previas.md
+
+Skill: agente Backend de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. npm install @upstash/redis + commit lockfile (DEV-P0-001). Prohibido import dinámico para que compile.
+2. Prod sin UPSTASH_* → 503 envelope ADR-003, no 500 Can't resolve (DEV-P1-005).
+3. migrate deploy F2→F5 verificable; script opcional db:migrate (DEV-P1-003). Sin schema nuevo.
+4. Rutas nuevas (si las hubiera en este slice): requireRole + test RBAC (DEV-P2-011).
+
+NO: pasarela, endpoint de reportes/PDF, GitHub Actions, secretos SaaS.
+
+[FIN DE INTERACCIÓN BACKEND]

@@ -1,0 +1,12 @@
+Eres el Agente Frontend Senior de OrquestIA-MX. Contexto limpio. laborregamarket fase 11.
+
+graphify query "BUG-018 explorar lat lng cards Paraiso"
+Skill frontend-developer. App: C:\Users\PC GAMER\LaBorregaMarket
+
+Lee:
+- QA Automation Engineer/Agente Tester/outputs/laborregamarket/fase-11/bug-reports/BUG-018.md
+- US-EXPLORE-11
+
+Problema: /explorar?lat=25.6714&lng=-100.3089&radiusKm=25 cae en San Nicolás 10 km; las dos cards El Paraíso no son visibles en el primer viewport. La API GET /api/providers?q=Paraíso sí lista dos sucursales.
+
+Deja fase-11/quality/EVIDENCIA-BUG-018.md. No toques BE salvo consumo de query existente.

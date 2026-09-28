@@ -1,0 +1,158 @@
+---
+description: Estándares de calidad que todo output debe cumplir antes de ser entregado a otro agente. Completitud, consistencia, claridad y trazabilidad.
+alwaysApply: true
+glob: "**/*"
+---
+
+# Calidad de Outputs
+
+Todo entregable generado por cualquier agente debe cumplir estos estándares **antes** de declararse listo para handoff. Un output de baja calidad genera retrabajo en toda la cadena downstream.
+
+## Estándares Generales
+
+### 1. Completitud
+
+Todo output debe:
+
+- [ ] Tener **todas las secciones** requeridas según su plantilla oficial (`templates/*.md`)
+- [ ] Incluir todos los **campos obligatorios**
+- [ ] No tener placeholders sin completar: `[Insertar...]`, `[Nombre del proyecto]`, `[DD/MM/AAAA]`, `TODO`, `XXX`, `Lorem ipsum`
+- [ ] No dejar referencias a archivos que no existen
+
+### 2. Consistencia
+
+Todo output debe:
+
+- [ ] Usar la **convención de naming** del repositorio (ver tabla abajo)
+- [ ] Seguir el **formato de la plantilla** oficial
+- [ ] Mantener **coherencia** con outputs anteriores de la misma fase
+- [ ] No **contradecir** ADRs, contratos o historias de la misma fase
+- [ ] Ubicarse en la **ruta correcta** según su tipo (ver `04-control-fase`)
+
+### 3. Claridad
+
+Todo output debe:
+
+- [ ] Ser **comprensible** sin contexto adicional
+- [ ] Incluir **ejemplos** cuando aplique (payloads, casos)
+- [ ] **Definir términos** ambiguos o acrónimos
+- [ ] Usar **español** en toda la documentación (regla de idiomaqa)
+
+### 4. Trazabilidad
+
+Todo output debe:
+
+- [ ] **Referenciar los inputs** que lo originaron (sección "Inputs Utilizados")
+- [ ] Incluir **IDs únicos** para identificación
+- [ ] Vincular con los **outputs downstream** que consumirá
+- [ ] Registrar la **fase** y el **proyecto** al que pertenece
+
+## Convenciones de Naming
+
+| Tipo de artefacto | Convención | Ejemplo |
+|-------------------|------------|---------|
+| Diagrama de arquitectura | `ARCH-{Module}-{Number}` | `ARCH-AUTH-01.md` |
+| Contrato API | `API-{Module}-{Number}` | `API-AUTH-01.md` |
+| Esquema de BD | `DB-{Entity}` | `DB-users.md` |
+| ADR (decisión de arquitectura) | `ADR-{Number}` | `ADR-001.md` |
+| User Flow | `UF-{Module}-{Number}` | `UF-AUTH-01.md` |
+| Wireframe | `WF-{Module}-{Number}` | `WF-AUTH-01.md` |
+| User Story | `US-{Module}-{Number}` | `US-AUTH-01.md` |
+| Handoff de módulo (Backend) | `MOD-{Module}-handoff` | `MOD-AUTH-handoff.md` |
+| Handoff de feature (Frontend) | `FEAT-{Feature}-handoff` | `FEAT-AUTH-handoff.md` |
+| Caso de prueba | `TC-{Module}-{Number}` | `TC-AUTH-001` |
+| Matriz de pruebas | `TC-{Module}-matrix` | `TC-AUTH-matrix.md` |
+| Bug | `BUG-{Number}` | `BUG-001.md` |
+| Sign-off QA | `QA-{Module}-signoff` | `QA-AUTH-signoff.md` |
+| Handoff infraestructura | `INFRA-{Component}-handoff` | `INFRA-API-handoff.md` |
+| PRD | `prd.md` | `prd.md` |
+| Documento de Arquitectura (SAD) | `sad.md` | `sad.md` |
+
+## Formato de Referencia de Inputs
+
+Cada output debe incluir, en su sección de cabecera o en un bloque aparte:
+
+```markdown
+## Inputs Utilizados
+
+- **PRD:** `outputs/{proyecto}/fase-{N}/prd.md`
+- **Contratos API:** `outputs/{proyecto}/fase-{N}/api/API-*.md`
+- **Wireframes:** `outputs/{proyecto}/fase-{N}/wireframes/WF-*.md`
+- **User Stories:** `outputs/{proyecto}/fase-{N}/user-stories/US-*.md`
+- **Handoffs:** `outputs/{proyecto}/fase-{N}/handoff-*.md`
+```
+
+## Formato de Referencia de Outputs
+
+Cada output debe incluir, al final o en la sección de cierre, la trazabilidad hacia downstream:
+
+```markdown
+## Outputs Generados
+
+- **Archivo:** `outputs/{proyecto}/fase-{N}/api/API-AUTH-01.md`
+- **Agente Downstream:** Backend Developer
+- **Inputs Requeridos:** Contrato API, esquema `DB-users.md`, US `US-AUTH-01.md`
+```
+
+## Validación de Formato por Tipo de Documento
+
+### Documentos Técnicos (API, DB, ADRs, Diagrams)
+
+- [ ] Título descriptivo
+- [ ] Fecha de creación
+- [ ] Versión del documento (si aplica)
+- [ ] Estado (Propuesto / Aprobado / Reemplazado para ADRs)
+- [ ] Diagramas Mermaid/C4 sin errores de sintaxis
+
+### Contratos de API
+
+- [ ] `Método` y `ruta` definidos
+- [ ] `Autenticación` documentada (Requerida/Pública)
+- [ ] `Request payload` con tipos y campos requeridos
+- [ ] `Respuestas 200/201` con estructura JSON `{ success, data, message }`
+- [ ] `Respuestas de error` con código y estructura `{ success, error: { code, message }, timestamp }`
+- [ ] Lista de `códigos de estado` posibles (400, 401, 403, 404, 409, 500)
+
+### Esquemas de BD
+
+- [ ] Tabla/colección con nombre claro
+- [ ] Tabla de campos: `Campo | Tipo | Restricción | Descripción`
+- [ ] `PRIMARY KEY` y `UNIQUE` definidos
+- [ ] Relaciones documentadas (1:N, N:M)
+- [ ] Índices clave indicados
+
+### Handoffs
+
+- [ ] Agente **emisor** identificado
+- [ ] Agente **receptor** identificado
+- [ ] **Entregables** listados como tabla con estado
+- [ ] **Pendientes** documentados con responsable
+- [ ] Checklist de recepción para el receptor incluida (si aplica)
+
+### Plantillas de Prueba (QA)
+
+- [ ] IDs únicos (`TC-*`, `BUG-*`, `QA-*`)
+- [ ] Pasos de reproducción claros (para bugs)
+- [ ] Resultado esperado vs obtenido
+- [ ] Evidencia (logs, screenshots, payloads)
+- [ ] Severidad y prioridad (para bugs)
+
+## Regla de idioma
+
+**Toda la documentación** generada por los agentes se redacta en **español**. Los términos técnicos conocidos (endpoint, payload, bug, testing) pueden usarse en su forma original.
+
+## Autoevaluación previa al handoff
+
+Antes de entregar, el agente debe recoger la siguiente **verificación automática**:
+
+1. **Correr `grep`** por placeholders sobrantes en el archivo (`\[Insertar`, `\[TODO`, `nombre-proyecto` literal)
+2. **Verificar** que todos los IDs referenciados existen con `grep`/`glob`
+3. **Confirmar** que la ruta del output es la de la fase activa
+4. **Revisar** que las referencias a inputs son rutas reales existentes
+5. **Confirmar** que el formato cumple la plantilla oficial
+
+Si la autoevaluación arroja fallos, corregir antes de entregar.
+
+## Conclusión
+
+Un output de calidad es la base de la **confiabilidad** del ecosistema. La calidad no es responsabilidad solo del QA; es responsabilidad de **cada agente emisor** garantizar que su entregable pueda ser consumido sin ambigüedad por el siguiente eslabón de la cadena.

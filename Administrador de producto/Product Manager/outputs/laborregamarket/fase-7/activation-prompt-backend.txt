@@ -1,0 +1,40 @@
+[INICIO DE INTERACCIÓN BACKEND — LaBorregaMarket Fase 7 · EXPLORAR + AUTH]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO (ventana nueva)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Código: C:\Users\PC GAMER\LaBorregaMarket\
+
+Fase 7 v0.7.0. TÚ implementas APIs cuando el Arquitecto publique
+  Agente Arquitecto\...\fase-7\handoff-backend-fase-7.md
+NO inventes contratos en este chat.
+
+Pagos / cobros POS / pago en línea: FUERA (CO-F6-001).
+NO YAML de CI. NO DASH F6. NO derivar radio en servidor desde bbox.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+Canónico Arquitecto (cuando exista):
+  Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\fase-7\handoff-backend-fase-7.md
+
+PM:
+  Administrador de producto\Product Manager\outputs\laborregamarket\fase-7\prd.md
+  ...\fase-7\handoff-arquitecto.md
+  ...\fase-7\user-stories\US-GEO-11, US-GEO-13, US-GEO-14, US-AUTH-09, US-EXPLORE-05, US-EXPLORE-06
+  ...\STATUS.md
+
+Skill: agente Backend de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. Esperar handoff Arquitecto.
+2. Implementar: total en lista geo, q producto+nombre, favoritas UserAddress,
+   preview, cookie/sesión portable (según ADR), clamp radiusKm 1-25.
+3. Envelope ADR-003. requireAuth en favoritas.
+
+[FIN DE INTERACCIÓN BACKEND — Fase 7]

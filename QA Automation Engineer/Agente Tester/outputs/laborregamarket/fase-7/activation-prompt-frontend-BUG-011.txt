@@ -1,0 +1,56 @@
+[INICIO DE INTERACCIÓN FRONTEND — BUG-011 Critical Explorar scroll]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket
+Código: C:\Users\PC GAMER\LaBorregaMarket
+Ambiente: http://localhost:8080
+
+Ticket QA: BUG-011 — Critical, P1
+Handoff: Agente Tester\outputs\laborregamarket\fase-7\QA-F7-handoff-frontend.md
+Bug report: Agente Tester\outputs\laborregamarket\fase-7\bug-reports\BUG-011.md
+
+Al hacer zoom en el mapa de /explorar, la lista de catálogo salta al tope.
+Causa: contenedor de resultados sin overflow-y ni altura controlada.
+
+═══════════════════════════════════════════════════════════════
+FIX OBLIGATORIO — ExploreLayoutF7
+═══════════════════════════════════════════════════════════════
+
+1. ExplorePageClient.tsx:
+   - Wrapper flex flex-1 flex-col min-h-0
+   - Mapa: lg:sticky lg:top-[var(--explore-sticky-top)] + explore-map-section
+   - Panel resultados: role="region" aria-label="Lista de fruterías"
+     flex-1 min-h-0 overflow-y-auto py-6
+   - Mover aria-busy al panel de resultados (no al grid interno)
+
+2. globals.css:
+   --explore-chrome-h: 280px;
+   --explore-sticky-top: 152px;
+   .explore-map-section { overflow-anchor: none; }
+
+3. ExploreMap.tsx:
+   - MapFocusGuard: tabindex=-1 en contenedor Leaflet
+   - Preservar window.scrollY en evento focus del mapa
+
+═══════════════════════════════════════════════════════════════
+NO TOCAR
+═══════════════════════════════════════════════════════════════
+
+- API GEO / backend
+- CO-F7-001: pan/zoom NO actualizan radio ni GET
+- FitCircle toBounds (BUG-010 ya cerrado)
+- Preview, login, favoritas
+
+═══════════════════════════════════════════════════════════════
+DoD
+═══════════════════════════════════════════════════════════════
+
+1. DevTools: panel resultados tiene overflow-y: auto + max-h o flex-1 min-h-0
+2. EC-GEO-17 Pass: zoom no altera scroll del catálogo
+3. HP-GEO-09 / HP-GEO-10 regresión Pass
+4. Avisar a QA para cerrar BUG-011
+
+[FIN DE INTERACCIÓN FRONTEND — BUG-011]

@@ -1,0 +1,79 @@
+---
+description: Coordinación de la fase activa N entre todos los agentes. Centraliza cómo leer la fase desde STATUS.md y cómo coordinar la escritura de entregables entre workspaces.
+alwaysApply: true
+glob: "**/*"
+---
+
+# Control de Fase Activa (Coordinación Multi-Agente)
+
+Esta regla centraliza el control de la **fase activa N** entre todos los agentes del ecosistema. Complementa los archivos `outputs-por-fase.mdc` ubicados en el `.cursor/rules/` de cada carpeta de agente.
+
+## Lectura de la fase activa
+
+La fase activa de un proyecto se determina desde:
+
+1. **`outputs/{proyecto}/STATUS.md`** — la fuente de verdad principal. En él se indica `Fase Activa: {N}` junto con el estado actual.
+2. **Handoffs recientes** — los `handoff-*.md` de la fase más reciente indican qué agente debe actuar ahora.
+
+### Regla de lectura
+- **SIEMPRE** consultar Graphify primero (grafo de orquestación **y** grafo de LaBorregaMarket; ver `graphify.mdc`).
+- **SIEMPRE** leer `STATUS.md` después del grafo y **antes** de escribir cualquier entregable.
+- No asumir la fase desde conversaciones previas o memoria; verificar en el archivo.
+
+## Destino de entregables por rol
+
+Cada agente escribe en su **propio workspace** dentro de `outputs/{proyecto}/`. La escritura sigue estas reglas (idénticas a `outputs-por-fase.mdc` de cada carpeta):
+
+| Agente | Ruta de entregables | Carpeta de fase |
+|--------|--------------------|-----------------|
+| PM | `outputs/{proyecto}/` | `fase-{N}/user-stories/`, `fase-{N}/prd.md` |
+| UX/UI | `outputs/{proyecto}/` | `fase-{N}/user-flows/`, `fase-{N}/wireframes/`, `fase-{N}/quality/` |
+| Arquitecto | `outputs/{proyecto}/` | `fase-{N}/api/`, `fase-{N}/data-model/`, `fase-{N}/diagrams/`, `fase-{N}/quality/` |
+| Backend | `outputs/{proyecto}/` | `fase-{N}/module-handoffs/`, `fase-{N}/quality/QR-BE.md` |
+| Frontend | `outputs/{proyecto}/` | `fase-{N}/feature-handoffs/`, `fase-{N}/quality/QR-FE.md` |
+| QA | `outputs/{proyecto}/` | `fase-{N}/test-matrices/`, `fase-{N}/bug-reports/`, `fase-{N}/qa-signoffs/`, `fase-{N}/handoffs/` |
+| DevOps | `outputs/{proyecto}/` | `fase-{N}/docker/`, `fase-{N}/terraform/`, `fase-{N}/k8s/`, `fase-{N}/observability/` |
+
+## Reglas de escritura
+
+### Permitido
+- `outputs/{proyecto}/fase-{N}/` — entregables de trabajo de esta sesión
+- `outputs/{proyecto}/README.md` y `STATUS.md` — índices y estado
+- `outputs/{proyecto}/comun/` — documentos vivos compartidos (design-tokens, SAD, infra-requirements, integration-readme, env-requirements)
+- `outputs/{proyecto}/historial/` — **solo append** (observabilidad, notas registradas, nunca editar historial previo)
+
+### Prohibido
+- **Archivos nuevos en la raíz** de `outputs/{proyecto}/` (solo se permiten los listados arriba)
+- **Escribir en `fase-{M}`** con M distinto de N
+- **Editar** entregables de otra fase o de otro agente
+- **Documentar** un bug o entregable solo en el chat, sin archivo en `fase-{N}/`
+
+## Coordinación de handoffs entre fases
+
+Cuando un agente termina su trabajo en la fase N y entrega:
+
+1. **Genera el handoff** hacia el agente downstream en `fase-{N}/`
+2. **Actualiza `STATUS.md`** indicando el nuevo estado y a quién le toca actuar
+3. **NO incrementa la fase** por sí mismo a menos que sea su responsabilidad explícita (normalmente el PM o el coordinador)
+4. El agente receptor lee el handoff, valida inputs (reglas 00-01) y comienza su trabajo **sin cambiar la fase N**, a menos que el protocolo lo indique
+
+## Manejo de fases paralelas
+
+En algunos proyectos (como `laborregamarket`), varios agentes trabajan en **paralelo** sobre la misma fase N. Reglas:
+
+- Cada agente escribe únicamente en sus carpetas de `fase-{N}/` (ver tabla de destino por rol)
+- **Nunca editar** los entregables de otro agente, incluso en la misma fase
+- Si se detecta una **contradicción** entre entregables de la misma fase, usarlo como **hallazgo cross-agent** (documentar en `QA-INPUT-issues.md` o notificar al agente correspondiente)
+- Coordinar mediante los handoffs y el `STATUS.md`, no editando archivos ajenos
+
+## Promoción de fase (N → N+1)
+
+La fase se promueve cuando **todos** los entregables esperados de la fase N están completos y handoffs emitidos, **incluido** `QG-correcciones.md` de UX y de Arquitecto tras un QA APROBADO. La promoción la autoriza el rol coordinador (generalmente el PM). Debe reflejarse en el `STATUS.md` de **todos** los workspaces afectados. Ver `comun/PROCESO.md`.
+
+## Regla de idioma
+
+Toda la documentación (status, handoffs, quality, bugs) se redacta en **español**. Términos técnicos como endpoint, payload, bug, testing se usan en su forma original.
+
+## Regla final
+
+Si encuentras la fase activa en `STATUS.md` y no coincide con la que planeabas usar, **respeta el STATUS.md**. Nunca inventes una fase, cree una `fase-{M}` arbitraria o documentes fuera de la fase establecida.

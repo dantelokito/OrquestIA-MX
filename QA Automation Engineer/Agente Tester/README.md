@@ -47,12 +47,14 @@ El agente se activa **bajo demanda**. Dos formas de usarlo en Cursor:
 
 ## Flujo de trabajo
 
+0. **Bootstrap** — Leer `outputs/{proyecto}/STATUS.md` para confirmar fase activa N, bugs vivos y alcance.
 1. **Shift-Left** — Auditar ACs del PM y contratos `API-*` antes de diseñar pruebas; rechazar historias ambiguas.
-2. **Diseño de matriz** — Casos positivos, negativos, edge cases y seguridad en `test-matrices/TC-{Module}-matrix.md`.
+2. **Diseño de matriz** — Casos positivos, negativos, edge cases y seguridad en `fase-{N}/test-matrices/TC-{Module}-matrix.md`.
 3. **Ejecución** — Pruebas manuales/exploratorias en staging/QA con datos documentados.
-4. **Reporte de bugs** — Defectos en `bug-reports/BUG-{NNN}.md` con pasos de reproducción y evidencia.
+4. **Reporte de bugs** — Defectos en `fase-{N}/bug-reports/BUG-{NNN}.md` con pasos de reproducción y evidencia.
 5. **Automatización** — Scripts Playwright (API + E2E con POM) en `tests/`.
-6. **Sign-off** — Dictamen formal en `qa-signoffs/QA-{Module}-signoff.md` compartido con el PM.
+6. **Sign-off** — Dictamen en `fase-{N}/qa-signoffs/QA-{Module}-signoff.md` o progreso parcial en `QA-F{N}-progreso.md`.
+7. **Cierre** — Actualizar `STATUS.md` con resultado de corrida y enlaces a sign-off/handoffs.
 
 ## Estructura del repositorio
 
@@ -73,13 +75,20 @@ templates/
 
 outputs/                                  # Artefactos generados por proyecto
 └── {nombre-proyecto}/
-    ├── test-matrices/
-    ├── bug-reports/
-    ├── qa-signoffs/
-    └── tests/
-        ├── api/
-        └── e2e/
-            └── pages/
+    ├── README.md
+    ├── STATUS.md                         # Fase activa N, bugs vivos, última corrida
+    ├── comun/                            # TEST_PLAN.md, env-requirements.md
+    ├── historial/                        # Solo append (observabilidad, notas)
+    ├── tests/                            # Suite Playwright viva (no se parte por fase)
+    │   ├── api/
+    │   └── e2e/
+    │       └── pages/
+    └── fase-{N}/
+        ├── test-matrices/TC-*-matrix.md
+        ├── bug-reports/BUG-*.md
+        ├── qa-signoffs/QA-*-signoff.md
+        ├── QA-F{N}-handoff-backend.md    # Handoff priorizado a Backend
+        └── QA-F{N}-handoff-frontend.md   # Handoff priorizado a Frontend
 ```
 
 ## Convención de salida
@@ -121,6 +130,7 @@ Dictamen posible: **APROBADO** / **RECHAZADO** / **APROBADO CON CONDICIONES**
 
 | Agente | Entregable |
 |--------|------------|
-| PM | `QA-{Module}-signoff.md` |
-| DevOps | `env-requirements.md`, comandos CI Playwright |
-| Backend / Frontend | `bug-reports/BUG-{NNN}.md` para re-probar fixes |
+| PM | `QA-{Module}-signoff.md` o `QA-F{N}-progreso.md` |
+| Backend | `QA-F{N}-handoff-backend.md` + `BUG-{NNN}.md` |
+| Frontend | `QA-F{N}-handoff-frontend.md` + `BUG-{NNN}.md` |
+| DevOps | `comun/env-requirements.md`, comandos CI Playwright |

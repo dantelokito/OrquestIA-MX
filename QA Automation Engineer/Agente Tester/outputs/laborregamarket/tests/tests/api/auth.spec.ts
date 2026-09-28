@@ -136,4 +136,31 @@ test.describe("API AUTH — TC-AUTH", () => {
     });
     expect(response.status()).toBe(400);
   });
+
+  test("HP-AUTH-09: login + session authenticated", async ({ request }) => {
+    const loginRes = await request.post("/api/auth/login", { data: credentials.client });
+    expect(loginRes.status()).toBe(200);
+
+    const sessionRes = await request.get("/api/auth/session");
+    expect(sessionRes.status()).toBe(200);
+    const session = await sessionRes.json();
+    expect(session.data.authenticated).toBe(true);
+    expect(session.data.role).toBe("CLIENT");
+  });
+
+  test("HP-AUTH-09b: cookies portables en segundo request context", async ({ playwright }) => {
+    const ctx1 = await playwright.request.newContext();
+    const loginRes = await ctx1.post("/api/auth/login", { data: credentials.client });
+    expect(loginRes.status()).toBe(200);
+    const state = await ctx1.storageState();
+
+    const ctx2 = await playwright.request.newContext({ storageState: state });
+    const meRes = await ctx2.get("/api/users/me");
+    expect(meRes.status()).toBe(200);
+    const me = await meRes.json();
+    expect(me.data.email).toBe(credentials.client.email);
+
+    await ctx1.dispose();
+    await ctx2.dispose();
+  });
 });

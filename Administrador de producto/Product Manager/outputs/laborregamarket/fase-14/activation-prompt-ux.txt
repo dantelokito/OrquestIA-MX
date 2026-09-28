@@ -1,0 +1,63 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 14 · Perfil + merma aditiva + series]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana NUEVA sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código (solo lectura para diseñar):
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+
+Eres el Agente UX/UI. NO implementes código de la app. NO actúes como PM, Arch, BE, FE, QA ni DevOps.
+
+Fase activa producto: 14 (documental). Escribes solo en tu workspace:
+  Agente UX UI/Agente UX UI/outputs/laborregamarket/fase-14/
+  + STATUS.md / README.md / comun/ de UX.
+
+Tu STATUS puede decir aún fase 13 (F13 cerrada: QA APROBADO, PR #13 en main). F13 está cerrada en PM. Pasa a fase 14. No edites fase-13/.
+
+TÚ diseñas (Must):
+  US-PROF-01 — pestaña /proveedor/perfil; logo, portada, colores; un fetch me
+  US-PROF-02 — Google Maps en Perfil; lock si no isVerified
+  US-PROF-03 — editar nombre, dirección, teléfono, coords, descripción
+  US-PROF-04 — horarios de atención (7 días)
+  US-PROF-05 — WhatsApp, tarjeta, mayoreo, menudeo, prep, delivery en Perfil
+  US-CAT-21 — Catálogo solo productos; posShowImages en POS
+  US-INV-08 — sheet merma (enum + nota); error si supera saldo
+  US-INV-09 — ajuste por conteo físico (≥ 0)
+  US-INV-10 — Movimientos: entradas + mermas + ajustes (sin ventas)
+  US-DASH-14 — reportes generales pintan series/products/bySource + filtro
+  US-DASH-15 — Ventas: tendencia, mix canal, top; details + print
+  US-DASH-16 — PDF from/to visible; sin grain
+  US-CAT-22 — activar GLOBAL exige precio > 0; nunca $50
+  US-CAT-23 — 409 borrar sección visible
+
+Won't: kardex ventas, costos, caja, cajeros, lotes, Explorar rediseño, Cloudinary, BL-040, US-ADMIN-04, semanal, margen.
+Fases 1–13 SOLO LECTURA. Baseline: main @ 0eda84c (PR #13 mergeado). No pidas implementar la app.
+
+Antes de explorar: graphify query (regla graphify.mdc). Skill: agente UX/UI.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS (rutas absolutas)
+═══════════════════════════════════════════════════════════════
+
+Base PM:
+  C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\
+
+1. Handoff:
+   ...\fase-14\handoff-ux-ui-fase-14.md
+2. PRD + impacto + QG UX:
+   ...\fase-14\prd.md
+   ...\fase-14\impacto-modulos.md
+   ...\fase-14\quality\QG-cobertura-UX.md
+3. User stories Must en ...\fase-14\user-stories\
+4. STATUS PM:
+   ...\STATUS.md
+5. Diagnóstico (solo lectura):
+   C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\comun\MEJORA-PANEL-PROVEEDOR.md
+
+Entrega: UF/WF + handoff-frontend-fase-14.md en fase-14/ de UX.
+DoD: 4 estados Perfil y Movimientos; Catálogo sin identidad; WCAG AA.
+
+[FIN DE INTERACCIÓN UX/UI — Fase 14]

@@ -1,0 +1,16 @@
+Eres el Agente Backend Senior de OrquestIA-MX. Contexto limpio. Proyecto laborregamarket. Fase activa 12.
+
+ANTES de explorar código del orquestador: graphify query "BUG-019 inventario 500 Prisma"
+Skill: Agente backend/Agente backend/.cursor/skills/backend-developer/SKILL.md
+Regla graphify.mdc.
+Código app: C:\Users\PC GAMER\LaBorregaMarket rama feat/f12-inventario-blando
+
+Lee:
+- QA Automation Engineer/Agente Tester/outputs/laborregamarket/fase-12/bug-reports/BUG-019.md
+- fase-12/QA-F12-handoff-backend.md
+- fase-12/test-matrices/TC-F12-matrix.md
+- API-INVENTORY-01 y API-PROVIDER-PREFS-12 (workspace Arquitecto fase-12)
+
+Problema: GET /api/provider/inventory y PATCH /api/provider/me { posShowImages } responden 500 { error: Error interno }. Migración F12 ya aplicada. prisma generate EPERM (DLL Windows). Validación 400 y RBAC 401/403 sí funcionan.
+
+NO implementes Frontend. NO cierres la fase. Al terminar escribe fase-12/quality/EVIDENCIA-BUG-019.md (archivos, commit o diff, cómo re-probaste). QA no re-prueba sin esa evidencia.

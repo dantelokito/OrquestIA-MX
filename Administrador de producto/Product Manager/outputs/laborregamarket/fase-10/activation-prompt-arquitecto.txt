@@ -1,0 +1,85 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 10 · Admin + catálogo local]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana NUEVA sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Stack: Next.js 15 + Prisma 6 + PostgreSQL 15. Envelope ADR-003.
+
+Código: C:\Users\PC GAMER\LaBorregaMarket\
+Arquitectura (salida tuya):
+  Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\
+
+Fase actual: Fase 10 v0.10.2. TÚ diseñas contratos (Must):
+  US-SEC-01 — hasModulePermission POR módulo (cierra OBS-004)
+  US-SEC-02 — AUDIT escrituras; último ADMIN; IDOR catálogo proveedor
+  US-SEC-03 — higiene demo/prod; 401/403 en TODA ruta nueva (DEV-P2-011)
+  US-ADMIN-02 — CRUD Product global; NO hard-delete con ventas/ProviderProduct
+  US-ADMIN-03 — PATCH admin providers: verified, active, wholesale, delivery + US-REV-04
+  US-CAT-02 — SKU LOCAL (dueño = Provider)
+  US-CAT-03 — ProviderSection (nombre, sortOrder); borrar solo vacía; SIN anidar
+  US-MEDIA-06 — DISCO local: logo, portada, fotos de producto; SIN Cloudinary/S3
+  US-DASH-07 — productIds[] opcional (vacío = todos); GMV ≠ CANCELLED
+  US-DASH-08 — from/to TZ Monterrey; mes UI = atajo; tope span
+  US-DASH-09 — print = FE; PDF corte = Should
+  US-ADMIN-04 — Should: promover local → Product global
+
+Orden de diseño (igual que BE): SEC → CAT/MEDIA → DASH.
+Paths REST y schema Prisma los decides tú. Este handoff fija el qué, no el cómo.
+
+Fase 9 SOLO LECTURA. fase-6/ SOLO LECTURA. CO-F10-001 revoca A5. CO-F10-002: ADR-006 aparcado. CO-F10-003.
+category explorar sigue FRUTA|VERDURA|AGRICOLA. Pagos FUERA (CO-F6-001).
+Vendible = isAvailable + producto activo (US-CAT-01 / F5). JWT httpOnly. Sin 2FA.
+
+Skill: agente Arquitecto de este workspace.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS (rutas absolutas)
+═══════════════════════════════════════════════════════════════
+
+Base PM:
+  C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\
+
+1. Handoff PM:
+   ...\fase-10\handoff-arquitecto.md
+2. PRD:
+   ...\fase-10\prd.md
+3. Change orders:
+   ...\fase-10\change-orders\CO-F10-001-admin-catalogo-local.md
+   ...\fase-10\change-orders\CO-F10-002-media-disco-local.md
+   ...\fase-10\change-orders\CO-F10-003-dashboard-reportes.md
+4. User stories Must:
+   ...\fase-10\user-stories\US-SEC-01-rbac-por-modulo.md
+   ...\fase-10\user-stories\US-SEC-02-audit-ultimo-admin.md
+   ...\fase-10\user-stories\US-SEC-03-higiene-entorno.md
+   ...\fase-10\user-stories\US-ADMIN-02-crud-catalogo-global.md
+   ...\fase-10\user-stories\US-ADMIN-03-proveedores-flags.md
+   ...\fase-10\user-stories\US-CAT-02-producto-local.md
+   ...\fase-10\user-stories\US-CAT-03-secciones-dinamicas.md
+   ...\fase-10\user-stories\US-MEDIA-06-almacenamiento-disco.md
+   ...\fase-10\user-stories\US-DASH-07-venta-por-producto.md
+   ...\fase-10\user-stories\US-DASH-08-rango-fechas-mes.md
+   ...\fase-10\user-stories\US-DASH-09-imprimir-vista-filtrada.md
+5. Should (no bloquea):
+   ...\fase-10\user-stories\US-ADMIN-04-promover-local-global.md
+6. F1 API-ADMIN-01 + DB-products (solo lectura; dual SKU los sustituye en parte)
+7. STATUS.md + fase-10\README.md
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. ADRs: dual SKU + ProviderSection + último ADMIN + disco de imágenes (ADR-006 aparcado)
+   + ventana calendario from/to (no copiar rolling F3).
+2. Contratos API + migración Prisma Must + tests 401/403/IDOR:
+   delta admin products, PATCH flags, products/sections PROVIDER, upload disco,
+   reports from/to + productIds[].
+3. handoff-backend-fase-10.md OBLIGATORIO antes de activar Backend.
+4. Actualizar sad.md (productos / permisos / media / reports).
+
+NO: auto-global, secciones anidadas, chips Explore de sección, Redis,
+    CI YAML, Maps JS, Places, pasarela, 2FA, impersonation, CRUD usuarios,
+    BL-067, pan→radio, reopen F9, Cloudinary/S3/CDN, editar fase-6/,
+    ADMIN DASH ajeno, CSV, multi-mes.
+
+[FIN DE INTERACCIÓN ARQUITECTO — Fase 10]

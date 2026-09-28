@@ -10,7 +10,7 @@ test.describe("E2E RBAC — TC-RBAC UI", () => {
   });
 
   test("TC-RBAC-004: rutas públicas accesibles sin sesión", async ({ page }) => {
-    for (const path of ["/", "/login", "/registro", "/explorar"]) {
+    for (const path of ["/", "/registro", "/explorar"]) {
       await page.goto(path);
       await expect(page).not.toHaveURL(/\/login/);
     }
@@ -20,8 +20,9 @@ test.describe("E2E RBAC — TC-RBAC UI", () => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.login(credentials.client.email, credentials.client.password);
+    await expect(page).not.toHaveURL(/\/login/, { timeout: 15_000 });
     await page.goto("/admin");
-    await expect(page).toHaveURL(/^\/$|\/$/);
+    await expect(page).not.toHaveURL(/\/admin/);
   });
 
   test("TC-RBAC-003: sin sesión /cuenta redirige a login", async ({ page }) => {

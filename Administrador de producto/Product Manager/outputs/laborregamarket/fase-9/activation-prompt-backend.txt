@@ -1,0 +1,48 @@
+[INICIO DE INTERACCIÓN BACKEND — LaBorregaMarket Fase 9 · Suggest + chips]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO (ventana nueva)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Código: C:\Users\PC GAMER\LaBorregaMarket\
+
+Fase 9 v0.9.0. TÚ implementas CUANDO el Arquitecto publique
+  Agente Arquitecto\...\fase-9\handoff-backend-fase-9.md
+NO inventes contratos en este chat.
+
+Must esperado (según Arch):
+  US-EXPLORE-11 — query listing offersWholesale / offersDelivery + URL params
+  US-EXPLORE-09 — suggest o política q+geo sobre corpus en radio (si Arch lo pide)
+
+Sin trabajo BE Must:
+  US-EXPLORE-08, US-EXPLORE-10, US-GEO-24 (solo FE)
+
+SIN schema orgánico. SIN typeahead de SKUs como filas.
+Pagos: FUERA. NO CI YAML. NO DASH. NO pan→radio. F8 SOLO LECTURA.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+Canónico Arquitecto (cuando exista):
+  Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\fase-9\handoff-backend-fase-9.md
+
+PM:
+  ...\fase-9\prd.md
+  ...\fase-9\handoff-arquitecto.md
+  ...\fase-9\change-orders\CO-F9-001-deuda-explorar.md
+  ...\fase-9\user-stories\US-EXPLORE-09-header-typeahead.md
+  ...\fase-9\user-stories\US-EXPLORE-11-filterbar-chips.md
+  ...\STATUS.md
+
+Skill: agente Backend de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. Esperar handoff Arch.
+2. Implementar delta listing mayoreo/domicilio + lo que Arch diga para suggest.
+3. Tests. Envelope ADR-003. No tocar DASH, Redis, CI, orgánico.
+
+[FIN DE INTERACCIÓN BACKEND — Fase 9]

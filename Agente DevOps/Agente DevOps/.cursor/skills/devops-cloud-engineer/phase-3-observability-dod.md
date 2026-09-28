@@ -44,6 +44,8 @@ Usa estrictamente el formato de [templates/opentelemetry-logging.md](../../templ
 
 Antes de declarar lista una infraestructura o tubería de despliegue, debes verificar:
 
+- [ ] **PR listo (no merge):** PR abierto con checks verdes. Prohibido push/merge a `main`/`master` o producción; el humano mergea.
+- [ ] **Documentación de producto:** `README.md`, `PRODUCT.md` y `OBSERVABILITY.md` del repo de la app coinciden con la fase del PR.
 - [ ] **Docker inmutable:** Imágenes multi-stage construidas con usuario no privilegiado (non-root) y sin vulnerabilidades críticas/altas en escaneos Trivy.
 - [ ] **IaC Validado:** Scripts de Terraform formateados (`terraform fmt`), validados (`terraform validate`) y con almacenamiento de estado remoto y bloqueo activo (s3 + dynamodb).
 - [ ] **Pipeline Seguro:** Tubería CI/CD con etapas de linting, pruebas automatizadas, escaneo SAST y gestión segura de credenciales de despliegue.

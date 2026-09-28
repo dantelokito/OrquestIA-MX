@@ -1,0 +1,57 @@
+[INICIO DE INTERACCIÓN BACKEND — LaBorregaMarket Fase 10 · SEC + CAT + ADMIN]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO (ventana nueva)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Código: C:\Users\PC GAMER\LaBorregaMarket\
+
+Fase 10 v0.10.2. TÚ implementas CUANDO el Arquitecto publique
+  Agente Arquitecto\...\fase-10\handoff-backend-fase-10.md
+NO inventes contratos en este chat.
+
+Must esperado (según PM; forma exacta = Arch):
+  US-SEC-01 — permiso por módulo en /api/catalogs y /api/admin/*
+  US-SEC-02 — AUDIT; último ADMIN; 403 IDOR entre providers
+  US-SEC-03 — 401/403 en rutas nuevas; criterio prod demo copy (si es BE)
+  US-ADMIN-02 — CRUD Product global; no hard-delete con ventas
+  US-ADMIN-03 — PATCH flags verified/active/wholesale/delivery + US-REV-04
+  US-CAT-02 — alta producto LOCAL
+  US-CAT-03 — CRUD secciones + sortOrder; delete solo vacía
+  US-MEDIA-06 — upload DISCO: logo, portada, fotos producto; SIN Cloudinary/S3
+  US-DASH-07 — agregación por producto; productIds[] opcional
+  US-DASH-08 — from/to TZ Monterrey; 400 si rango inválido
+  US-ADMIN-04 — Should promover
+
+CO-F10-001 revoca A5. CO-F10-002: ADR-006 aparcado. CO-F10-003: DASH.
+US-CAT-01: inhabilitado → 409 orden/POS. Envelope ADR-003.
+Pagos: FUERA. NO CI YAML. NO editar fase-6/. NO pan→radio. F9 SOLO LECTURA.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+Canónico Arquitecto (cuando exista):
+  Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\fase-10\handoff-backend-fase-10.md
+
+PM:
+  ...\fase-10\prd.md
+  ...\fase-10\handoff-arquitecto.md
+  ...\fase-10\change-orders\CO-F10-001-admin-catalogo-local.md
+  ...\fase-10\change-orders\CO-F10-002-media-disco-local.md
+  ...\fase-10\change-orders\CO-F10-003-dashboard-reportes.md
+  ...\fase-10\user-stories\
+  ...\STATUS.md
+
+Skill: agente Backend de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. Esperar handoff Arch.
+2. Implementar SEC primero, luego schema CAT + APIs, luego ADMIN CRUD/flags, luego reports from/to.
+3. Tests: 401/403, IDOR, AUDIT, CAT-01, aislamiento local, upload disco (MEDIA-03), rango inválido DASH.
+4. No tocar Redis, CI, Explorar F9 contracts salvo q de detalle si Arch lo pide. No editar fase-6/.
+
+[FIN DE INTERACCIÓN BACKEND — Fase 10]

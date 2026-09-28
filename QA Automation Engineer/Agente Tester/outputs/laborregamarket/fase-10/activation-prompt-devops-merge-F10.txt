@@ -1,0 +1,51 @@
+[INICIO DE INTERACCIÓN DEVOPS — merge GitHub v0.10.2 / F10]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO (ventana nueva)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket
+Código: C:\Users\PC GAMER\LaBorregaMarket
+Ambiente QA: http://127.0.0.1:8080
+
+QA F10 está CERRADA documentalmente.
+Sign-off: APROBADO CON CONDICIONES (12/09/2026).
+Zero Blocker PASS para release localhost.
+
+Handoff:
+  Agente Tester\outputs\laborregamarket\fase-10\QA-F10-handoff-devops.md
+Sign-off:
+  Agente Tester\outputs\laborregamarket\fase-10\qa-signoffs\QA-F10-signoff.md
+STATUS QA:
+  Agente Tester\outputs\laborregamarket\STATUS.md
+
+Tu STATUS hoy: fase 7 CI (US-OPS-04 / DEV-P0-002).
+  Agente DevOps\Agente DevOps\outputs\laborregamarket\STATUS.md
+
+QA NO ejecuta git push. El merge/push es tuyo.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+- Merge / push a GitHub del código en LaBorregaMarket, según tu STATUS
+  (workflow ci.yml: build/start, NUNCA next dev).
+- Publicar v0.10.2 con el dictamen QA APROBADO CON CONDICIONES.
+
+═══════════════════════════════════════════════════════════════
+NO HACER
+═══════════════════════════════════════════════════════════════
+
+- No reabrir F8 ni F9.
+- No tratar DT-F10-001 ni DT-F10-002 como P0 de CI.
+  Specs cart-uuid.spec.ts, HP-MED-02 y TC-MED-009 PUEDEN fallar;
+  son cobertura de deuda, no gate de merge.
+- No exigir fallback UUID, copy 20 MB ni bodySizeLimit para este merge.
+- No abrir fase 11.
+- No implementar uuid helper ni copy FE (eso es FE/BE en backlog DT).
+
+Deuda (backlog, no P0):
+  fase-10/deuda-tecnica/DT-F10-001-uuid-contexto-inseguro.md
+  fase-10/deuda-tecnica/DT-F10-002-media-20mib-fe-bodysize.md
+
+[FIN DE INTERACCIÓN DEVOPS — merge F10]

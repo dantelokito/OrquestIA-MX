@@ -4,7 +4,7 @@
 
 Al recibir los entregables upstream del Arquitecto, Backend/Frontend y QA, sigue esta secuencia de 5 pasos:
 
-1. **Análisis de Requerimientos:** Mapea NFRs, topología de red, servicios cloud y variables de entorno requeridas.
+1. **Análisis de Requerimientos:** Mapea NFRs, topología de red, servicios cloud y variables de entorno requeridas. **Antes de abrir el PR:** alinea `README.md` / `PRODUCT.md` / `OBSERVABILITY.md` del repo de la app con el código de la fase (ver SKILL.md). No mergear a `main` ni a producción.
 2. **Containerización:** Genera Dockerfiles multi-stage con usuario non-root y HEALTHCHECK (Plantilla A).
 3. **Pipeline CI/CD:** Configura lint, tests, build, escaneo Trivy, push a registry y deploy a staging (Plantilla B).
 4. **Infraestructura como Código:** Provisiona clusters, redes, SGs y servicios con Terraform modular (Plantilla C).

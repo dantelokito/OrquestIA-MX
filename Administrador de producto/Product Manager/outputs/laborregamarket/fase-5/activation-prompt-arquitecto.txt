@@ -1,0 +1,52 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 5]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Stack: Next.js 15 + Prisma 6 + PostgreSQL 15. Envelope ADR-003.
+
+Código: C:\Users\PC GAMER\LaBorregaMarket\
+Arquitectura F4 (referencia, ya diseñada): Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\
+
+Fase actual: Fase 5 v0.5.0 — GEO Leaflet/OSM (revoca D-F4-2 / ADR-016), endurecer ProviderProduct inactivo en todos los canales, colores primario/secundario en sesión PROVIDER.
+
+Decisiones PM ya cerradas (14/08/2026):
+- CO-F5-001: NO Google Maps JS API en /explorar (no se puede pagar). Leaflet + OSM. Cierra OBS-F4-023. Embed/URL de reseñas Google (US-REV-03) se mantiene.
+- Filtro de negocio GEO: sigue lat/lng/radiusKm Haversine (US-GEO-02). Bounding box API es Could, no Must. Viewport sync de lista es Should UX.
+- Pagos FUERA de F5 (BL-040 → F6+).
+- CAT: producto inhabilitado no se lista ni se vende (POST /api/orders y POS rechazan). No es stock.
+- BRAND: Provider.primaryColor / secondaryColor; tema solo en sesión PROVIDER; rechazo de contraste insuficiente en servidor; CLIENT/ADMIN ven marca de plataforma.
+- La directiva Leaflet (react-leaflet, cluster, debounce 300 ms, next/dynamic ssr:false) es IDEA de implementación, no contrato ni AC. Úsala en ADR-020.
+
+Schema relevante: Provider (F4 ya sumó googlePlaceId, preparationTimeMinutes, offersDelivery); ProviderProduct con flag activo F1.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM:
+   Administrador de producto\Product Manager\outputs\laborregamarket\fase-5\handoff-arquitecto.md
+2. PRD F5:
+   ...\fase-5\prd.md
+3. CO-F5-001:
+   ...\fase-5\change-orders\CO-F5-001-revertir-google-maps.md
+4. User stories F5 (US-GEO-04/05, US-CAT-01, US-BRAND-01/02)
+5. Schema actual: LaBorregaMarket/prisma/schema.prisma
+6. ADR a superar: Agente Arquitecto/.../adrs/ADR-016 (motor mapa Google) — no editar F4; nuevo ADR-020 en fase-5
+
+Skill: @software-architect
+
+═══════════════════════════════════════════════════════════════
+ENTREGABLES
+═══════════════════════════════════════════════════════════════
+
+ADRs 020-022 (Leaflet/OSM, brand colors, catálogo inactivo)
+Deltas API-GEO-01 (motor, no query), API-PROVIDER-PRODUCTS-01, API-PROVIDER-SETTINGS-01 (colores), sesión/me para hidratar tema
+Actualizar DB-providers.md
+handoff-backend-fase-5.md
+Actualizar sad.md (F5 ya no es "visión pagos") y OBSERVABILITY.md
+
+NO diseñar pasarela de pagos, CFDI, logística de reparto, Google Maps JS API, Places API, Distance Matrix, bbox API Must.
+
+[FIN DE INTERACCIÓN ARQUITECTO]

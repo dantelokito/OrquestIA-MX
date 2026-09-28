@@ -1,0 +1,57 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 6 · slices REPORTES + GEO]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local tipo Airbnb para fruterías en Monterrey.
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código:
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+
+Fase actual: Fase 6 v0.6.1 — TRES slices. TÚ diseñas REPORTES (UF-DASH-02 + print/PDF)
+Y delta EXPLORAR zoom↔radio (US-GEO-07/08). El slice DEUDA YA está en:
+  Agente UX UI\...\fase-6\handoff-frontend-fase-6.md
+NO lo rediseñes (ContactCTA, invariante Leaflet, fallback marca).
+
+Decisiones cerradas (16/08/2026, Dante / CO-F6-001 + CO-F6-002):
+- Pagos, cobros POS nuevos y pago en línea: FUERA hasta nuevo aviso. POS F3 intacto.
+- Reportes en panel PROVIDER (su negocio). NO copiar /admin/analytics.
+- Periodo: día, mes (MM/AAAA) o año (AAAA) CONCRETO. TZ Monterrey.
+- Imprimir: AMBOS — diálogo del navegador + CSS print, Y descargar PDF.
+- GEO: círculo SIEMPRE visible. Zoom/pan y slider 1-25 km = mismo radiusKm Haversine.
+  Slider encuadra el círculo. Clamp 25 km + hint. NO bbox Must. NO clustering.
+- Loading en Explorar: loop B1→B2→B3 (`comun/brand/loader-borrega/`), componente reutilizable;
+  prefers-reduced-motion = B1 estático. NO skeleton Must. Mapa y círculo siguen visibles.
+- Dashboard F3 "hoy + 7d" puede quedar como vista por defecto.
+
+NO diseñar: pasarela, CFDI, PWA, flotilla, ticket térmico, CSV, email del reporte,
+Google Maps JS, clustering, bbox Must, deuda ContactCTA/Leaflet/marca.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM:
+   Administrador de producto\Product Manager\outputs\laborregamarket\fase-6\handoff-ux-ui.md
+2. PRD: ...\fase-6\prd.md
+3. Change orders: CO-F6-001, CO-F6-002
+4. User stories: US-DASH-04/05/06, US-GEO-07, US-GEO-08
+5. Índice: README.md + STATUS.md del PM
+6. Referencia F3 (solo lectura): WF-proveedor-dashboard, UF-DASH-01
+7. Referencia F5 (solo lectura): UF-GEO-01-mapa-leaflet-radio, WF-explorar-leaflet
+8. Frames loader: ...\comun\brand\loader-borrega\ (B1.png, B2.png, B3.png)
+
+Skill: @ux-ui-designer
+
+═══════════════════════════════════════════════════════════════
+ENTREGABLES
+═══════════════════════════════════════════════════════════════
+
+UF-DASH-02 + WF reportes/print/PDF CTAs
+Delta UF-GEO-01 / WF-explorar-leaflet: círculo siempre on, slider vivo con zoom, loader borrega B1-B3 (no pulse genérico)
+Delta handoff-frontend F6 (reportes + GEO) — no reescribir el de deuda
+Actualizar information-architecture.md
+Quality Gate cuando FE implemente
+
+[FIN DE INTERACCIÓN UX/UI]

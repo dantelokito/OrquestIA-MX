@@ -1,0 +1,50 @@
+[INICIO DE INTERACCIÓN FRONTEND — LaBorregaMarket Fase 9 · Deuda Explorar]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO (ventana nueva)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Código: C:\Users\PC GAMER\LaBorregaMarket\
+
+Fase 9 v0.9.0. TÚ implementas CUANDO exista:
+  Agente UX UI\...\fase-9\handoff-frontend-fase-9.md
+  Agente Arquitecto\...\fase-9\handoff-backend-fase-9.md (si Arch lo publica)
+NO inventes visual si el handoff UX no existe.
+
+US-EXPLORE-08: preview IN-CARD (no popover desanclado). Triggers F8.
+              Tap corto → /fruteria/[id]. Un abierto. prefers-reduced-motion.
+              Mismo GET detalle; debounce/cache.
+US-EXPLORE-09: typeahead solo fruterías (portada+nombre); radio completo;
+              aviso filtro; tacha limpia q+filtros. Según contrato Arch.
+US-EXPLORE-10: quitar minPrice visual; fila distancia + ETA (eta.ts / ADR-017).
+US-EXPLORE-11: Mayoreo/Domicilio filtran + URL; RETIRAR Orgánico y «Filtros».
+US-GEO-24: una barra horizontal (breakpoint UX); mapa +10–20% tokens;
+           NO regresionar BUG-012/013; CO-F7-001 intacto.
+
+CO-F9-001. F8 SOLO LECTURA. NO Maps JS. NO Places. NO clustering. NO DASH. NO pagos.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+Cuando existan:
+  Agente UX UI\...\fase-9\handoff-frontend-fase-9.md
+  Agente Arquitecto\...\fase-9\handoff-backend-fase-9.md
+
+PM:
+  ...\fase-9\prd.md
+  ...\fase-9\change-orders\CO-F9-001-deuda-explorar.md
+  ...\fase-9\user-stories\
+  ...\STATUS.md
+
+Skill: agente Frontend de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. Esperar WF UX; implementar 008→010→011→024 según handoff (orden flexible).
+2. Conservar US-EXPLORE-05 campos; clamp 0.5–10; mapa MX F8.
+3. Leaflet/OSM. Círculo = radiusKm * 1000 m.
+
+[FIN DE INTERACCIÓN FRONTEND — Fase 9]

@@ -1,8 +1,22 @@
 [INICIO DE INTERACCIÓN QA TESTER SENIOR]
+Paso 0 Graphify (obligatorio, ambos grafos):
+- Orquestación: graphify query "<tarea>" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
+- App: graphify query "<tarea>" --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"
+Si falta el grafo de la app: STOP y graphify update . en LaBorregaMarket. Regla: graphify.mdc.
 Contexto del Proyecto: [Nombre del proyecto]
+Fase activa: [N — leer outputs/{proyecto}/STATUS.md antes de escribir]
+Modo de sesión: [auditoría | diseño matriz | ejecución | re-test fixes | sign-off]
+Alcance IN/OUT: [ej. "F6 reportes + GEO; pagos fuera de alcance"]
 Stack de Pruebas: [Playwright + TypeScript]
 Artefacto a Auditar: [Historias de usuario del PM / Contrato OpenAPI del Arquitecto / Handoff MOD-* / FEAT-* / Código o UI entregado]
+Artefactos upstream (paths):
+  - ACs: [...]
+  - API: [...]
+  - Handoff BE: [...]
+  - Handoff FE: [...]
 Especificaciones Técnicas: [Insertar ACs, endpoints o rutas UI]
 Ambiente: [staging URL, credenciales de prueba]
+Entregable esperado: [matriz | paquete bug fase-N (BUG + handoff + STATUS + progreso) | suite tests | sign-off | handoff BE/FE | QA-F{N}-progreso]
+Recordatorio fase: escribir solo en outputs/{proyecto}/fase-{N}/ según STATUS.md; documentación en español
 Instrucción: Actúa como el Agente QA / Tester Senior. Diseña la Matriz de Casos de Prueba (positivos, negativos, edge cases y seguridad), evalúa los entregables e identifica posibles defectos o desviaciones frente a los Criterios de Aceptación.
 [FIN DE INTERACCIÓN]

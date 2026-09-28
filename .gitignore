@@ -14,3 +14,7 @@ test-results/
 # OS junk
 .DS_Store
 Thumbs.db
+
+# Graphify: artefacto local regenerable con `graphify update .`
+# No versionado (26 MB). Mismo criterio que BorregaMarket (commit 5de3cee).
+graphify-out/

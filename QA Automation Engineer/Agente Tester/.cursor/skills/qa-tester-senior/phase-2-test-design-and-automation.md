@@ -22,8 +22,26 @@ Usa [templates/test-case.md](../../templates/test-case.md) para cada caso indivi
 
 ---
 
-## 2. Plantilla Estandarizada de Reporte de Defectos (Bug Report)
-Cuando detectes una desviación entre el resultado obtenido y los Criterios de Aceptación o Contrato de API, debes levantar un ticket con el siguiente formato:
+## 2. Workflow completo de reporte de defectos
+
+**Idioma:** redacta todos los entregables en **español**.
+
+Cuando detectes una desviación entre el resultado obtenido y los Criterios de Aceptación o Contrato de API, sigue este checklist en la **fase activa N** (`outputs/{proyecto}/STATUS.md`):
+
+1. **Confirmar fase activa** — Leer `STATUS.md` → N. Prohibido escribir en `fase-{M}` con M ≠ N.
+2. **Bug report** — Crear o actualizar `outputs/{nombre-proyecto}/fase-{N}/bug-reports/BUG-{NNN}.md` con [templates/bug-report.md](../../templates/bug-report.md).
+3. **Contenido mínimo del bug** — Incluir: causa raíz, rol responsable (Frontend / Backend), fix esperado, TCs afectados, evidencia (stack, logs, HTTP).
+4. **Handoffs** — Actualizar `fase-{N}/QA-F{N}-handoff-frontend.md` y/o `QA-F{N}-handoff-backend.md` con cola priorizada, archivos sugeridos y DoD de re-prueba.
+5. **Prompts de activación** — Si hay asignación a otro agente, crear `fase-{N}/activation-prompt-*-BUG-{NNN}.txt` (en español) para copiar en su chat.
+6. **Progreso y README** — Actualizar `fase-{N}/qa-signoffs/QA-F{N}-progreso.md` y `fase-{N}/README.md`.
+7. **STATUS** — Actualizar `outputs/{proyecto}/STATUS.md` (bugs vivos/cerrados, Zero Blocker, enlaces).
+8. **Cobertura** — Si el bug no estaba cubierto: actualizar `fase-{N}/test-matrices/TC-*-matrix.md` y/o spec en `tests/`.
+
+**Escalación de severidad** (ej. Major → Blocker): actualizar el mismo `BUG-{NNN}.md`, handoffs y `STATUS.md` en la misma sesión.
+
+**Entregable incompleto:** describir el bug solo en chat o crear únicamente el `.md` sin handoffs/STATUS/progreso cuando aplica → la sesión QA no está cerrada.
+
+### Plantilla del bug report
 
 > ### 🐞 BUG-[ID]: [Resumen corto y conciso del problema]
 > **Módulo / Componente:** [Backend / Frontend / API / UI]  
@@ -52,8 +70,6 @@ Cuando detectes una desviación entre el resultado obtenido y los Criterios de A
 > }
 > ```
 
-Documenta cada defecto en `outputs/{nombre-proyecto}/bug-reports/BUG-{NNN}.md` usando [templates/bug-report.md](../../templates/bug-report.md).
-
 ---
 
 ## 3. Estrategia y Frameworks de Automatización (QA Automation)
@@ -76,7 +92,7 @@ Ante cada módulo o feature entregado, sigue esta secuencia:
 1. **Auditar ACs y contratos** — Verificar que los criterios de aceptación sean medibles y que los contratos `API-*` estén completos.
 2. **Diseñar matriz** — Generar `test-matrices/TC-{Module}-matrix.md` con las 4 dimensiones.
 3. **Ejecutar pruebas manuales/exploratorias** — En ambiente staging/QA con datos de prueba documentados.
-4. **Reportar defectos** — Crear `bug-reports/BUG-{NNN}.md` por cada desviación detectada.
+4. **Reportar defectos** — Seguir el workflow completo de la sección 2 (paquete `fase-{N}/`, no solo el `.md` del bug).
 5. **Automatizar regresión** — Implementar scripts Playwright en la estructura definida abajo.
 6. **Re-probar fixes** — Verificar que los defectos corregidos pasen antes del sign-off.
 
