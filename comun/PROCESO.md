@@ -2,7 +2,7 @@
 
 Documento vivo de orquestación. Todos los agentes lo consumen como el backlog del PM: es la cadena canónica, no un STATUS de fase.
 
-Cerebro de orquestación: `graphify-out/graph.html`. Cerebro de la app: `C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.html`. Consulta: `graphify query`, `graphify path`, `graphify explain` con `--graph` del corpus correcto.
+Cerebro de orquestación: `<ORQUESTA_REPO>/graphify-out/graph.html`. Cerebro de la app: `<APP_REPO>/graphify-out/graph.html`. Consulta: `graphify query`, `graphify path`, `graphify explain`.
 
 ## Cadena canónica
 
@@ -33,12 +33,12 @@ Un rol = un subagente o chat limpio. El orquestador **no** implementa FE/BE/QA/U
 Prompt mínimo al activar:
 
 1. `graphify query` de orquestación (fase, handoffs)
-2. `graphify query` de LaBorregaMarket (`--graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"`)
+2. `graphify query` de <APP_REPO> (`--graph "<APP_REPO>/graphify-out/graph.json"`)
 3. Ruta del handoff anterior
 4. Skill del rol
 5. Regla `graphify.mdc`
 
-Si falta el grafo de la app: STOP y `graphify update .` en `C:\Users\PC GAMER\LaBorregaMarket`. Fallback de orquestación (`comun/PROCESO.md`) solo si no hay grafo de este repo.
+Si falta el grafo de la app: STOP y `graphify update .` en `<APP_REPO>`. Fallback de orquestación (`comun/PROCESO.md`) solo si no hay grafo de este repo.
 
 Los `activation-prompt-*.txt` son respaldo para pegar en un chat nuevo; no son excusa para seguir en la ventana larga del orquestador.
 
@@ -67,21 +67,21 @@ Si no hubo bugs cerrados en la fase, ambos archivos lo declaran explícitamente.
 
 Dos corpus; no fusionar:
 
-- **Orquestación:** este repo (reglas, STATUS, fase activa, `comun/`). Tras un handoff: `graphify update .`. Cerebro: `graphify-out/graph.html`.
-- **App:** `C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json`. Tras cambiar código: `graphify update .` en ese repo. Cerebro: `LaBorregaMarket/graphify-out/graph.html`.
+- **Orquestación:** este repo (reglas, STATUS, fase activa, `comun/`). Tras un handoff: `graphify update .`. Cerebro: `<ORQUESTA_REPO>/graphify-out/graph.html`.
+- **App:** `<APP_REPO>`. Tras cambiar código: `graphify update .` en ese repo. Cerebro: `<APP_REPO>/graphify-out/graph.html`.
 
 PM, UX/UI, Arquitecto, Backend, Frontend, QA y DevOps consultan **ambos** antes de analizar. Si falta el grafo de la app: STOP y regenerar.
 
 ## Áreas de mejora (revisión pre-F11)
 
 | Hallazgo | Ajuste en vigor |
-|----------|-----------------|
+|----------|------------------|
 | Siete STATUS pueden divergir; no había un doc de proceso compartido | Este archivo + Graphify |
 | Activación mixta (prompt pegado vs orquestador largo) | Un rol = un contexto nuevo |
 | DevOps hablaba de merge a `main` / prod | Solo PR; humano mergea |
 | QA cerraba bugs y UX/Arch no re-documentaban | QG-correcciones obligatorio antes de promover |
 | FE/BE no dejaban evidencia de fix | `EVIDENCIA-BUG-{NNN}.md` antes de re-test |
-| “Lista para producción” incluía deploy del agente | Lista = cadena validada + PR listo; prod la autoriza el humano |
+| "Lista para producción" incluía deploy del agente | Lista = cadena validada + PR listo; prod la autoriza el humano |
 
 ## Inputs Utilizados
 
@@ -94,3 +94,7 @@ PM, UX/UI, Arquitecto, Backend, Frontend, QA y DevOps consultan **ambos** antes 
 - **Archivo:** `comun/PROCESO.md`
 - **Agente Downstream:** todos los roles + orquestador
 - **Inputs Requeridos:** handoff de la fase activa, grafo, skill del rol
+
+---
+
+**Nota de seguridad:** Este documento debe mantenerse en un repositorio privado o ser sanitizado antes de hacerlo público. Contiene referencias a rutas y estructuras internas del proyecto en desarrollo.
