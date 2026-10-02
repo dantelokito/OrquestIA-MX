@@ -1,0 +1,61 @@
+[INICIO DE INTERACCIÓN FRONTEND — BUG-015 Blocker Encargar]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket
+Código: C:\Users\PC GAMER\LaBorregaMarket
+Ambiente: http://127.0.0.1:8080
+
+Ticket QA: BUG-015 — Blocker, P1
+Handoff: Agente Tester\outputs\laborregamarket\fase-10\QA-F10-handoff-frontend.md
+Bug report: Agente Tester\outputs\laborregamarket\fase-10\bug-reports\BUG-015.md
+
+Al pulsar «Ver carrito» / «Encargar» desde /fruteria/[id], /carrito
+revienta con global-error:
+
+  Algo salió mal.
+  crypto.randomUUID is not a function
+  Intentar de nuevo
+
+Causa: useRef(crypto.randomUUID()) en CartPageClient al montar.
+El API de órdenes NO se llama. Backend NO actúa.
+
+La misma llamada existe en PosPageClient (3 sitios). Un solo ticket.
+
+═══════════════════════════════════════════════════════════════
+FIX OBLIGATORIO
+═══════════════════════════════════════════════════════════════
+
+1. Crear helper newIdempotencyKey() (p. ej. src/lib/uuid.ts):
+   - Si typeof globalThis.crypto?.randomUUID === "function" → usarlo
+   - Si no, UUID v4 con crypto.getRandomValues
+   - Último recurso: string único Date.now + random
+
+2. CartPageClient.tsx:
+   - Quitar crypto.randomUUID() del inicializador de useRef
+   - Lazy-init: if (!idempotencyRef.current) idempotencyRef.current = newIdempotencyKey()
+
+3. PosPageClient.tsx:
+   - Sustituir L54, L154 (qs-${...}), L227
+
+═══════════════════════════════════════════════════════════════
+NO TOCAR
+═══════════════════════════════════════════════════════════════
+
+- API / backend / Prisma / Idempotency-Key en servidor
+- global-error.tsx (el TypeError debe desaparecer, no maquillarse)
+- Explorar F8/F9, admin F10, media, reportes, US-ADMIN-04
+
+═══════════════════════════════════════════════════════════════
+DoD
+═══════════════════════════════════════════════════════════════
+
+1. /carrito con ítems muestra resumen y «Confirmar pedido» (cero global-error)
+2. /proveedor/pos abre sin global-error
+3. Spec QA: cwd outputs/laborregamarket/tests
+   npx playwright test tests/e2e/cart-uuid.spec.ts
+4. Avisar a QA para cerrar BUG-015
+
+[FIN DE INTERACCIÓN FRONTEND — BUG-015]

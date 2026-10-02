@@ -1,0 +1,49 @@
+---
+description: Entregables solo en la fase activa de outputs/{proyecto}/. Prohibido documentar en raíz o en otra fase. Complementa las reglas globales de validación cruzada.
+alwaysApply: true
+---
+
+# Outputs por fase activa
+
+La **fase activa N** está en `outputs/{proyecto}/STATUS.md`. Léelo **antes** de escribir cualquier entregable.
+
+> **Nota global:** Estas reglas de ubicación de archivos se complementan con las reglas de **validación cruzada, calidad y protocolo de handoff** definidas en el `.cursor/rules/` raíz del workspace: `graphify.mdc`, `00-validacion-cruzada-global.mdc`, `01-recepcion-upstream.mdc`, `02-calidad-output.mdc`, `03-protocolo-handoff.mdc` y `05-especifico-rol.mdc`.
+
+**Idioma:** toda la documentación QA (bugs, handoffs, sign-offs, matrices, prompts) se redacta en **español**.
+
+## Permitido escribir
+
+- `outputs/{proyecto}/fase-{N}/` (matrices, bugs, sign-offs, handoffs de esta fase)
+- `outputs/{proyecto}/README.md` y `STATUS.md`
+- `outputs/{proyecto}/comun/` (TEST_PLAN, env-requirements)
+- `outputs/{proyecto}/historial/` **solo append**
+- `outputs/{proyecto}/tests/` — suite Playwright viva (no es documento de fase; no partirla)
+
+## Prohibido
+
+- Matrices, bugs, handoffs o sign-offs nuevos en la raíz de `outputs/{proyecto}/`
+- Escribir en `fase-{M}` con M distinto de N
+- Documentar un bug solo en el chat sin archivos en `fase-{N}/`
+
+## Destino por rol (este workspace = QA)
+
+`fase-{N}/test-matrices/`, `fase-{N}/bug-reports/`, `fase-{N}/qa-signoffs/`, `fase-{N}/QA-F{N}-handoff-*.md`, `fase-{N}/activation-prompt-*.txt`. Specs: `tests/`.
+
+## Paquete obligatorio al documentar un bug
+
+Al crear o actualizar un defecto (nuevo `BUG-{NNN}` o escalación de severidad), genera el paquete completo en la **fase activa N**:
+
+| Archivo | Cuándo |
+|---------|--------|
+| `fase-{N}/bug-reports/BUG-{NNN}.md` | Siempre (nuevo o actualizar existente) |
+| `fase-{N}/QA-F{N}-handoff-frontend.md` y/o `QA-F{N}-handoff-backend.md` | Si el bug requiere acción FE y/o BE |
+| `fase-{N}/activation-prompt-*-BUG-{NNN}.txt` | Si hay handoff a otro agente (copiar/pegar en su chat) |
+| `fase-{N}/qa-signoffs/QA-F{N}-progreso.md` | Actualizar bugs vivos, quality gates y métricas |
+| `fase-{N}/README.md` | Enlazar bug, handoffs y prompts |
+| `outputs/{proyecto}/STATUS.md` | Fase activa, bugs abiertos/cerrados, enlaces |
+| `fase-{N}/test-matrices/TC-*-matrix.md` | Si el bug afecta casos ya documentados |
+| `outputs/{proyecto}/tests/` | Si falta cobertura automatizada (ej. smoke Blocker) |
+
+**Escalación:** si sube severidad (ej. Major → Blocker), actualizar el mismo `BUG-{NNN}.md`, handoffs, `STATUS.md` y progreso en la **misma sesión**.
+
+**Entregable incompleto:** un bug descrito solo en chat o con un solo `.md` sin handoffs/STATUS/progreso cuando aplica → la sesión QA no está cerrada.

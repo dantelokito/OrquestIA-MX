@@ -1,0 +1,53 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 5]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local tipo Airbnb para fruterías en Monterrey.
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código:
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+
+Fase actual: Fase 5 — GEO Leaflet/OSM, catálogo endurecido, marca por proveedor (v0.5.0).
+Fase 4 está cerrada documentalmente (reseñas, GEO Maps JS, notify-scale, analytics, báscula). NO rediseñes esos flujos salvo el delta de Explorar.
+
+Decisiones cerradas (14/08/2026):
+- CO-F5-001: Google Maps JS API en /explorar queda REVOCADA. Motor Open Source (Leaflet + OSM). Cierra OBS-F4-023 (mapa gris sin API key).
+- Layout Explorar: CTA "Usar mi ubicación" en el BANNER SUPERIOR. Slider de radio 1-25 km en el BORDE INFERIOR DEL MAPA. Filtro de negocio = radio Haversine (F4), no bbox Must.
+- US-REV-03 (enlace/embed Google de reseñas para verificados) se MANTIENE — no es la JS API de pago.
+- Catálogo: inhabilitar producto lo oculta en explorar, detalle, carrito y POS; no se puede pedir. No es stock.
+- Branding: primario + secundario del proveedor en TODA su sesión (panel, POS, ops, dashboard y /explorar si entra logueado como PROVIDER). CLIENT/ADMIN/invitado = marca de plataforma.
+- Pagos, CFDI, PWA, flotilla: NO.
+
+NO diseñar: pasarela, CFDI, PWA, logística de reparto, Google Maps JS en Explorar, tema de proveedor pintando cards de CLIENT.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff:
+   Administrador de producto\Product Manager\outputs\laborregamarket\fase-5\handoff-ux-ui.md
+2. PRD:
+   ...\fase-5\prd.md
+3. Change order:
+   ...\fase-5\change-orders\CO-F5-001-revertir-google-maps.md
+4. User stories:
+   ...\fase-5\user-stories\US-GEO-04, US-GEO-05, US-CAT-01, US-BRAND-01, US-BRAND-02
+5. Índice (no cargar fases anteriores completas):
+   ...\Product Manager\outputs\laborregamarket\README.md + STATUS.md
+6. Referencia de layout F4 a reemplazar (solo lectura):
+   Agente UX UI\...\fase-4\wireframes\WF-explorar-geo.md
+
+Skill: @ux-ui-designer
+
+═══════════════════════════════════════════════════════════════
+ENTREGABLES
+═══════════════════════════════════════════════════════════════
+
+UF-GEO-01 (delta F5), UF-CAT-01, UF-BRAND-01
+Wireframes: explorar (banner ubicación + radio al pie del mapa Leaflet), config colores proveedor, toggle producto/empty POS
+Actualizar design-tokens.md (marca por sesión PROVIDER) y handoff-frontend.md a v0.5.0
+Quality Gate: fase-5/quality/REVIEW-UX.md
+
+[FIN DE INTERACCIÓN UX/UI]

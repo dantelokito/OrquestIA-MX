@@ -1,0 +1,48 @@
+[INICIO DE INTERACCIÓN BACKEND — Aviso BUG-010 + cola BUG-009]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket
+Código: C:\Users\PC GAMER\LaBorregaMarket
+Ambiente: http://localhost:8080
+
+Handoff: Agente Tester\outputs\laborregamarket\fase-6\QA-F6-handoff-backend.md
+
+═══════════════════════════════════════════════════════════════
+BUG-010 — NO ES BACKEND (solo informativo)
+═══════════════════════════════════════════════════════════════
+
+QA escaló BUG-010 a Blocker: crash al entrar a /explorar
+  TypeError: Cannot read properties of undefined (reading 'layerPointToLatLng')
+  en ExploreMap.tsx FitCircle (cliente Leaflet)
+
+NO implementes nada en GEO para este ticket:
+  - NO cambiar GET /api/providers
+  - NO cambiar clamp radiusKm 1-25
+  - NO cambiar bbox MTY
+  - NO workaround server-side
+
+El fix es Frontend (L.latLng.toBounds + map.whenReady).
+
+Smoke opcional tras fix FE:
+  GET /api/providers?lat=25.7475&lng=-100.2830&radiusKm=10 → 200
+
+═══════════════════════════════════════════════════════════════
+TU COLA DE CÓDIGO: BUG-009 (sin cambio)
+═══════════════════════════════════════════════════════════════
+
+GET /api/provider/reports.pdf?grain=day&date=2020-01-01
+  Autenticado PROVIDER → 500 {"error":"Error interno"}
+  JSON hermano → 200 empty:true
+
+Archivos:
+  src/app/api/provider/reports.pdf/route.ts
+  src/lib/reports/pdf.ts
+  next.config.ts (serverExternalPackages: ['pdfkit']?)
+
+DoD: TC-REP-008 + HP-DASH-06 Pass
+No se firma F6 hasta BUG-009 + BUG-010 (FE) cerrados.
+
+[FIN DE INTERACCIÓN BACKEND]

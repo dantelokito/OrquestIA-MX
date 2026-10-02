@@ -1,0 +1,57 @@
+[INICIO DE INTERACCIÓN FRONTEND — BUG-016 Major límite 20 MiB]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket
+Código: C:\Users\PC GAMER\LaBorregaMarket
+Ambiente: http://127.0.0.1:8080
+
+Ticket QA: BUG-016 — Major, P2
+Handoff: Agente Tester\outputs\laborregamarket\fase-10\QA-F10-handoff-frontend.md
+Bug report: Agente Tester\outputs\laborregamarket\fase-10\bug-reports\BUG-016.md
+
+Cola: BUG-015 (Blocker Encargar) es P1 — ciérralo primero o en paralelo
+sin mezclar commits con este ticket.
+
+Stakeholder (install local): JPEG/PNG/WebP hasta 20 MiB en:
+  - logo (perfil proveedor)
+  - portada
+  - imagen de producto (local + admin GLOBAL)
+
+Hoy MediaUpload corta a 5 MB ANTES del POST. Backend tiene el mismo tope:
+si solo cambias FE, el API devolverá 400. Coordina MAX = 20 * 1024 * 1024.
+
+═══════════════════════════════════════════════════════════════
+FIX OBLIGATORIO
+═══════════════════════════════════════════════════════════════
+
+1. MediaUpload.tsx:
+   MAX_BYTES = 20 * 1024 * 1024
+   error: "El archivo supera el límite de 20MB"
+
+2. Copy hint (máx 20MB) en:
+   - ProveedorPageClient.tsx (párrafo + hint Logo y Portada)
+   - ProductImageDropzone.tsx
+   - AdminProductForm.tsx
+
+3. Número IDÉNTICO al BE (20_971_520). No Cloudinary en copy.
+
+═══════════════════════════════════════════════════════════════
+NO TOCAR
+═══════════════════════════════════════════════════════════════
+
+- BUG-015 (uuid) salvo que ya esté en tu cola P1
+- API / Prisma / UPLOADS_DIR
+- US-ADMIN-04, Explorar F8/F9
+
+═══════════════════════════════════════════════════════════════
+DoD
+═══════════════════════════════════════════════════════════════
+
+1. Logo, portada, producto: hint y error 20MB
+2. HP-MED-02 Pass (copy /20MB/)
+3. Avisar a QA (cierre con BE)
+
+[FIN DE INTERACCIÓN FRONTEND — BUG-016]

@@ -17,6 +17,7 @@ Skill bajo demanda para transformar wireframes del UX/UI Designer y contratos de
 
 Ante una nueva solicitud de implementación frontend, sigue esta secuencia:
 
+0. **Graphify (puerta dura):** Consulta el grafo de orquestación y el de LaBorregaMarket antes de leer STATUS, wireframes o código. Comandos: `.cursor/rules/graphify.mdc`. Si falta `C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json`: STOP y `graphify update .` en el repo de la app.
 1. **Leer contratos upstream:** Revisa wireframes y design tokens del UX/UI (`WF-*`, `design-tokens.md`), contratos API (`API-*`) del Arquitecto, handoffs del Backend (`MOD-*-handoff.md`) y criterios de aceptación del PM.
 2. **Scaffold del proyecto:** Crea la estructura de directorios en `outputs/{nombre-proyecto}/src/` según la arquitectura modular definida.
 3. **Implementar capas:** Cliente HTTP base → componentes UI/layout → features (components, hooks, services, types) con los 4 estados UI.
@@ -40,21 +41,24 @@ Usa estrictamente estas plantillas al generar entregables:
 
 ## Convención de salida
 
-Guarda artefactos generados en:
+La **fase activa N** está en `STATUS.md`. Los **markdown de este agente** van en `fase-{N}/`. El código UI vive en el repo de la app.
 
 ```
 outputs/{nombre-proyecto}/
-├── src/
-├── tests/
-│   ├── unit/
-│   └── e2e/              # opcional
-├── .env.example
-├── integration-readme.md
-└── feature-handoffs/
-    └── FEAT-{Feature}-handoff.md
+├── README.md
+├── STATUS.md
+├── comun/              # integration-readme.md, .env.example
+├── historial/          # solo append
+└── fase-{N}/
+    ├── feature-handoffs/FEAT-*.md
+    └── quality/
+        ├── QR-FE.md
+        └── EVIDENCIA-BUG-{NNN}.md   # obligatorio al atender un bug de QA
 ```
 
-Usa kebab-case para `{nombre-proyecto}` (ej. `outputs/tienda-online/`).
+Prohibido: `feature-handoffs/` en la raíz; escribir otra `fase-M`.
+
+Regla persistente: [outputs-por-fase.mdc](../../.cursor/rules/outputs-por-fase.mdc).
 
 | Tipo | Convención ID | Ejemplo |
 |------|---------------|---------|
@@ -70,6 +74,7 @@ Antes de traspasar al QA Tester, verifica:
 - [ ] **Consumo Limpio de APIs:** Los datos se obtienen usando la capa de servicios/hooks, sin código de fetch embebido directamente en la vista.
 - [ ] **Validación de Formulario:** Todos los campos de entrada tienen mensajes de error amigables e inline antes de permitir el *submit*.
 - [ ] **Accesibilidad Basal:** Sintaxis semántica, uso de `aria-labels` donde sea necesario y navegación navegable mediante teclado (Tab/Enter/Space).
+- [ ] **Evidencia de fix (si atendiste un BUG de QA):** `fase-{N}/quality/EVIDENCIA-BUG-{NNN}.md` con archivos, commit o diff y re-prueba local. QA no re-testea sin ese archivo.
 
 ## Handoff por rol
 

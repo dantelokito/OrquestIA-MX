@@ -1,0 +1,43 @@
+[INICIO DE INTERACCIÓN DEVOPS — LaBorregaMarket Fase 6 · slice DEUDA]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO (ventana nueva)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Código app: C:\Users\PC GAMER\LaBorregaMarket\
+
+Fase 6 v0.6.0: deuda P0/P1 + reportes (reportes no son tuyos). Pagos FUERA hasta nuevo aviso.
+
+Tu documento de deuda (15/08) es la fuente de IDs:
+  Agente DevOps\Agente DevOps\outputs\laborregamarket\comun\deuda-fases-previas.md
+
+QA F1→F5: gate "regresión en CI" PENDIENTE. CI debe usar build/start, NUNCA next dev.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. PM: Administrador de producto\Product Manager\outputs\laborregamarket\fase-6\prd.md
+   US-OPS-04 (CI), US-OPS-05 (migrate en el workflow), US-OPS-06 (secretos Should), US-AUTH-08 (JWT Should)
+2. Infra Arquitecto: Agente Arquitecto\...\comun\infra-requirements.md (v0.6.0)
+3. Env QA: QA Automation Engineer\...\comun\env-requirements.md — NO copiar el bloque local a CI
+4. Suite: QA Automation Engineer\...\outputs\laborregamarket\tests\
+
+Skill: agente DevOps de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+Must:
+- DEV-P0-002: workflow Postgres 15 + npm ci + prisma migrate deploy + seed TEST + npm run build + npm start + Playwright
+- Incluir migrate (DEV-P1-003) en el mismo pipeline
+- No exigir NEXT_PUBLIC_GOOGLE_MAPS_API_KEY para Explorar (DEV-P1-006)
+
+Should:
+- DEV-P1-004 secretos staging (Resend, Cloudinary, Upstash, Inngest)
+- DEV-P1-007 JWT_SECRET distinto por entorno; no en YAML
+
+Won't: /health, PITR/ECS/K8s, pasarela, parchear package.json de Redis (eso es Backend).
+
+[FIN DE INTERACCIÓN DEVOPS]

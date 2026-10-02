@@ -1,0 +1,135 @@
+---
+description: Antes de procesar cualquier tarea, valida que los inputs upstream estén completos y correctos. Nunca asumas que los entregables de otro agente son válidos.
+alwaysApply: true
+glob: "**/*"
+---
+
+# Validación Cruzada Global
+
+## Principio Fundamental
+
+**Nunca asumas que los inputs upstream están correctos.** Antes de generar cualquier output, verifica que:
+
+1. **Los archivos de referencia existen** en las rutas documentadas
+2. **Los entregables tienen el formato correcto** (convenciones de naming, estructura)
+3. **La información está completa** (no hay campos vacíos o placeholder)
+4. **Los datos son coherentes** con la fase activa y el contexto del proyecto
+
+Este principio aplica a **todos los agentes** del ecosistema: PM, UX/UI, Arquitecto, Backend, Frontend, QA y DevOps.
+
+## Orden de aplicabilidad
+
+Las reglas de este repositorio se aplican en este orden de prioridad:
+
+1. **`graphify.mdc`** — Paso 0: consultar grafo de orquestación y grafo de LaBorregaMarket antes de explorar
+2. **`00-validacion-cruzada-global.mdc`** (este archivo) — Principios que todo agente debe cumplir
+3. **`01-recepcion-upstream.mdc`** — Checklists específicos de recepción por agente
+4. **`02-calidad-output.mdc`** — Estándares de calidad que todo output debe cumplir
+5. **`03-protocolo-handoff.mdc`** — Protocolo de traspaso entre agentes
+6. **`04-control-fase.mdc`** — Control de fase activa (ubicado en cada agente)
+7. **`05-especifico-rol.mdc`** — Reglas específicas por rol
+
+## Checklist de Validación de Inputs
+
+### Paso 0: Consultar Graphify (obligatorio para los 7 roles)
+
+Antes de Grep, Glob o Read exploratorio:
+
+- [ ] Grafo de **orquestación** consultado (`graphify query` + `--graph` de este repo)
+- [ ] Grafo de **LaBorregaMarket** consultado (`graphify query --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"`)
+- [ ] Si falta `graph.json` de la app: STOP, regenerar con `graphify update .` en el repo de la app, no continuar el análisis
+
+Detalle de comandos: `.cursor/rules/graphify.mdc`.
+
+### Paso 1: Ubicar Inputs
+
+- Lee `outputs/{proyecto}/STATUS.md` para conocer la fase activa (después del Paso 0)
+- Identifica qué agentes upstream deben haber entregado
+- Determina qué entregables consume tu rol (ver `01-recepcion-upstream.mdc`)
+
+### Paso 2: Validar Existencia
+
+Para cada input esperado:
+
+- [ ] El archivo existe en la ruta documentada
+- [ ] El archivo no está vacío
+- [ ] El archivo no es un placeholder o "TODO"
+
+### Paso 3: Validar Formato
+
+Para cada input existente:
+
+- [ ] Usa la convención de naming correcta (`API-*`, `WF-*`, `TC-*`, `US-*`, `MOD-*`, `FEAT-*`, `BUG-*`, `ADR-*`, `DB-*`, `INFRA-*`)
+- [ ] Contiene las secciones mínimas requeridas según su plantilla
+- [ ] Los datos están en el formato esperado (JSON, Markdown con tablas, Mermaid, etc.)
+
+### Paso 4: Validar Contenido y Coherencia
+
+Para cada input con formato correcto:
+
+- [ ] La información es coherente con la fase actual
+- [ ] No hay placeholders sin completar (`[Insertar...]`, `[Nombre del proyecto]`, `TODO`, `XXX`)
+- [ ] Los IDs de referencia son válidos y existen (ej. `US-AUTH-01` referenciado en AC de un contrato)
+- [ ] No hay contradicciones con otros entregables de la misma fase
+- [ ] No se contradicen ADRs, contratos o historias de la misma fase
+
+## Acciones ante Inputs Inválidos
+
+Si algún input falla la validación:
+
+1. **NO generes el output** hasta resolver la dependencia (regla de bloqueo)
+2. **Documenta el problema** en `outputs/{proyecto}/fase-{N}/quality/QA-INPUT-issues.md`
+3. **Notifica al agente upstream** mediante un handoff de retorno o comentario claro
+4. **Espera resolución** antes de continuar con el trabajo dependiente
+
+### Niveles de bloqueo
+
+| Severidad | Descripción | Acción |
+|-----------|-------------|--------|
+| **Bloqueante** | Input ausente, vacío o placeholder | No implementar. Notificar upstream. |
+| **Crítico** | Input incompleto o con contradicciones | No implementar. Solicitar aclaración. |
+| **Advertencia** | Input con formato no estándar | Continuar con precaución. Documentar desviación. |
+| **Informativo** | Input correcto pero con recomendaciones | Continuar. Registrar observaciones. |
+
+## Herramientas de validación
+
+Al validar inputs, usa estas verificaciones **en este orden**:
+
+- **`graphify query` / `path` / `explain`** sobre el grafo de orquestación y el de LaBorregaMarket (Paso 0; ver `graphify.mdc`)
+- **`grep`** para confirmar que un ID referenciado existe (ej. `US-AUTH-01`)
+- **`glob`** para confirmar que los archivos esperados existen en las rutas de `fase-{N}/`
+- **Lectura directa** de los archivos para verificar contenido y formato
+- **Comparación cruzada** entre contrato API, esquema BD y user stories
+
+## Ejemplo de Validación (Backend)
+
+```markdown
+## Validación de Inputs para Agente Backend
+
+### Inputs Esperados:
+1. Contratos API del Arquitecto: `fase-{N}/api/API-AUTH-01.md`
+2. Esquema de BD del Arquitecto: `fase-{N}/data-model/DB-users.md`
+3. User Stories del PM: `fase-{N}/user-stories/US-AUTH-01.md`
+
+### Resultado de Validación:
+- [x] `API-AUTH-01.md` existe (2.3KB) ✅
+- [x] `DB-users.md` existe (1.1KB) ✅
+- [ ] `US-AUTH-01.md` NO EXISTE ❌
+
+### Acción:
+- Bloquear implementación de módulo AUTH
+- Notificar al PM que falta US-AUTH-01.md
+- Documentar en `fase-{N}/quality/QA-INPUT-issues.md`
+```
+
+## Regla preventiva
+
+Si no hay inputs upstream que validar (caso del PM que recibe requerimientos del cliente en lenguaje natural), el agente debe:
+
+- **Documentar las suposiciones** explícitamente en el output o en el STATUS.md
+- **Realizar las preguntas de aclaración** necesarias antes de definir alcance
+- **Registrar las restricciones** conocidas (tiempo, presupuesto, técnicas)
+
+## Conclusión
+
+La validación cruzada es un **requisito obligatorio**, no opcional. Un agente que implementa sobre inputs no validados genera deuda técnica, bugs y retrabajo para los agentes downstream. La calidad del ecosistema depende de que cada eslabón de la cadena entregue y reciba información confiable.

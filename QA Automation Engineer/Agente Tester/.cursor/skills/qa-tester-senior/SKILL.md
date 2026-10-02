@@ -12,15 +12,33 @@ disable-model-invocation: true
 
 Skill bajo demanda para auditar requerimientos, contratos API y entregables de Backend/Frontend; diseñar matrices de prueba, reportar defectos, automatizar regresión con Playwright y emitir sign-off de calidad.
 
+**Idioma:** toda la documentación QA (bugs, handoffs, sign-offs, matrices, prompts de activación) se redacta en **español**.
+
 ## Quick Start
 
 Ante una nueva solicitud de validación QA, sigue esta secuencia:
 
+0. **Graphify (puerta dura):** Consulta el grafo de orquestación y el de LaBorregaMarket antes de leer STATUS, contratos o código. Comandos: `.cursor/rules/graphify.mdc`. Si falta `C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json`: STOP y `graphify update .` en el repo de la app. Recién entonces abrir `outputs/{proyecto}/STATUS.md` → confirmar fase activa N. Solo escribir en `fase-{N}/`.
 1. **Leer contratos upstream:** Revisa ACs del PM, contratos API (`API-*`) del Arquitecto, handoffs Backend (`MOD-*-handoff.md`) y Frontend (`FEAT-*-handoff.md`).
 2. **Auditar ACs (Shift-Left):** Rechaza historias con criterios ambiguos; solicita aclaración al PM antes de diseñar pruebas.
-3. **Diseñar matriz de pruebas:** Positivos, negativos, edge cases y seguridad en `test-matrices/TC-{Module}-matrix.md`.
+3. **Diseñar matriz de pruebas:** Positivos, negativos, edge cases y seguridad en `fase-{N}/test-matrices/TC-{Module}-matrix.md`.
 4. **Ejecutar y automatizar:** Pruebas manuales/exploratorias en staging; scripts Playwright (API + E2E con POM) en `tests/`.
-5. **Documentar y sign-off:** Bug reports en `bug-reports/`, dictamen en `qa-signoffs/QA-{Module}-signoff.md`.
+5. **Documentar y sign-off:** Bug reports en `fase-{N}/bug-reports/`, dictamen en `fase-{N}/qa-signoffs/QA-{Module}-signoff.md` (o `QA-F{N}-progreso.md` si los gates no se cumplen).
+6. **Actualizar STATUS.md:** Registrar resultado de corrida, bugs abiertos/cerrados y enlace al sign-off o progreso.
+
+## Workflow: documentar un defecto
+
+Al detectar o escalar un bug, **no basta** con el archivo `BUG-{NNN}.md`. Genera el paquete completo en `fase-{N}/`:
+
+1. **Confirmar fase activa** — Leer `outputs/{proyecto}/STATUS.md` → N.
+2. **Bug report** — Crear o actualizar `fase-{N}/bug-reports/BUG-{NNN}.md` con [templates/bug-report.md](../../templates/bug-report.md): causa raíz, rol responsable (FE/BE), fix esperado, TCs afectados.
+3. **Handoffs** — Actualizar `fase-{N}/QA-F{N}-handoff-frontend.md` y/o `QA-F{N}-handoff-backend.md` con cola priorizada, archivos sugeridos y DoD de re-prueba.
+4. **Prompts de activación** — Si hay asignación downstream, crear `fase-{N}/activation-prompt-*-BUG-{NNN}.txt` para copiar en el chat del agente FE/BE.
+5. **Progreso y README** — Actualizar `fase-{N}/qa-signoffs/QA-F{N}-progreso.md` y `fase-{N}/README.md`.
+6. **STATUS** — Actualizar `outputs/{proyecto}/STATUS.md` (bugs vivos, Zero Blocker, enlaces).
+7. **Cobertura** — Si el bug no estaba cubierto: actualizar matriz en `fase-{N}/test-matrices/` y/o spec en `tests/`.
+
+**Escalación de severidad** (ej. Major → Blocker): actualizar el mismo `BUG-{NNN}.md` + handoffs + STATUS en la misma sesión.
 
 ## Qué leer según el contexto
 
@@ -43,26 +61,27 @@ Usa estrictamente estas plantillas al generar entregables:
 
 ## Convención de salida
 
-Guarda artefactos generados en:
+La **fase activa N** está en `STATUS.md`. Matrices/bugs/sign-offs/handoffs van en `fase-{N}/`. La suite Playwright permanece en `tests/` (código vivo; no partirla por fase).
 
 ```
 outputs/{nombre-proyecto}/
-├── test-matrices/
-│   └── TC-{Module}-matrix.md
-├── bug-reports/
-│   └── BUG-{NNN}.md
-├── qa-signoffs/
-│   └── QA-{Module}-signoff.md
-└── tests/
-    ├── api/
-    │   └── {modulo}.spec.ts
-    └── e2e/
-        ├── pages/
-        │   └── {Page}.ts
-        └── {flujo}.spec.ts
+├── README.md
+├── STATUS.md
+├── comun/              # TEST_PLAN.md, env-requirements.md
+├── historial/          # solo append
+├── tests/              # Playwright (no es documento de fase)
+└── fase-{N}/
+    ├── test-matrices/TC-*-matrix.md
+    ├── bug-reports/BUG-*.md
+    ├── qa-signoffs/QA-*-signoff.md
+    ├── QA-F{N}-handoff-frontend.md
+    ├── QA-F{N}-handoff-backend.md
+    └── activation-prompt-*-BUG-*.txt
 ```
 
-Usa kebab-case para `{nombre-proyecto}` (ej. `outputs/tienda-online/`).
+Prohibido: matrices/bugs/handoffs nuevos en la raíz; escribir otra `fase-M`.
+
+Regla persistente: [outputs-por-fase.mdc](../../.cursor/rules/outputs-por-fase.mdc).
 
 | Tipo | Convención ID | Ejemplo |
 |------|---------------|---------|
@@ -78,7 +97,9 @@ Antes de emitir sign-off, verifica:
 - [ ] **Matriz Diseñada:** Casos positivos, negativos, edge cases y permisos documentados.
 - [ ] **Ejecución Completa:** Pruebas manuales y/o exploratorias en staging/QA.
 - [ ] **Bugs Documentados:** Fallas reportadas con pasos, logs y payloads.
-- [ ] **Verificación de Fixes:** Re-prueba de defectos corregidos verificada.
+- [ ] **Paquete de fase completo:** Cada bug con handoffs, STATUS, progreso y prompts si aplica (no solo el `.md` del bug).
+- [ ] **Verificación de Fixes:** Re-prueba solo si existe `fase-{N}/quality/EVIDENCIA-BUG-{NNN}.md` del FE/BE responsable.
+- [ ] **APROBADO no cierra la fase:** el dictamen va al PM; UX y Arquitecto deben emitir `QG-correcciones.md` antes de promover.
 - [ ] **Automatización Actualizada:** Scripts API/E2E en el repositorio de pruebas.
 - [ ] **Dictamen Emitido:** Sign-off compartido con el PM.
 
@@ -90,11 +111,12 @@ Antes de emitir sign-off, verifica:
 
 ## Handoff por rol
 
-| Agente downstream | Entregable |
-|-------------------|------------|
-| PM | `QA-{Module}-signoff.md` (APROBADO / RECHAZADO / APROBADO CON CONDICIONES) |
-| DevOps | `env-requirements.md`, comandos CI para suite Playwright |
-| Backend / Frontend | `bug-reports/BUG-{NNN}.md` con evidencia para re-probar fixes |
+| Agente downstream | Entregable (siempre en `fase-{N}/`) |
+|-------------------|-------------------------------------|
+| PM | `qa-signoffs/QA-{Module}-signoff.md` o `QA-F{N}-progreso.md` |
+| Backend | `QA-F{N}-handoff-backend.md` + `bug-reports/BUG-{NNN}.md` + `activation-prompt-backend-BUG-{NNN}.txt` si aplica |
+| Frontend | `QA-F{N}-handoff-frontend.md` + `bug-reports/BUG-{NNN}.md` + `activation-prompt-frontend-BUG-{NNN}.txt` si aplica |
+| DevOps | `comun/env-requirements.md`, comandos CI para suite Playwright |
 
 ## Activación
 
@@ -105,3 +127,4 @@ Para iniciar una sesión QA, usa el prompt de [templates/activation-prompt.txt](
 - [Fase 1: Identidad y principios](phase-1-identity.md)
 - [Fase 2: Diseño de pruebas y automatización](phase-2-test-design-and-automation.md)
 - [Fase 3: Quality gates, DoD y sign-off](phase-3-quality-gates-and-dod.md)
+

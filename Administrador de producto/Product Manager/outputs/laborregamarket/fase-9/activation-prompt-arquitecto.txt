@@ -1,0 +1,45 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 9 · Deuda Explorar]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Stack: Next.js 15 + Prisma 6 + PostgreSQL 15. Envelope ADR-003.
+
+Código: C:\Users\PC GAMER\LaBorregaMarket\
+Arquitectura: Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\
+
+Fase actual: Fase 9 v0.9.0. TÚ diseñas contratos de deuda Explorar:
+  US-EXPLORE-08 / 10 / 24 — SIN API Must (preview in-card, distanceKm+ETA, chrome)
+  US-EXPLORE-09 — decidir suggest vs q+geo sobre corpus en radio (typeahead solo fruterías)
+  US-EXPLORE-11 — query listing offersWholesale / offersDelivery + URL
+                 SIN schema orgánico (chip retirado; D-F9-2)
+
+Fase 8 SOLO LECTURA. CO-F7-001: radiusKm del slider. Pagos FUERA (CO-F6-001).
+CO-F9-001.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM: ...\fase-9\handoff-arquitecto.md
+2. PRD F9 + CO-F9-001
+3. User stories: US-EXPLORE-08…11, US-GEO-24
+4. QA: Agente Tester\...\fase-9\deuda-tecnica\DT-F9-002, DT-F9-004
+5. STATUS.md del PM
+
+Skill: agente Arquitecto de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. Notas «sin API Must» para 008/010/024.
+2. Decisión suggest vs q+geo (009) documentada.
+3. Delta API mayoreo/domicilio (011) + tests.
+4. handoff-backend-fase-9.md OBLIGATORIO (009/011).
+
+NO: schema orgánico, typeahead SKUs, bbox API Must, clustering, Maps JS,
+    Places, pasarela, CI YAML, DASH, pan→radio, reopen F8.
+
+[FIN DE INTERACCIÓN ARQUITECTO — Fase 9]

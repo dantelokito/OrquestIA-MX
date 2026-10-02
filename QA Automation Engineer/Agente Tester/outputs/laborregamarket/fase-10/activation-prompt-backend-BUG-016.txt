@@ -1,0 +1,61 @@
+[INICIO DE INTERACCIÓN BACKEND — BUG-016 Major límite 20 MiB]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket
+Código: C:\Users\PC GAMER\LaBorregaMarket
+Ambiente: http://127.0.0.1:8080
+
+Ticket QA: BUG-016 — Major, P2
+Handoff: Agente Tester\outputs\laborregamarket\fase-10\QA-F10-handoff-backend.md
+Bug report: Agente Tester\outputs\laborregamarket\fase-10\bug-reports\BUG-016.md
+
+BUG-015 (carrito randomUUID) NO es Backend.
+
+Stakeholder: install local, fotos hasta 20 MiB (logo, portada, producto).
+Hoy MAX_IMAGE_BYTES = 5_242_880. Frontend también corta a 5 MB: mismo número.
+
+═══════════════════════════════════════════════════════════════
+FIX OBLIGATORIO
+═══════════════════════════════════════════════════════════════
+
+1. local-disk.ts:
+   MAX_IMAGE_BYTES = 20_971_520  // 20 * 1024 * 1024
+
+2. media.service.ts:
+   mensaje "El archivo supera el límite de 20MB"
+
+3. cloudinary.ts: mismo tope y mensaje (no dejar 5 MB oculto)
+
+4. next.config.ts:
+   experimental.serverActions.bodySizeLimit = "21mb"
+   (o el flag App Router equivalente) para que formData() acepte ≥21 MB
+
+Rutas cubiertas por validateAndStore:
+  POST /api/provider/media (logo|cover)
+  POST /api/provider/products/{id}/image
+  POST /api/admin/products/{id}/image
+
+MIME JPEG/PNG/WebP y rate 20/10min: SIN CAMBIO.
+
+═══════════════════════════════════════════════════════════════
+NO TOCAR
+═══════════════════════════════════════════════════════════════
+
+- Carrito / POS / BUG-015
+- Storage Cloudinary como Must (sigue disco UPLOADS_DIR)
+- US-ADMIN-04
+
+═══════════════════════════════════════════════════════════════
+DoD
+═══════════════════════════════════════════════════════════════
+
+1. ≤20 MiB + magic bytes → 200
+2. 20 MiB+1 → 400 mensaje 20MB
+3. Spec QA: cwd outputs/laborregamarket/tests
+   npx playwright test tests/api/media.spec.ts
+4. Avisar a QA (cierre con FE)
+
+[FIN DE INTERACCIÓN BACKEND — BUG-016]

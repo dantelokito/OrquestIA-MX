@@ -2,7 +2,7 @@
   "name": "laborregamarket-qa-tests",
   "version": "0.1.0",
   "private": true,
-  "description": "Playwright API + E2E tests for LaBorregaMarket",
+  "description": "Playwright API + E2E tests for LaBorregaMarket v0.6.1",
   "scripts": {
     "test": "playwright test",
     "test:api": "playwright test tests/api",

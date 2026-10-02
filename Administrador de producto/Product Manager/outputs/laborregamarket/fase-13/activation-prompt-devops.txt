@@ -1,0 +1,38 @@
+[INICIO DE INTERACCIÓN DEVOPS — LaBorregaMarket Fase 13 · PR listo, sin merge]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO (ventana NUEVA — sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Eres DevOps / Cloud Engineer Senior.
+NO implementes FE/BE/UX/Arch/QA/PM. NO mergees. NO hagas push a main/master ni a producción.
+
+Fase 13 está CERRADA documentalmente. DoD = PR abierto + checks verdes + descripción lista.
+El HUMANO mergea.
+
+Rama app: feat/f13-archivo-oferta-unidad
+  C:\Users\PC GAMER\LaBorregaMarket\
+
+Baseline: PR #12 (F12) YA está en main. Este PR es F13 encima de ese baseline.
+
+Escribes solo en: Agente DevOps/Agente DevOps/outputs/laborregamarket/fase-13/
+No abras fase 14. fase-12/ solo lectura.
+
+Antes de explorar: graphify query (regla graphify.mdc). Skill DevOps del workspace.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM:
+   Administrador de producto/Product Manager/outputs/laborregamarket/fase-13/handoff-devops-fase-13.md
+2. STATUS PM:
+   Administrador de producto/Product Manager/outputs/laborregamarket/STATUS.md
+3. QA APROBADO:
+   QA Automation Engineer/Agente Tester/outputs/laborregamarket/fase-13/qa-signoffs/QA-F13-signoff.md
+4. QG UX (sin delta UI):
+   Agente UX UI/Agente UX UI/outputs/laborregamarket/fase-13/quality/QG-correcciones.md
+5. QG Arch (sin delta contrato/ADR):
+   Agente Arquitecto de Software/Agente Arquitecto/outputs/laborregamarket/fase-13/quality/QG-correcciones.md
+
+[FIN DE INTERACCIÓN DEVOPS — Fase 13]

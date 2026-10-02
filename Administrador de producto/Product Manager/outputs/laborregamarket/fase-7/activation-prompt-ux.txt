@@ -1,0 +1,55 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 7 · EXPLORAR]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código:
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+
+Fase actual: Fase 7 v0.7.1. TÚ diseñas /explorar (IDs 000-012) + estados de login si aplican.
+Fase 6 CONGELADA: NO diseñes reportes DASH ni el modelo pan→radio (US-GEO-07).
+CO-F7-001: pan/zoom NO cambian radiusKm. Solo slider, dirección, GPS, favorita.
+
+Decisiones (18/08/2026, Dante):
+- Mapa prioridad sobre catálogo; en móvil el mapa va ARRIBA.
+- Default centro: San Nicolás de los Garza, NL; radio 10 km.
+- Favoritas = servidor, no localStorage como fuente de verdad.
+- Lista máx 20 + paginación; mapa ~+20% alto.
+- Copy N fruterías = total API, no page size.
+- Preview: horario 3 columnas, abierta/cerrada, iconos envío/tarjeta/WhatsApp,
+  verificado MM/AAAA, 3 reseñas + ancla #resenas, catálogo preview, mayoreo/menudeo.
+- Markers SIN nombre en reposo; hover/tap; icono negocio pequeño.
+- Empty radio (total=0): REUTILIZAR loader borrega B1-B3, tamaño ligeramente MAYOR
+  que el de loading. Copy/CTA Ampliar radio se quedan. Error API no es empty.
+- Leaflet/OSM. NO Google Maps JS. NO clustering. NO bbox. NO pagos.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM:
+   Administrador de producto\Product Manager\outputs\laborregamarket\fase-7\handoff-ux-ui.md
+2. PRD: ...\fase-7\prd.md
+3. Change order: CO-F7-001
+4. User stories: US-GEO-09..16, US-AUTH-09, US-EXPLORE-05, US-EXPLORE-06
+5. Índice: README.md + STATUS.md del PM
+6. Baseline F5 (solo lectura): UF-GEO-01 / US-GEO-05
+7. Frames loader: ...\comun\brand\loader-borrega\ (B1.png, B2.png, B3.png)
+
+Skill: agente UX/UI de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. Delta UF-GEO-01 + WF-explorar (layout, radio, default, lista 20, markers, search, empty borrega).
+2. WF preview proveedor (US-EXPLORE-05).
+3. Handoff frontend fase-7 con tokens, breakpoints, DoD.
+4. Quality Gate cuando FE implemente (no bloquear el handoff inicial).
+
+NO diseñar: pasarela, CFDI, PWA, DASH F6, clustering, Maps JS.
+
+[FIN DE INTERACCIÓN UX/UI — Fase 7]

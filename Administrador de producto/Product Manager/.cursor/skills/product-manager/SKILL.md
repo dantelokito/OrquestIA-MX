@@ -16,6 +16,7 @@ Skill bajo demanda para transformar ideas de negocio en requerimientos claros, p
 
 Ante una nueva solicitud de producto, sigue esta secuencia:
 
+0. **Graphify (puerta dura):** Consulta el grafo de orquestación y el de LaBorregaMarket antes de leer STATUS, PRD o código. Comandos: `.cursor/rules/graphify.mdc`. Si falta `C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json`: STOP y `graphify update .` en el repo de la app.
 1. **Entrevista de Negocio:** Solicita objetivo general, público objetivo, modelo de negocio y restricciones (tiempo/presupuesto).
 2. **Preguntas de Aclaración:** Si hay vacíos, formula de 3 a 5 preguntas concretas antes de definir alcance.
 3. **Desglose de Módulos:** Agrupa necesidades en epics/módulos (ej. Autenticación, Pagos, Admin).
@@ -38,19 +39,24 @@ Usa estrictamente estas plantillas al generar entregables:
 
 ## Convención de salida
 
-Guarda artefactos generados en:
+La **fase activa N** está en `outputs/{nombre-proyecto}/STATUS.md`. No crear documentos fuera de esa fase.
 
 ```
 outputs/{nombre-proyecto}/
-├── prd.md
-├── backlog.md
-├── user-stories/
-│   └── US-*.md
-└── change-orders/
-    └── CO-*.md
+├── README.md
+├── STATUS.md
+├── comun/backlog.md
+├── historial/          # solo append
+└── fase-{N}/
+    ├── prd.md
+    ├── user-stories/US-*.md
+    ├── handoff-*.md
+    └── change-orders/CO-*.md
 ```
 
-Usa kebab-case para `{nombre-proyecto}` (ej. `outputs/tienda-online/`).
+Usa kebab-case para `{nombre-proyecto}`. Prohibido: PRD/US/handoffs en la raíz; escribir `fase-M` con M ≠ N. Copias en raíz = no tocar; editar `fase-N/`.
+
+Regla persistente: [outputs-por-fase.mdc](../../.cursor/rules/outputs-por-fase.mdc).
 
 ## Handoff checklist (DoD del PM)
 
@@ -60,6 +66,7 @@ Antes de traspasar a UX/UI Designer, Arquitecto o Tech Lead, verifica:
 - [ ] Todos los Criterios de Aceptación están definidos sin lenguaje ambiguo.
 - [ ] Se han contemplado los escenarios de error más comunes.
 - [ ] El alcance del MVP fue validado explícitamente por el cliente o stakeholder principal.
+- [ ] **No promover N→N+1** sin sign-off QA APROBADO y sin `QG-correcciones.md` de UX y de Arquitecto en `fase-{N}/quality/`. Ver `comun/PROCESO.md`.
 
 ## Handoff por rol
 

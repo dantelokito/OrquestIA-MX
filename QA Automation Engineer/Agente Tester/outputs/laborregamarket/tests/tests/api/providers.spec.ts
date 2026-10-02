@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { loginAs, uniqueEmail, assertResponseTime } from "../../fixtures/auth";
+import { loginAs, uniqueEmail, assertResponseTime, rememberSessionCookie, withAuth } from "../../fixtures/auth";
 
 test.describe("API PROVIDERS — TC-PROV", () => {
   test("TC-PROV-001: listar proveedores con envelope paginado", async ({ request }) => {
@@ -58,6 +58,28 @@ test.describe("API PROVIDERS — TC-PROV", () => {
     expect(Array.isArray(body.data.products)).toBe(true);
   });
 
+  test("HP-EXPLORE-05b: detalle incluye campos preview F7", async ({ request }) => {
+    const listRes = await request.get("/api/providers?limit=1");
+    const list = await listRes.json();
+    const id = list.data[0].id;
+
+    const response = await request.get(`/api/providers/${id}`);
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.data).toMatchObject({
+      hoursPublished: expect.any(Boolean),
+      offersWholesale: expect.any(Boolean),
+      offersRetail: expect.any(Boolean),
+    });
+    expect(
+      body.data.isOpenNow === null || typeof body.data.isOpenNow === "boolean"
+    ).toBe(true);
+    if (body.data.reviewsPreview) {
+      expect(Array.isArray(body.data.reviewsPreview)).toBe(true);
+      expect(body.data.reviewsPreview.length).toBeLessThanOrEqual(3);
+    }
+  });
+
   test("TC-PROV-007: detalle 404 para id inexistente", async ({ request }) => {
     const response = await request.get("/api/providers/nonexistent-id-12345");
     expect(response.status()).toBe(404);
@@ -65,27 +87,33 @@ test.describe("API PROVIDERS — TC-PROV", () => {
     expect(body.error).toMatch(/no encontrada/i);
   });
 
-  test("TC-PROV-008: limit > 50 rechazado", async ({ request }) => {
+  test("TC-PROV-008: limit > 50 acotado a max 50", async ({ request }) => {
     const response = await request.get("/api/providers?limit=51");
-    expect(response.status()).toBe(400);
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.meta.limit).toBe(50);
   });
 
   test("TC-PROV-011: crear Provider onboarding paso 2", async ({ request }) => {
     const email = uniqueEmail("onboard");
-    await request.post("/api/auth/register", {
+    const register = await request.post("/api/auth/register", {
       data: { name: "Onboard Test", email, password: "Test1234!", role: "PROVIDER" },
     });
+    rememberSessionCookie(request, register);
 
-    const response = await request.post("/api/providers", {
-      data: {
-        businessName: "Frutería QA Test",
-        address: "Av. Test 100",
-        city: "Monterrey",
-        latitude: 25.6714,
-        longitude: -100.3095,
-        description: "Test onboarding",
-      },
-    });
+    const response = await request.post(
+      "/api/providers",
+      withAuth(request, {
+        data: {
+          businessName: "Frutería QA Test",
+          address: "Av. Test 100",
+          city: "Monterrey",
+          latitude: 25.6714,
+          longitude: -100.3095,
+          description: "Test onboarding",
+        },
+      })
+    );
     expect(response.status()).toBe(201);
     const body = await response.json();
     expect(body.data.businessName).toBe("Frutería QA Test");
@@ -107,15 +135,18 @@ test.describe("API PROVIDERS — TC-PROV", () => {
 
   test("TC-PROV-014: Provider duplicado retorna 409", async ({ request }) => {
     await loginAs(request, "PROVIDER");
-    const response = await request.post("/api/providers", {
-      data: {
-        businessName: "Duplicado Test",
-        address: "Calle 2",
-        city: "Monterrey",
-        latitude: 25.67,
-        longitude: -100.31,
-      },
-    });
+    const response = await request.post(
+      "/api/providers",
+      withAuth(request, {
+        data: {
+          businessName: "Duplicado Test",
+          address: "Calle 2",
+          city: "Monterrey",
+          latitude: 25.67,
+          longitude: -100.31,
+        },
+      })
+    );
     expect(response.status()).toBe(409);
   });
 });

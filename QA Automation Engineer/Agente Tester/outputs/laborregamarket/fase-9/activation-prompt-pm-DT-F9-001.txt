@@ -1,0 +1,23 @@
+Eres el Product Manager de LaBorregaMarket.
+
+QA abrió Fase 9. Fase 8 permanece CERRADA (sign-off 24/08 APROBADO CON CONDICIONES). No reabras F8.
+
+Tu trabajo: revisar deuda técnica DT-F9-001 (no es bug Blocker). QA no genera código.
+
+Leer primero:
+- Agente Tester / outputs/laborregamarket/STATUS.md
+- Agente Tester / outputs/laborregamarket/fase-9/deuda-tecnica/DT-F9-001-preview-in-card.md
+- Agente Tester / outputs/laborregamarket/fase-9/QA-F9-handoff-pm.md
+
+Problema: el preview hover/long-press (US-EXPLORE-07) muestra un submódulo alejado del card y rompe el orden visual.
+
+Propuesta Parte 1/3: convertir ese preview en animación DENTRO del mismo card (mismos triggers; clic corto sigue a /fruteria/{id}). Reutilizar GET /api/providers/[id]. Sin API Must nueva.
+
+QA confirma: el card (ProviderListing) y el submódulo (ProviderDetail) YA traen los datos. sampleProducts llega al listing pero no se pinta. El header ya envía q a /explorar (filtro nombre/descripcion/producto en radio). Partes 2/3 y 3/3 están en DT-F9-002 (ticket aparte).
+
+Decide:
+1) Aceptar DT-F9-001 como mejora F9 Parte 1/3 (US + CO).
+2) No asignar Frontend hasta tener US/CO y, si aplica, spec UX de la animación.
+3) Partes 2–3: revisar DT-F9-002 (header); ya no es backlog vacío.
+
+Responde en tus outputs de fase 9 (PM), no en los de QA.

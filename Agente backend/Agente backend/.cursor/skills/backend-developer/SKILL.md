@@ -16,6 +16,7 @@ Skill bajo demanda para transformar contratos de API, esquemas de BD e historias
 
 Ante una nueva solicitud de implementación backend, sigue esta secuencia:
 
+0. **Graphify (puerta dura):** Consulta el grafo de orquestación y el de LaBorregaMarket antes de leer STATUS, contratos o código. Comandos: `.cursor/rules/graphify.mdc`. Si falta `C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json`: STOP y `graphify update .` en el repo de la app.
 1. **Leer contratos upstream:** Revisa contratos API (`API-*`), esquemas de BD (`DB-*`) del Arquitecto y criterios de aceptación del PM.
 2. **Scaffold del módulo:** Crea la estructura de directorios en `outputs/{nombre-proyecto}/src/modules/[modulo]/`.
 3. **Implementar capas:** DTOs → Repository → Service → Controller → Routes, más migraciones y middlewares globales.
@@ -40,22 +41,25 @@ Usa estrictamente estas plantillas al generar entregables:
 
 ## Convención de salida
 
-Guarda artefactos generados en:
+La **fase activa N** está en `STATUS.md`. Los **markdown de este agente** van en `fase-{N}/`. El código de la app vive en su repo, no en la raíz de outputs.
 
 ```
 outputs/{nombre-proyecto}/
-├── src/
-├── prisma/ o migrations/
-├── tests/
-│   ├── unit/
-│   └── integration/
-├── .env.example
-├── integration-readme.md
-└── module-handoffs/
-    └── MOD-{Module}-handoff.md
+├── README.md
+├── STATUS.md
+├── comun/
+├── historial/          # solo append
+└── fase-{N}/
+    ├── handoff-*.md
+    ├── quality/
+    │   ├── QR-BE.md
+    │   └── EVIDENCIA-BUG-{NNN}.md   # obligatorio al atender un bug de QA
+    └── module-handoffs/   # si aplica
 ```
 
-Usa kebab-case para `{nombre-proyecto}` (ej. `outputs/tienda-online/`).
+Prohibido: handoffs/QR en la raíz de outputs; escribir otra `fase-M`.
+
+Regla persistente: [outputs-por-fase.mdc](../../.cursor/rules/outputs-por-fase.mdc).
 
 | Tipo | Convención ID | Ejemplo |
 |------|---------------|---------|
@@ -71,6 +75,7 @@ Antes de traspasar al QA Tester o Frontend Developer, verifica:
 - [ ] **Seguridad de Endpoints:** Rutas sensibles protegidas por middlewares de autenticación y autorización (RBAC).
 - [ ] **Eficiencia en Consultas:** Sin problemas de N+1 queries; paginación implementada en listados.
 - [ ] **Pruebas Superadas:** Unit tests y tests de integración ejecutados y pasando exitosamente.
+- [ ] **Evidencia de fix (si atendiste un BUG de QA):** `fase-{N}/quality/EVIDENCIA-BUG-{NNN}.md` con archivos, commit o diff y re-prueba local. QA no re-testea sin ese archivo.
 
 ## Handoff por rol
 

@@ -1,4 +1,8 @@
 [INICIO DE INTERACCIÓN ARQUITECTO DE SOFTWARE]
+Paso 0 Graphify (obligatorio, ambos grafos):
+- Orquestación: graphify query "<tarea>" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
+- App: graphify query "<tarea>" --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"
+Si falta el grafo de la app: STOP y graphify update . en LaBorregaMarket. Regla: graphify.mdc.
 Contexto del Proyecto: [Nombre del proyecto y stack técnico preferido]
 Requerimientos del PM / UI UX: [Insertar PRD, User Stories y/o Flujos de Pantalla]
 Instrucción: Actúa como el Agente Arquitecto de Software. Diseña la topología del sistema, el esquema de base de datos (ERD), las especificaciones de contratos de API RESTful y documenta cualquier ADR necesario para la fase de desarrollo.

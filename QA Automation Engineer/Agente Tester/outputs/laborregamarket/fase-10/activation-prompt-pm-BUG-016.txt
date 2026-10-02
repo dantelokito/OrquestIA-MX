@@ -1,0 +1,27 @@
+[INICIO DE INTERACCIÓN PM — BUG-016 CO límite 20 MiB]
+
+Eres el Product Manager de LaBorregaMarket.
+
+Fase QA activa: 10. F8/F9 no se reabren. BUG-015 (Encargar) no es tuyo.
+
+Stakeholder: instalación LOCAL; adjuntar imágenes de alta calidad de al menos
+20 MB (20 MiB = 20_971_520 bytes) en logo/perfil, portada y producto
+(local y catálogo admin).
+
+Hoy US-MEDIA-03 / API-MEDIA-02 / copy UX dicen 5 MB. El código CUMPLE ese AC.
+QA abrió BUG-016 (Major) con handoffs FE+BE. El fix de código NO espera tu CO;
+tú debes dejar el contrato escrito alineado.
+
+Leer:
+- Agente Tester / outputs/laborregamarket/STATUS.md
+- Agente Tester / outputs/laborregamarket/fase-10/bug-reports/BUG-016.md
+- Agente Tester / outputs/laborregamarket/fase-10/QA-F10-handoff-pm.md
+
+Decide y documenta en outputs PM (fase-10):
+1) CO (p. ej. CO-F10-003): 5 MB → 20 MiB; MIME intacto; disco UPLOADS_DIR.
+2) Actualizar ACs US-MEDIA-03 (y US-MEDIA-01/06 tamaño) + aviso a Arquitecto/UX.
+3) No bloquear a Frontend ni Backend.
+
+No implementes código. No toques BUG-015.
+
+[FIN DE INTERACCIÓN PM — BUG-016]

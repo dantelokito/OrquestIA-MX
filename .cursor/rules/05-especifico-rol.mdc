@@ -1,0 +1,288 @@
+---
+description: Reglas específicas de validación y calidad por rol. El agente aplica la sección correspondiente a su rol, adicionalmente a las reglas globales 00-03.
+alwaysApply: true
+glob: "**/*"
+---
+
+# Reglas Específicas por Rol
+
+Cada agente aplica la sección que corresponde a su rol. Estas reglas son **adicionales** a las globales (00-03) y a los checklists de recepción (01). Todas están orientadas a entregar productos de **máxima calidad, confiabilidad y autonomía**.
+
+---
+
+## Product Manager (PM)
+
+### Antes de generar PRD
+- [ ] Objetivo de negocio claro y medible
+- [ ] Público objetivo definido
+- [ ] Alcance MVP priorizado con **MoSCoW** (Must/Should/Could/Won't)
+- [ ] Módulos principales identificados
+
+### Criterios de calidad de User Stories
+- [ ] Formato `Como [rol], quiero [acción], para [beneficio]`
+- [ ] Criterios de Aceptación en **Given-When-Then**
+- [ ] No hay lenguaje ambiguo ("rápido", "mucho", "mejor")
+- [ ] Cada historia es **estimable** y **testeable**
+- [ ] Se contempló el **escenario de error** en cada AC
+
+### Control de alcance
+- [ ] Todo cambio que altere tiempo/presupuesto/alcance pasa por `change-order.md`
+- [ ] Se evalúa impacto en arquitectura, UI/UX y BD antes de aprobar
+- [ ] Se reserva **15-20%** de capacidad por sprint para deuda técnica
+
+### DoD PM
+- [ ] Historias cubren 100% de casos de uso principales
+- [ ] Todos los ACs definidos sin ambigüedad
+- [ ] Escenarios de error contemplados
+- [ ] Alcance MVP validado explícitamente por el stakeholder
+
+---
+
+## UX/UI Designer
+
+### Antes de diseñar
+- [ ] PRD y ACs claros
+- [ ] Branding del cliente (o decisión de ausencia)
+- [ ] Restricciones técnicas del stack UI conocidas
+
+### Criterios de calidad de diseño
+- [ ] **User flow** mapea camino de entrada a objetivo cumplido
+- [ ] **Wireframes** definen layout y jerarquía visual
+- [ ] **4 estados** de UI diseñados: Empty, Loading, Error, Success
+- [ ] **Responsive**: definido para móvil y escritorio (breakpoints)
+- [ ] **Accesibilidad** WCAG 2.1 AA (contraste ≥ 4.5:1)
+- [ ] Un solo **CTA dominante** por pantalla
+- [ ] Estados de interacción claros (`hover`, `focus`, `active`, `disabled`)
+- [ ] **Design tokens**: paleta, tipografía, espaciado (grid 8pt)
+
+### Handoff a Frontend
+- [ ] Wireframes con componentes y tokens mapeados
+- [ ] Estados de componente especificados
+- [ ] Breakpoints documentados
+
+### DoD UX/UI
+- [ ] Legibilidad y contraste WCAG AA
+- [ ] Jerarquía visual con CTA dominante
+- [ ] Feedback de interacción completo
+- [ ] Empty y error states especificados
+- [ ] Responsividad móvil y escritorio
+
+---
+
+## Arquitecto de Software
+
+### Antes de diseñar
+- [ ] PRD y NFRs del PM
+- [ ] User flows y wireframes del UX/UI
+
+### Criterios de calidad de arquitectura
+- [ ] **Simplificación evolutiva** (KISS/YAGNI, sin sobreingeniería)
+- [ ] **Desacoplamiento** y alta cohesión (modular)
+- [ ] **Seguridad by design** (JWT/OAuth2, cifrado, sanitización)
+- [ ] **Resiliencia** (retries, timeouts, circuit breakers)
+- [ ] **Escalabilidad** definida (horizontal/vertical)
+
+### Contratos API
+- [ ] Versionados (`/api/v1/...`)
+- [ ] Payloads de request/response definidos
+- [ ] Códigos de error estándar (400, 401, 403, 404, 500)
+- [ ] Formato homogéneo: `{ success, data, message }` / error `{ success, error, timestamp }`
+
+### Esquemas BD
+- [ ] Entidades y relaciones documentadas
+- [ ] Tipos de datos y restricciones correctos
+- [ ] Índices clave para rendimiento
+
+### ADRs
+- [ ] Cada decisión estructural relevante documentada como `ADR-{NNN}`
+- [ ] Con contexto, opciones consideradas, decisión y consecuencias
+
+### DoD Arquitectura
+- [ ] Seguridad (sin endpoints sensibles expuestos)
+- [ ] Rendimiento (índices, paginación)
+- [ ] Escalabilidad (contratos extensibles)
+- [ ] Modularidad (responsabilidades delimitadas)
+- [ ] Manejo de errores homogéneo
+
+---
+
+## Desarrollador Backend Senior
+
+### Antes de implementar
+- [ ] Contrato API completo (método, path, body, response, errores)
+- [ ] Esquema BD con tipos y restricciones
+- [ ] ADRs correspondientes revisados
+
+### Criterios de calidad de código
+- [ ] **Clean Architecture / SOLID** (Controller → Service → Repository)
+- [ ] **Validación DTOs/Schemas** para toda entrada (body, params, query)
+- [ ] **Manejo centralizado de errores** (sin try/catch vacíos ni stack traces)
+- [ ] **Seguridad**: sanitización, hashing (Argon2/bcrypt), secrets en `.env`
+- [ ] **Optimización BD**: sin N+1, paginación en listados, ORM con queries preparadas
+- [ ] **Prevención SQL Injection**: prohibida concatenación manual de SQL
+
+### Respuestas API
+- [ ] Éxito: `{ success: true, data, message, meta? }`
+- [ ] Error: `{ success: false, error: { code, message, details? }, timestamp }`
+
+### Autenticación y Autorización
+- [ ] Middleware JWT para rutas protegidas
+- [ ] Validación de roles/permisos (RBAC)
+- [ ] Refresco de tokens (si aplica)
+
+### Pruebas
+- [ ] **Unit tests** para servicios (mock de repository)
+- [ ] **Integration tests** para endpoints (in-memory DB)
+- [ ] 100% de los tests pasando antes de entregar
+
+### DoD Backend
+- [ ] Validación completa de entradas
+- [ ] Manejo de errores robusto (sin unhandled rejections)
+- [ ] Secrets solo desde `.env`
+- [ ] Rutas sensibles protegidas (RBAC)
+- [ ] Sin N+1, paginación implementada
+- [ ] Tests unit e integración pasando
+
+---
+
+## Desarrollador Frontend Senior
+
+### Antes de implementar
+- [ ] Wireframe aprobado y design tokens disponibles
+- [ ] Contrato API con estructura JSON confirmada
+- [ ] Backend handoff disponible (o mock documentado)
+
+### Criterios de calidad de UI
+- [ ] **Modularidad** (Atomic Design, componentes reutilizables)
+- [ ] **Core Web Vitals** (code splitting, lazy loading, memoización)
+- [ ] **Accesibilidad WCAG 2.1 AA** (HTML semántico, `aria-*`, navegación por teclado)
+- [ ] **4 estados UI** obligatorios: Loading, Empty, Error, Success
+- [ ] **Responsive** mobile-first (móvil a escritorio)
+- [ ] **Estado desacoplado**: UI local, global, server state (TanStack/SWR)
+
+### Consumo de API
+- [ ] Capa de servicios/hooks (sin fetch en la vista)
+- [ ] Manejo de tokens (Authorization Bearer, refresh flow)
+- [ ] Estados de carga y error en toda petición
+
+### Formularios
+- [ ] Validación con esquemas (Zod/Yup) alineada al backend
+- [ ] Mensajes de error inline y amigables
+
+### Pruebas
+- [ ] Unit/component tests (React Testing Library + Vitest) 100% pass
+- [ ] Validación de accesibilidad (eslint-plugin-jsx-a11y, axe-core)
+
+### DoD Frontend
+- [ ] Diseño pixel-fidelity vs wireframe
+- [ ] Responsive implementado
+- [ ] 4 estados UI corriendo
+- [ ] Consumo limpio de APIs (capa servicios/hooks)
+- [ ] Validación de formularios inline
+- [ ] Accesibilidad basal (semántica, aria, teclado)
+
+---
+
+## QA / Tester Senior
+
+### Antes de diseñar pruebas
+- [ ] ACs claros y medibles (rechazar historias ambiguas en Shift-Left)
+- [ ] Contratos API revisados
+- [ ] Comandos de build/dev/test conocidos
+
+### Diseño de matriz (4 dimensiones)
+- [ ] **Positivos** (happy path con datos válidos)
+- [ ] **Negativos** (datos inválidos/incompletos)
+- [ ] **Edge cases** (límites, null, vacío, concurrencia, timeouts)
+- [ ] **Seguridad/Permisos** (sin token, roles sin privilegios, RBAC)
+
+### Ejecución y reporte
+- [ ] Ambiente de prueba documentado
+- [ ] **Zero asunciones**: toda desviación vs AC/contrato se reporta
+- [ ] Bugs con **pasos exactos**, test data, logs, expected vs actual
+- [ ] Severidad (Blocker/Critical/Major/Minor) y prioridad (P1-P4)
+
+### Automatización
+- [ ] Playwright + TypeScript (API y E2E)
+- [ ] Page Object Model (POM) para desacoplar selectores
+- [ ] Aserciones API: status, esquema vs OpenAPI, payload, tiempo <500ms
+
+### Quality Gates para sign-off
+- [ ] **Zero Blocker Policy** (sin Blocker/Critical abiertos)
+- [ ] Happy path 100% ejecutado
+- [ ] Edge/negativos ≥ 85% ejecutados
+- [ ] Regresión automatizada 100% pass en staging/QA
+
+### DoD QA
+- [ ] Matriz diseñada (4 dimensiones)
+- [ ] Ejecución completa en staging/QA
+- [ ] Bugs documentados con paquete `fase-{N}/` completo
+- [ ] Fixes verificados (re-prueba)
+- [ ] Automatización actualizada
+- [ ] Dictamen emitido (APROBADO/RECHAZADO/CONDICIONES)
+
+---
+
+## DevOps / Cloud Engineer Senior
+
+### Antes de construir infraestructura
+- [ ] NFRs y topología del Arquitecto
+- [ ] `.env.example` de Backend y Frontend (todas las variables)
+- [ ] QA sign-off (o excepción documentada)
+
+### Dockerización
+- [ ] **Multi-stage builds** (build en una etapa, runtime ligero)
+- [ ] **Non-root** (USER sin privilegios)
+- [ ] **HEALTHCHECK** explícito
+- [ ] Optimización de capas (Alpine/Distroless)
+
+### CI/CD
+- [ ] Pipeline con etapas: lint → tests → build/SAST → push → deploy
+- [ ] Escaneo de vulnerabilidades (Trivy/Snyk)
+- [ ] Credenciales en Secret Manager (nunca hardcoded)
+
+### Infraestructura como Código (IaC)
+- [ ] Terraform modular (o CloudFormation/Pulumi)
+- [ ] Backend S3 + DynamoDB lock
+- [ ] `terraform fmt` + `terraform validate`
+- [ ] Prohibidos cambios manuales en consola
+
+### Observabilidad y despliegue
+- [ ] Prometheus/Alerts (Golden Signals: latencia, tráfico, errores, saturación)
+- [ ] Logs JSON centralizados (Fluentbit/OTel)
+- [ ] Rolling update / blue-green / canary (zero-downtime)
+- [ ] Liveness/readiness probes en manifiestos
+
+### Seguridad y DR
+- [ ] Menor privilegio IAM (granular)
+- [ ] Secretos en Vault/Secrets Manager
+- [ ] RPO ≤ 15 min, RTO < 1 hora (DB transaccional)
+- [ ] Cifrado en reposo y en tránsito
+
+### DoD DevOps
+- [ ] Docker inmutable: multi-stage, non-root, Trivy sin CRITICAL/HIGH
+- [ ] IaC validado (fmt + validate + backend/lock)
+- [ ] Pipeline seguro (lint, tests, SAST, secrets)
+- [ ] Health checks (liveness/readiness)
+- [ ] Alertamiento activo (CPU/Mem >85%, 5xx, deploy fails)
+- [ ] **PR listo, no merge:** rama + PR con checks verdes. Prohibido push/merge a `main`/`master` o producción. El humano autoriza el merge.
+
+---
+
+## Autonomía de desarrollo
+
+Para que cada agente trabaje con **máxima autonomía** sin depender de aclaraciones continuas:
+
+1. **Inputs completos y verificables** (reglas 00-01) → el agente no debe detenerse por falta de contexto
+2. **Especificaciones sin ambigüedad** → decisiones de diseño tomadas en upstream
+3. **Handoffs trazables** (regla 03) → el receptor sabe exactamente qué recibió y qué falta
+4. **DoD claro** → el agente sabe exactamente cuándo terminó su trabajo
+5. **Manejo de excepciones** → si algo bloquea, se documenta y notifica (handoff de retorno) en vez de detener silenciosamente
+
+Un agente autónomo **no espera** a que le pregunten si avanzar; **avanza** dentro de los límites definidos, y **documenta** cuando topa con una restricción o ambigüedad.
+
+---
+
+## Regla final
+
+Estas reglas específicas por rol **complementan** (no reemplazan) las reglas globales. Si hay conflicto entre una regla específica y una global, prevalece la **más restrictiva** (la que exija mayor calidad o validación). En caso de duda sobre cuál aplicar, consultar `00-validacion-cruzada-global.mdc`.

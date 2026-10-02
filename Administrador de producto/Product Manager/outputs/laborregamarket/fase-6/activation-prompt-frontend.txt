@@ -1,0 +1,48 @@
+[INICIO DE INTERACCIÓN FRONTEND — LaBorregaMarket Fase 6 · slice DEUDA]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO (ventana nueva)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Código: C:\Users\PC GAMER\LaBorregaMarket\
+
+Fase 6 v0.6.1 tiene TRES slices. TÚ implementas ahora el slice DEUDA (UI).
+Reportes DASH (US-DASH-04/05/06) y GEO zoom↔radio (US-GEO-07/08) ESPERAN diseño UX;
+no los implementes en este chat. US-GEO-06 (invariante Leaflet) SÍ va en deuda.
+
+Pagos / cobros POS nuevos / pago en línea: FUERA hasta nuevo aviso (CO-F6-001).
+No instalar @upstash/redis (Backend). No YAML de CI (DevOps). No Maps JS en /explorar.
+No clustering ni bbox Must (CO-F6-002).
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+Canónico UX (implementar esto):
+  Agente UX UI\Agente UX UI\outputs\laborregamarket\fase-6\handoff-frontend-fase-6.md
+
+Copia de trabajo FE (si existe):
+  Agente frontend\Agente Frontend\outputs\laborregamarket\fase-6\handoff-ux-fase-6.md
+
+PM (contexto, no rediseñar):
+  Administrador de producto\Product Manager\outputs\laborregamarket\fase-6\prd.md
+  ...\fase-6\user-stories\US-NOTIFY-10, US-GEO-06, US-BRAND-03, US-OPS-07
+  ...\STATUS.md
+
+Skill: agente Frontend de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. ContactCTA: ramificar 429 / 503 / 500 (copy del handoff UX). tel: y Encargar siempre usables.
+2. Invariante Explorar Leaflet/OSM; cero @vis.gl/react-google-maps.
+3. Session/colores 500 → tokens plataforma; picker ErrorBanner; POS 500 ≠ "No hay productos activos".
+4. comun/.env.example FE: OSM opcional; sin Maps key Must.
+
+NO: pasarela, PDF de reportes, zoom↔radio ni loader borrega (tras WF UX), npm install Redis, CI YAML, clustering.
+
+Cuando exista el WF GEO: copiar PNG 1:1 a LaBorregaMarket/public/brand/loader-borrega/ y montar
+componente reutilizable BrandLoader/LoaderBorrega (US-GEO-08). No en este chat de deuda.
+
+[FIN DE INTERACCIÓN FRONTEND]

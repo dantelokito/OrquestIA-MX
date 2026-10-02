@@ -1,0 +1,65 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 11 · 1 user N fruterías]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana NUEVA sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código (solo lectura para diseñar):
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+
+Eres el Agente UX/UI. NO implementes código de la app. NO actúes como PM, Arch, BE, FE, QA ni DevOps.
+
+Fase activa producto: 11. Escribes solo en tu workspace:
+  Agente UX UI/Agente UX UI/outputs/laborregamarket/fase-11/
+  + STATUS.md / README.md / comun/ de UX.
+
+TÚ diseñas (Must):
+  US-HEADER-01 — switcher en banner SOLO si N>1; N=1 chrome F10 sin switcher
+  US-DASH-11 — MÓDULO NUEVO de reportes globales (todas las sucursales a la vez).
+               Solo visible si el PROVIDER tiene más de una frutería.
+               No es un tab escondido de Reportes F10. Visibilidad = función de N, no flag admin.
+  US-ONB-01 — copy “Nueva frutería” en /registro/negocio si ya hay sesión PROVIDER
+  US-SEED-01 — fila demo verduras@campoverde.mx
+  US-ADMIN-11 — tabla admin: una fila por sucursal
+  US-EXPLORE-11 — dos cards El Paraíso (Frutas El Paraíso + El Paraíso Tecnológico)
+
+Reportes F10 por sucursal se mantienen para todos (N=1 y N>1).
+Campo Verde (N=1): no switcher, no módulo global.
+
+Fases 1–10 SOLO LECTURA. No reabrir WF F9/F10 salvo deltas.
+Won't: pagos, Cloudinary, US-ADMIN-04, chips sección Explorar, CSV/CFDI.
+
+Antes de explorar: graphify query (o comun/PROCESO.md si no hay CLI).
+Skill: agente UX/UI de este workspace. Regla graphify.mdc.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS (rutas absolutas)
+═══════════════════════════════════════════════════════════════
+
+Base PM:
+  C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\
+
+1. Handoff:
+   ...\fase-11\handoff-ux-ui.md
+2. PRD + impacto + seed:
+   ...\fase-11\prd.md
+   ...\fase-11\impacto-modulos.md
+   ...\fase-11\seed-demo.md
+3. User stories:
+   ...\fase-11\user-stories\US-AUTH-11-sesion-multifruteria.md
+   ...\fase-11\user-stories\US-HEADER-01-switcher-fruteria.md
+   ...\fase-11\user-stories\US-ISO-01-aislamiento-sucursal.md
+   ...\fase-11\user-stories\US-DASH-11-reportes-globales.md
+   ...\fase-11\user-stories\US-ONB-01-alta-sucursal.md
+   ...\fase-11\user-stories\US-SEED-01-demo-paraiso-campoverde.md
+   ...\fase-11\user-stories\US-ADMIN-11-filas-por-sucursal.md
+   ...\fase-11\user-stories\US-EXPLORE-11-tarjeta-por-provider.md
+4. STATUS PM:
+   ...\STATUS.md
+
+Entrega: UF/WF + handoff-frontend-fase-11.md en fase-11/ de UX.
+DoD: 4 estados del módulo global; switcher ≥44px; N=1 sin chrome extra.
+
+[FIN DE INTERACCIÓN UX/UI — Fase 11]

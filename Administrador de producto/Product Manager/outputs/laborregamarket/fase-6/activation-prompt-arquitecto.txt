@@ -1,0 +1,57 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 6 · slices REPORTES + GEO]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Stack: Next.js 15 + Prisma 6 + PostgreSQL 15. Envelope ADR-003.
+
+Código: C:\Users\PC GAMER\LaBorregaMarket\
+Arquitectura (referencia): Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\
+
+Fase actual: Fase 6 v0.6.1 — TRES slices. TÚ diseñas:
+  - REPORTES DASH (API periodo + ADR PDF)
+  - GEO: nota/append — FE deriva radiusKm del visualizador; SIN bbox Must, SIN endpoint nuevo
+El slice DEUDA YA está en:
+  Agente Arquitecto\...\fase-6\handoff-backend-fase-6.md
+NO reabrir ADR-015 ni checklist Maps (DEV-P1-006 ya alineado).
+
+Decisiones PM (16/08/2026, CO-F6-001 + CO-F6-002):
+- Pagos / cobros POS nuevos / pago en línea: FUERA hasta nuevo aviso.
+- PROVIDER ve SOLO su negocio. No copiar GET /api/admin/analytics.
+- grain=day|month|year + fecha concreta. TZ America/Monterrey.
+- GMV = SUM(total) status != CANCELLED. Split MARKETPLACE vs POS.
+- PDF Must descargable; servidor vs cliente = TU ADR. Print CSS = Frontend.
+- GEO: zoom/pan ↔ slider = mismo Haversine 1-25 km (clamp). Círculo siempre visible.
+  Reusar GET /api/providers?lat&lng&radiusKm. Debounce al terminar pan/zoom.
+  Distancia centro→borde (detalle tuyo). NO south/west/north/east Must. NO clustering.
+- Sin migración de schema. Rutas nuevas DASH: requireRole + test 401/403 (DEV-P2-011).
+
+Schema: Order / OrderItem existentes. No modelo de pagos. GEO sin delta de tablas.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM: ...\fase-6\handoff-arquitecto.md
+2. PRD F6: ...\fase-6\prd.md
+3. CO-F6-001 y CO-F6-002
+4. User stories: US-DASH-04/05/06, US-GEO-07, US-GEO-08
+5. API-PROVIDER-DASH-01 F3 y API-GEO-01 F4/F5 (solo lectura)
+6. Deuda: ...\fase-6\handoff-backend-fase-6.md (no reescribir)
+
+Skill: @software-architect
+
+═══════════════════════════════════════════════════════════════
+ENTREGABLES
+═══════════════════════════════════════════════════════════════
+
+ADR PDF + ventanas calendario (day/month/year)
+Delta API-PROVIDER-DASH (o API-PROVIDER-REPORTS-01) + PDF si servidor
+Nota/append ADR-020 o equivalente: derivación radiusKm, clamp 25, debounce; API-GEO-01 sin bbox
+handoff-backend delta reportes (no reescribir el de deuda)
+Append sad.md y OBSERVABILITY.md
+
+NO diseñar pasarela, CFDI, /health, CI YAML, CSV, bbox Must, clustering, ticket térmico.
+
+[FIN DE INTERACCIÓN ARQUITECTO]

@@ -1,0 +1,148 @@
+---
+description: Protocolo estandarizado para traspasar entregables entre agentes de forma segura, trazable y verificable. Aplica a todo handoff del ecosistema.
+alwaysApply: true
+glob: "**/*"
+---
+
+# Protocolo de Handoff
+
+El handoff es el mecanismo formal por el cual un agente entrega su trabajo a los agentes downstream. Debe ser **trazable**, **verificable** y **completo** para asegurar continuidad sin ambigüedad.
+
+## Fases del Handoff
+
+### Fase 1: Pre-Handoff (Emisor)
+
+Antes de entregar, el agente emisor debe:
+
+- [ ] Completar su **DoD (Definition of Done)** específico de rol
+- [ ] Cumplir los estándares de calidad de `02-calidad-output.mdc`
+- [ ] Ejecutar su autoevaluación (grep de placeholders, verificación de referencias)
+- [ ] Generar el handoff usando la plantilla oficial (`templates/handoff-*.md` o equivalente)
+- [ ] Incluir todos los archivos referenciados en el handoff
+- [ ] Documentar **pendientes** o **excepciones** explícitamente
+
+### Fase 2: Entrega
+
+El handoff debe cumplir:
+
+- [ ] Estar en la ruta correcta: `outputs/{proyecto}/fase-{N}/`
+- [ ] Usar la convención de naming: `handoff-{agente-receptor}-fase-{N}.md` (o `MOD-*`, `FEAT-*`, `INFRA-*` según el emisor)
+- [ ] Incluir **timestamp** de entrega
+- [ ] **Referenciar** el `STATUS.md` actualizado con la nueva fase/estado
+- [ ] Declarar el **agente emisor** y el **agente receptor**
+
+### Fase 3: Recepción (Receptor)
+
+Al recibir, el agente receptor debe:
+
+- [ ] Leer el handoff **completo** (no solo el inicio)
+- [ ] Aplicar el checklist de recepción de `01-recepcion-upstream.mdc`
+- [ ] Ejecutar la validación global de `00-validacion-cruzada-global.mdc`
+- [ ] Confirmar que los archivos referenciados **existen** y están **completos**
+- [ ] Documentar **conformidad** o **problemas** encontrados
+
+### Fase 4: Confirmación y Cierre
+
+La recepción se considera completada cuando:
+
+- [ ] El receptor ha **iniciado su trabajo** basado en el handoff
+- [ ] No hay **bloqueos pendientes** del emisor que impidan avanzar
+- [ ] El `STATUS.md` refleja el nuevo **estado** correctamente
+- [ ] Si hubo problemas, se generó un **handoff de retorno** al emisor
+
+## Plantilla de Handoff Estándar
+
+Usa la siguiente estructura en los handoffs entre agentes (adaptada a cada plantilla específica):
+
+```markdown
+# Handoff: [Agente Emisor] → [Agente Receptor]
+
+## Metadata
+- **Fecha:** YYYY-MM-DD
+- **Fase:** {N}
+- **Proyecto:** {nombre-proyecto}
+- **Agente Emisor:** [rol]
+- **Agente Receptor:** [rol]
+
+## Entregables
+| Archivo | Tipo | Estado |
+|---------|------|--------|
+| `fase-{N}/api/API-AUTH-01.md` | Contrato API | ✅ Completo |
+| `fase-{N}/data-model/DB-users.md` | Esquema BD | ✅ Completo |
+| `fase-{N}/handoff-backend-fase-{N}.md` | Handoff | ✅ Listo |
+
+## Pendientes
+- [ ] Pendiente 1 (responsable: [agente])
+- [ ] Pendiente 2 (responsable: [agente])
+
+## Validación Requerida por el Receptor
+- [ ] Contratos API completos (método, path, body, response)
+- [ ] Esquemas BD con tipos y restricciones
+- [ ] Sin placeholders pendientes
+
+## Checklist de Recepción (para el Receptor)
+- [ ] Todos los archivos listados existen
+- [ ] Los archivos tienen el formato correcto
+- [ ] La información está completa
+- [ ] No hay contradicciones con la fase
+```
+
+## Handoffs por Flujo (convenciones de archivo)
+
+| Flujo | Archivo de handoff | Contenido principal |
+|-------|--------------------|---------------------|
+| PM → UX/UI | `handoff-ux-ui-fase-{N}.md` | PRD, User Stories, ACs |
+| PM → Arquitecto | `handoff-arquitecto-fase-{N}.md` | PRD, NFRs, User Stories |
+| UX/UI → Frontend | `handoff-frontend-fase-{N}.md` | Wireframes, Design Tokens, User Flows |
+| Arquitecto → Backend | `handoff-backend-fase-{N}.md` | Contratos API, Esquemas BD, ADRs |
+| Arquitecto → DevOps | `infra-requirements.md` | NFRs, servicios cloud, topología |
+| Backend → Frontend | `MOD-{Module}-handoff.md` | Endpoints, estructura JSON validada |
+| Backend/Frontend → QA | `fase-{N}/handoff/README.md` | Módulos implementados, comandos build/test |
+| FE/BE → QA (fix) | `fase-{N}/quality/EVIDENCIA-BUG-{NNN}.md` | Archivos, commit/diff, re-prueba local. Sin esto QA no re-testea |
+| QA → PM | `QA-{Module}-signoff.md` | Dictamen (APROBADO/RECHAZADO/CONDICIONES). **No cierra la fase** |
+| QA → Backend | `QA-F{N}-handoff-backend.md` | Cola de bugs priorizada, archivos sugeridos |
+| QA → Frontend | `QA-F{N}-handoff-frontend.md` | Cola de bugs priorizada, componentes afectados |
+| QA APROBADO → UX | `fase-{N}/quality/QG-correcciones.md` (workspace UX) | Cambios de UI/flujo/tokens por bugs |
+| QA APROBADO → Arquitecto | `fase-{N}/quality/QG-correcciones.md` (workspace Arch) | Cambios de contrato/ADR/datos; nota ADR si aplica |
+| QA → DevOps | `comun/env-requirements.md` | URLs staging, credenciales de prueba, comandos CI |
+| DevOps → humano | PR del repo de la app | PR listo, checks verdes. **Sin merge a main/prod** |
+
+## Handoff de Retorno (Receptor → Emisor)
+
+Cuando el receptor encuentra inputs inválidos o incompletos, debe generar un handoff de retorno:
+
+`outputs/{proyecto}/fase-{N}/RETORNO-{agente-emisor}-fase-{N}.md` con:
+
+- **Problemas encontrados** (archivo, tipo de fallo, severidad)
+- **Requerimientos** para resolver (quién, qué debe completar)
+- **Bloqueos** resultantes para su propio trabajo
+- **Acciones recomendadas** al emisor
+
+## Actualización de STATUS.md
+
+Tras cada handoff (entrega o recepción), el agente debe:
+
+- [ ] Actualizar `outputs/{proyecto}/STATUS.md`
+- [ ] Actualizar la fecha de última entrega/recepción
+- [ ] Registrar los hechos clave de la fase (bugs vivos, pendientes, enlaces)
+- [ ] Actualizar el historial (`historial/`) solo en modo **append**, y sobre el archivo que ya existe. No crees una copia del estado completo con nombre de versión (ver `04-control-fase.mdc`); registra el delta.
+
+## Criterios para declarar "lista para PR" (cross-agent)
+
+Un módulo o feature se considera listo para que el **humano** mergee cuando **toda** la cadena validó:
+
+1. **PM:** User Stories y ACs cubiertos, alcance validado
+2. **UX/UI:** DoD UX/UI + `QG-correcciones.md` post-QA
+3. **Arquitecto:** DoD arquitectura + `QG-correcciones.md` post-QA
+4. **Backend:** DoD backend + `EVIDENCIA-BUG-*` si atendió bugs
+5. **Frontend:** DoD frontend + `EVIDENCIA-BUG-*` si atendió bugs
+6. **QA:** Sign-off **APROBADO** (Zero Blocker, cobertura)
+7. **DevOps:** DoD DevOps + **PR abierto** (sin merge a `main` ni producción)
+
+El PM no promueve N→N+1 sin los dos `QG-correcciones.md`. Producción la autoriza el humano, no el agente DevOps.
+
+Si **cualquiera** de los eslabones no validó, el release **debe considerarse bloqueado** hasta que se resuelva.
+
+## Regla final
+
+**Sin handoff no hay entrega.** Ningún trabajo se considera completado si no está documentado en un handoff trazable y verificado por el receptor. Documentar solo en chat o en la raíz de `outputs/{proyecto}/` **no es suficiente** (regla QA `outputs-por-fase`).

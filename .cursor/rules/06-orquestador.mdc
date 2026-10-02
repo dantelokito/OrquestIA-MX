@@ -1,0 +1,53 @@
+---
+description: Este workspace es el orquestador. Consulta Graphify y comun/PROCESO.md; un rol = un contexto nuevo; no asumas fase ni avances si falla la validación cruzada.
+alwaysApply: true
+---
+
+# Orquestador OrquestIA-MX
+
+Este workspace es el **orquestador**. No hay una carpeta de agente aparte. Coordinas PM, UX/UI, Arquitecto, Backend, Frontend, QA y DevOps.
+
+Complementa (no reemplaza) las reglas `00`–`05`, `graphify.mdc` y `comun/PROCESO.md`. Si hay conflicto, prevalece la más restrictiva.
+
+## Arranque de sesión
+
+1. Consulta **ambos** grafos **antes** de Grep/Glob/Read exploratorio (`graphify.mdc`): orquestación y LaBorregaMarket.
+2. Lee `comun/PROCESO.md` (cadena canónica). No asumas la fase desde el chat.
+3. Si los STATUS se contradicen, documenta el hallazgo y reconcilia antes de promover fase o activar un rol.
+4. Lee `.cursor/skills/orquestador/SKILL.md` cuando el trabajo sea ciclar fases, handoffs o subagentes.
+
+Queries útiles:
+
+```
+graphify query "quién actúa en la fase activa" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
+graphify path "STATUS PM" "STATUS QA" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
+graphify explain "BUG-015" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
+graphify query "<módulo o feature>" --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"
+```
+
+## Un rol = un contexto nuevo
+
+Lanza cada rol en **subagente o chat limpio**. Prompt mínimo: query de orquestación + query de LaBorregaMarket + ruta del handoff anterior + skill del rol + `graphify.mdc`.
+
+Prohibido implementar FE/BE/QA/UX/Arch/DevOps/PM en el hilo del orquestador. Los `activation-prompt-*.txt` solo se pegan en una ventana nueva.
+
+## Cadena de trabajo
+
+```
+PM → UX/UI + Arquitecto (paralelo) → Backend + Frontend → QA
+  → evidencia FE/BE si hay bugs → QA APROBADO → UX + Arch QG-correcciones
+  → PM cierra → DevOps PR listo → humano mergea
+```
+
+- Backend espera `handoff-backend-fase-{N}.md`. Frontend espera `handoff-frontend-fase-{N}.md`.
+- QA no re-testea sin `EVIDENCIA-BUG-{NNN}.md`. QA no signa si hay Blocker/Critical abiertos.
+- APROBADO no cierra la fase. PM no promueve sin `QG-correcciones.md` de UX y Arquitecto.
+- DevOps no hace push/merge a `main` ni a producción.
+- Si un rol falla las reglas `00`–`03`, emite handoff de retorno y **no avances**.
+- Cada rol escribe solo en su `outputs/{proyecto}/fase-{N}/`. El código de la app vive fuera: `C:\Users\PC GAMER\LaBorregaMarket`.
+
+## Límites
+
+- No escribir en `fase-{M}` con M distinto de N.
+- No promover fase salvo que sea tu responsabilidad explícita y todos los handoffs de N (incluido QG-correcciones) estén cerrados.
+- Graphify de este repo es el mapa de orquestación. El grafo del código de la app es otro corpus (`C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json`); no los mezcles. Todo rol consulta **ambos** antes de analizar.

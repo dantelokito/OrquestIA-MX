@@ -1,4 +1,8 @@
 [INICIO DE INTERACCIÓN PM]
+Paso 0 Graphify (obligatorio, ambos grafos):
+- Orquestación: graphify query "<tarea>" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
+- App: graphify query "<tarea>" --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"
+Si falta el grafo de la app: STOP y graphify update . en LaBorregaMarket. Regla: graphify.mdc.
 Contexto del Proyecto: [Insertar descripción breve de la idea o negocio]
 Fase Actual: [Descubrimiento / Modificación de Alcance / Creación de Backlog]
 Instrucción: Actúa como el Agente Product Manager. Analiza la información previa, genera el PRD/Historias de Usuario correspondientes y hazme las preguntas necesarias para cerrar vacíos de negocio.

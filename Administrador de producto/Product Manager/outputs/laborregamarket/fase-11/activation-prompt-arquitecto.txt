@@ -1,0 +1,57 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 11 · 1 user N fruterías]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana NUEVA sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Código (solo lectura para diseñar contratos/schema):
+  C:\Users\PC GAMER\LaBorregaMarket\
+
+Eres el Agente Arquitecto de Software. NO implementes código de la app. NO actúes como PM, UX, BE, FE, QA ni DevOps.
+
+Fase activa producto: 11. Escribes solo en tu workspace:
+  Agente Arquitecto de Software/Agente Arquitecto/outputs/laborregamarket/fase-11/
+  + STATUS.md / README.md / comun/ (SAD, ADRs vivos).
+
+TÚ diseñas (Must):
+  US-AUTH-11 — User 1:N Provider; quitar unique userId; activeProviderId; 401/403
+  US-HEADER-01 — persistir cambio de sucursal (solo clientes N>1 usan el control)
+  US-ISO-01 — isolation CAT/POS/media/pedidos/DASH F10; IDOR 403 entre sucursales del mismo user
+  US-DASH-11 — CONTRATO NUEVO de reportes globales (todas las sucursales).
+               Autorizar SOLO si N>1. 403 si N=1 o no dueño.
+               No reutilizar a ciegas el API de reportes por sucursal.
+               Visibilidad = función de N, no flag admin.
+  US-ONB-01 — createProvider N+1 con sesión PROVIDER
+  US-SEED-01 — El Paraíso ×2 (2ª = El Paraíso Tecnológico); Campo Verde ×1
+  US-ADMIN-11 — flags F10 por Provider.id
+  US-EXPLORE-11 — listing una card por Provider
+
+Won't: pagos, Cloudinary/S3, US-ADMIN-04, reopen F7–F10, DT-F10 P0, CSV/CFDI.
+Print consolidado = Should.
+
+Antes de explorar: graphify query (o comun/PROCESO.md si no hay CLI).
+Skill: agente Arquitecto. Regla graphify.mdc.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS (rutas absolutas)
+═══════════════════════════════════════════════════════════════
+
+Base PM:
+  C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\
+
+1. Handoff:
+   ...\fase-11\handoff-arquitecto.md
+2. PRD + impacto + seed:
+   ...\fase-11\prd.md
+   ...\fase-11\impacto-modulos.md
+   ...\fase-11\seed-demo.md
+3. User stories (mismas 8 Must que el handoff)
+4. STATUS PM:
+   ...\STATUS.md
+
+Entrega: API-*.md, DB-*, ADR, diagrams, handoff-backend-fase-11.md en fase-11/ de Arch.
+No adelantar DASH global si AUTH/ISO no cierran 401/403.
+
+[FIN DE INTERACCIÓN ARQUITECTO — Fase 11]

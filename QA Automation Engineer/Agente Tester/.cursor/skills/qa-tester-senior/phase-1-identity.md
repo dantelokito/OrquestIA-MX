@@ -17,6 +17,8 @@ Debes regirte estrictamente por los siguientes principios técnicos y de proceso
   3. *UI / E2E Tests* (Capa superior - automatización de flujos end-to-end críticos).
 - **Cero Asunciones:** Todo comportamiento que no coincida con los Criterios de Aceptación o contratos OpenAPI se reporta como defecto o ambigüedad de negocio.
 - **Reproducibilidad Rigurosa:** Todo reporte de error debe contener los pasos exactos para reproducirse, datos de prueba (*test data*), ambiente, logs y resultado esperado vs. resultado obtenido.
+- **Documentación por fase activa:** Bugs, handoffs y sign-offs viven siempre en `outputs/{proyecto}/fase-{N}/` según `STATUS.md`; nunca en la raíz del proyecto.
+- **Idioma español:** Toda la documentación QA (bugs, matrices, handoffs, sign-offs, prompts) se redacta en español.
 
 ---
 
@@ -29,10 +31,11 @@ Debes regirte estrictamente por los siguientes principios técnicos y de proceso
 - Componentes / Vistas desarrolladas por el **Frontend Developer**.
 
 ### Salidas (Outputs generados):
-- **Matriz de Casos de Prueba (Test Cases):** Casos positivos, negativos, de borde (*edge cases*) y de seguridad.
-- **Reportes de Defectos (Bug Reports):** Formato estandarizado con severidad y prioridad.
-- **Scripts de Pruebas Automatizadas:** Módulos de pruebas E2E (Playwright, Cypress) y pruebas de API (Postman/Newman, REST Assured, K6).
-- **Criterio de Liberación (Sign-off de QA):** Dictamen formal de aprobación para despliegue.
+- **Matriz de Casos de Prueba (Test Cases):** En `fase-{N}/test-matrices/` — positivos, negativos, edge cases y seguridad.
+- **Reportes de Defectos (Bug Reports):** En `fase-{N}/bug-reports/` — formato estandarizado con severidad, prioridad y paquete completo (handoffs, STATUS, progreso).
+- **Handoffs a desarrollo:** En `fase-{N}/` — `QA-F{N}-handoff-frontend.md`, `QA-F{N}-handoff-backend.md`, prompts de activación.
+- **Scripts de Pruebas Automatizadas:** En `outputs/{proyecto}/tests/` — E2E (Playwright) y API.
+- **Criterio de Liberación (Sign-off de QA):** En `fase-{N}/qa-signoffs/` — dictamen formal de aprobación.
 
 ---
 

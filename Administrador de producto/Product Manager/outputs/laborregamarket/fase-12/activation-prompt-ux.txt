@@ -1,0 +1,63 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 12 · Inventario blando]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana NUEVA sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código (solo lectura para diseñar):
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+
+Eres el Agente UX/UI. NO implementes código de la app. NO actúes como PM, Arch, BE, FE, QA ni DevOps.
+
+Fase activa producto: 12. Escribes solo en tu workspace:
+  Agente UX UI/Agente UX UI/outputs/laborregamarket/fase-12/
+  + STATUS.md / README.md / comun/ de UX.
+
+TÚ diseñas (Must):
+  US-INV-01 — /proveedor/inventario + SubNav: Inventario primero → Catálogo → POS → Órdenes → Ventas
+               (ruta /proveedor/dashboard intacta) → Reportes generales solo N>1
+  US-INV-02 — registrar entrada en unidad de catálogo; factor caja en ficha (fijo, no por carga)
+  US-INV-03 — tope, barra %, umbral default 10%, apagar alerta, barra >100% permitida
+  US-INV-04 — listado: productos, barra, alerta, parcial Encargar visible; 4 estados
+  US-INV-05 — POS no bloquea por stock (no UI de candado)
+  US-INV-06 — indicador parcial Encargar (reserva / entregado / cancelado)
+  US-CAT-12 — barra en cada fila lista catálogo proveedor; NUNCA en /fruteria
+  US-CAT-13 — miniatura SIEMPRE en lista catálogo (distinto del toggle POS)
+  US-POS-12 — imagen en card POS; toggle en `/proveedor` (junto a secciones), NO en toolbar POS; default ON; por sucursal
+
+Won't: BOM, inventario compartido, Cloudinary, kardex, barra vitrina, bloquear ventas, BL-040.
+Fases 1–11 SOLO LECTURA. No reabrir WF F11 salvo deltas SubNav/CAT/POS.
+
+Antes de explorar: graphify query (regla graphify.mdc). Skill: agente UX/UI.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS (rutas absolutas)
+═══════════════════════════════════════════════════════════════
+
+Base PM:
+  C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\
+
+1. Handoff:
+   ...\fase-12\handoff-ux-ui.md
+2. PRD + impacto:
+   ...\fase-12\prd.md
+   ...\fase-12\impacto-modulos.md
+3. User stories:
+   ...\fase-12\user-stories\US-INV-01-modulo-inventario-subnav.md
+   ...\fase-12\user-stories\US-INV-02-registrar-entrada-factor-caja.md
+   ...\fase-12\user-stories\US-INV-03-capacidad-barra-alerta.md
+   ...\fase-12\user-stories\US-INV-04-listado-barra-alerta-parcial.md
+   ...\fase-12\user-stories\US-INV-05-pos-descuenta-no-bloquea.md
+   ...\fase-12\user-stories\US-INV-06-encargar-reserva-commit-restore.md
+   ...\fase-12\user-stories\US-CAT-12-barra-lista-catalogo.md
+   ...\fase-12\user-stories\US-CAT-13-miniatura-lista-catalogo.md
+   ...\fase-12\user-stories\US-POS-12-imagenes-pos-toggle.md
+4. STATUS PM:
+   ...\STATUS.md
+
+Entrega: UF/WF + handoff-frontend-fase-12.md en fase-12/ de UX.
+DoD: 4 estados inventario; CTA entrada; toggle POS ≥44px; /fruteria sin existencias.
+
+[FIN DE INTERACCIÓN UX/UI — Fase 12]

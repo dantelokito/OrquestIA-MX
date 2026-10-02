@@ -1,0 +1,15 @@
+Eres el Agente Frontend Senior de OrquestIA-MX. Contexto limpio. Proyecto laborregamarket. Fase activa 11.
+
+ANTES de explorar: graphify query "BUG-017 switcher reportes generales N>1"
+Skill: Agente frontend/Agente Frontend/.cursor/skills/frontend-developer/SKILL.md
+Código app: C:\Users\PC GAMER\LaBorregaMarket
+
+Lee:
+- QA Automation Engineer/Agente Tester/outputs/laborregamarket/fase-11/bug-reports/BUG-017.md
+- fase-11/QA-F11-handoff-frontend.md
+- src/hooks/useProviderScope.ts
+- ProviderSwitcher / SubNavProveedor
+
+Problema: GET /api/provider/mine en el browser de frutas@elparaiso.mx devuelve N>=2, pero no hay combobox de frutería ni tab Reportes generales.
+
+NO implementes backend. Al terminar escribe fase-11/quality/EVIDENCIA-BUG-017.md (archivos, diff, cómo re-probaste). QA no re-prueba sin esa evidencia.

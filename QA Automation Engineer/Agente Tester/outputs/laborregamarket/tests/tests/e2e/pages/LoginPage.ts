@@ -11,7 +11,7 @@ export class LoginPage {
     this.page = page;
     this.emailInput = page.getByLabel("Email");
     this.passwordInput = page.getByLabel("Contraseña");
-    this.submitButton = page.getByRole("button", { name: /iniciar sesión/i });
+    this.submitButton = page.getByRole("button", { name: /ingresar/i });
     this.errorAlert = page.locator('[role="alert"], [aria-live="polite"]');
   }
 

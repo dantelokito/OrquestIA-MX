@@ -1,0 +1,18 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — retorno F10 API MEDIA]
+
+Eres el Arquitecto de LaBorregaMarket. Fase 10. No F11.
+
+QA 12/09: local-disk MAX_IMAGE_BYTES = 20_971_520 y TC-MED-008 Pass (6 MiB).
+API-MEDIA-02 / ADR-032 siguen en 5 MB. POST 20 MiB+1 → 500 (Next body),
+no 400 del service.
+
+Leer:
+- Agente Tester / outputs/laborregamarket/fase-10/QA-F10-retorno-pm-ux-arch.md
+- Agente Tester / outputs/laborregamarket/fase-10/QA-F10-handoff-arquitecto.md
+
+Si PM confirma el CO: enmendar API-MEDIA-02 (max 20_971_520), ADR-032,
+y documentar bodySizeLimit ≥ 21mb. Decidir cloudinary.ts (5 MB residual).
+
+No implementes Next (Backend). No reabras F8/F9.
+
+[FIN DE INTERACCIÓN ARQUITECTO — retorno F10]

@@ -1,0 +1,62 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 14 · Perfil + merma aditiva + series]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana NUEVA sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Código (solo lectura para diseñar contratos/schema):
+  C:\Users\PC GAMER\LaBorregaMarket\
+
+Eres el Agente Arquitecto de Software. NO implementes código de la app. NO actúes como PM, UX, BE, FE, QA ni DevOps.
+
+Fase activa producto: 14 (documental). Escribes solo en tu workspace:
+  Agente Arquitecto de Software/Agente Arquitecto/outputs/laborregamarket/fase-14/
+  + STATUS.md / README.md / comun/ (SAD, ADRs vivos).
+
+Tu STATUS puede decir aún fase 13 (F13 cerrada: QA APROBADO). F13 está cerrada en PM. Pasa a fase 14. No edites fase-13/.
+
+TÚ diseñas (Must):
+  US-PROF-03 — ampliar PATCH datos negocio (nombre, dirección, teléfono, lat/lng, descripción); geo AMM; NO reset isVerified
+  US-PROF-01/02/04/05 — contratos existentes (media, Google lock, openingHours, capacidades, prep, delivery)
+  US-CAT-21 — posShowImages intacto (solo se mueve la UI)
+  US-CAT-22 — precio > 0 al activar GLOBAL; prohibido default 50
+  US-CAT-23 — 409 sección con productos (mensaje usable)
+  US-INV-08/09 — persistir MERMA y AJUSTE; 400 si on_hand < 0; conteo ≥ 0
+  US-INV-10 — GET movimientos ENTRADA+MERMA+AJUSTE (sin ventas)
+  US-DASH-14 — N=1 403 GLOBAL_REPORTS_NOT_AVAILABLE intacto; pintar payload existente
+  US-DASH-15 — decisión SVG unificado vs librería (PM no fija npm); details + print
+  US-DASH-16 — PDF from/to; no grain en UI
+
+Won't: instrumentar decrementOnHandForLines, kardex VENTA_POS/ENTREGA_PEDIDO, confirmDiscard F13, costos, caja, Cloudinary, BL-040, SELECT FOR UPDATE como Must (es Should BL-243).
+ADR-022 intacto EN VENTA. Aislamiento F11 intacto. Tabla merma = tú eliges (InventoryEntry vs InventoryMovement acotado).
+
+Baseline: main @ 0eda84c (PR #13 mergeado). Diseña sobre F12+F13 en main. No pidas implementar la app.
+
+Antes de explorar: graphify query (regla graphify.mdc). Skill: agente Arquitecto.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS (rutas absolutas)
+═══════════════════════════════════════════════════════════════
+
+Base PM:
+  C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\
+
+1. Handoff:
+   ...\fase-14\handoff-arquitecto-fase-14.md
+2. PRD + impacto:
+   ...\fase-14\prd.md
+   ...\fase-14\impacto-modulos.md
+3. User stories Must en ...\fase-14\user-stories\
+4. STATUS PM:
+   ...\STATUS.md
+5. QG BE:
+   ...\fase-14\quality\QG-cobertura-BE.md
+6. Diagnóstico (solo lectura):
+   C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\comun\MEJORA-PANEL-PROVEEDOR.md
+
+Entrega: API-*.md, DB-*, ADR (isVerified/coords + merma aditiva + gráficas), diagrams, handoff-backend-fase-14.md en fase-14/ de Arch.
+Nunca 4xx de stock al vender. 400 merma/ajuste negativo. No reset isVerified.
+
+[FIN DE INTERACCIÓN ARQUITECTO — Fase 14]

@@ -1,0 +1,48 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 8 · P1–P4]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Stack: Next.js 15 + Prisma 6 + PostgreSQL 15. Envelope ADR-003.
+
+Código: C:\Users\PC GAMER\LaBorregaMarket\
+Arquitectura: Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\
+
+Fase actual: Fase 8 v0.8.3. TÚ diseñas:
+  PARTE 1 — UserAddress cubre US-GEO-17…20 SIN endpoint nuevo
+  PARTE 2 — clamp radiusKm 0.5–10 decimal (CO-F8-001)
+  PARTE 3 — bbox México + minZoom + isInMexico (CO-F8-002)
+             GET /api/providers SIGUE Haversine. NO bbox Must de lista.
+  PARTE 4 — SIN API nueva. Mismo GET /api/providers/:id.
+             Debounce/cache hover (1 preview, no spam). CO-F8-003.
+
+Fase 7 SOLO LECTURA. Fase 6 CONGELADA.
+CO-F7-001: radiusKm del slider. No derivar del viewport.
+Pagos: FUERA (CO-F6-001).
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM: ...\fase-8\handoff-arquitecto.md
+2. PRD F8 + CO-F8-001 + CO-F8-002 + CO-F8-003
+3. User stories: US-GEO-17…23, US-EXPLORE-07
+4. STATUS.md del PM
+
+Skill: agente Arquitecto de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. P1: inventario addresses; si no hay delta, decirlo explícito.
+2. P2: contrato clamp 0.5–10; tests.
+3. P3: MEXICO_BOUNDS + minZoom + isInMexico; Should URL fuera de MX.
+4. P4: nota «sin API nueva» + política debounce hover.
+5. handoff-backend-fase-8.md (obligatorio por clamp; incluir MX y preview).
+
+NO: bbox API Must, clustering, Maps JS, Places, pasarela, CI YAML,
+    merge duplicados, DASH, pan→radio, polígono INEGI.
+
+[FIN DE INTERACCIÓN ARQUITECTO — Fase 8]

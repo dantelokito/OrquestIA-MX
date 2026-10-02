@@ -1,0 +1,66 @@
+[INICIO DE INTERACCIÓN FRONTEND — BUG-010 Blocker Explorar]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket
+Código: C:\Users\PC GAMER\LaBorregaMarket
+Ambiente: http://localhost:8080
+
+Ticket QA: BUG-010 — Blocker, P1
+Handoff: Agente Tester\outputs\laborregamarket\fase-6\QA-F6-handoff-frontend.md
+Bug report: Agente Tester\outputs\laborregamarket\fase-6\bug-reports\BUG-010.md
+
+El módulo /explorar crashea al entrar con overlay Next:
+  Runtime TypeError: Cannot read properties of undefined (reading 'layerPointToLatLng')
+  at FitCircle.useEffect (src/components/explore/ExploreMap.tsx:122)
+
+Tu intento anterior (sesión 98ad6d) solo añadió dbgLog — NO corrigió la línea 122.
+
+═══════════════════════════════════════════════════════════════
+CAUSA RAÍZ
+═══════════════════════════════════════════════════════════════
+
+FitCircle hace:
+  const circle = L.circle([pin.lat, pin.lng], { radius: radiusKm * 1000 });
+  map.fitBounds(circle.getBounds(), ...);
+
+L.circle sin addTo(map) → _map undefined → getBounds() falla.
+
+═══════════════════════════════════════════════════════════════
+FIX OBLIGATORIO
+═══════════════════════════════════════════════════════════════
+
+En src/components/explore/ExploreMap.tsx — FitCircle useEffect:
+
+  map.whenReady(() => {
+    if (map.getSize().x === 0 || map.getSize().y === 0) map.invalidateSize();
+    const bounds = L.latLng(pin.lat, pin.lng).toBounds(radiusKm * 1000);
+    map.fitBounds(bounds, { padding: [28, 28], animate: false });
+  });
+
+ELIMINAR de producto:
+  - dbgLog y #region agent log en ExploreMap.tsx
+  - dbgLog y #region agent log en ExplorePageClient.tsx
+  - fetch a 127.0.0.1:7481 y /api/debug/agent-log
+
+═══════════════════════════════════════════════════════════════
+NO TOCAR
+═══════════════════════════════════════════════════════════════
+
+- API-GEO-01 / backend (cero cambio BE)
+- CO-F7-001: pan/zoom NO actualizan radio
+- resolveExploreCenter, layout mapa-primero, preview, login
+- PDF (BUG-009 es Backend)
+
+═══════════════════════════════════════════════════════════════
+DoD
+═══════════════════════════════════════════════════════════════
+
+1. http://localhost:8080/explorar carga SIN overlay de error
+2. Slider hidrata radiusKm en URL y refetch lista
+3. Pan/zoom no cambian radio
+4. Avisar a QA para re-run HP-GEO-07 / HP-GEO-08
+
+[FIN DE INTERACCIÓN FRONTEND — BUG-010]

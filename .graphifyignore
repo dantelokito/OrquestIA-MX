@@ -1,0 +1,74 @@
+# Ignore everything, then re-include only orchestration material.
+*
+!*/
+
+# Root
+!README.md
+!.graphifyignore
+!.gitignore
+!comun/
+!comun/**
+
+# Global orchestrator rules and skills
+!.cursor/
+!.cursor/rules/
+!.cursor/rules/**
+!.cursor/skills/
+!.cursor/skills/**
+
+# Agent rules and skills
+!**/.cursor/rules/
+!**/.cursor/rules/**
+!**/.cursor/skills/
+!**/.cursor/skills/**
+
+# Agent identity READMEs (not every nested README)
+!Administrador de producto/Product Manager/README.md
+!Agente UX UI/Agente UX UI/README.md
+!Agente Arquitecto de Software/Agente Arquitecto/README.md
+!Agente backend/Agente backend/README.md
+!Agente frontend/Agente Frontend/README.md
+!QA Automation Engineer/Agente Tester/README.md
+!Agente DevOps/Agente DevOps/README.md
+
+# Living STATUS / index of the active project
+!**/outputs/laborregamarket/STATUS.md
+!**/outputs/laborregamarket/README.md
+
+# Active phase and shared living docs
+!**/outputs/laborregamarket/fase-14/
+!**/outputs/laborregamarket/fase-14/**
+!**/outputs/laborregamarket/comun/
+!**/outputs/laborregamarket/comun/**
+
+# Never send media through the LLM pass
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.webp
+**/*.gif
+**/*.svg
+**/*.mp4
+**/*.mov
+
+# Historical / noise even if a parent was un-ignored
+**/fase-1/**
+**/fase-2/**
+**/fase-3/**
+**/fase-4/**
+**/fase-5/**
+**/fase-6/**
+**/fase-7/**
+**/fase-8/**
+**/fase-9/**
+**/fase-10/**
+**/fase-11/**
+**/fase-12/**
+**/fase-13/**
+**/historial/**
+**/tests/**
+**/Notas/**
+**/node_modules/**
+**/playwright-report/**
+**/test-results/**
+graphify-out/

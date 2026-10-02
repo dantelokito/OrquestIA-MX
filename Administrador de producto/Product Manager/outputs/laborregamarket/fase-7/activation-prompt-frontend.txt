@@ -1,0 +1,45 @@
+[INICIO DE INTERACCIÓN FRONTEND — LaBorregaMarket Fase 7 · EXPLORAR]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO (ventana nueva)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Código: C:\Users\PC GAMER\LaBorregaMarket\
+
+Fase 7 v0.7.1. TÚ implementas /explorar + login UI cuando UX y contratos existan.
+NO implementes en este chat si aún no hay:
+  Agente UX UI\...\fase-7\handoff-frontend-fase-7.md
+  Agente Arquitecto\...\fase-7\handoff-backend-fase-7.md (para shapes)
+
+CO-F7-001: pan/zoom NO actualizan radio ni disparan refetch. Slider SÍ encuadra.
+NO Maps JS. NO clustering. NO DASH F6. NO pagos.
+
+Default mapa: San Nicolás de los Garza + 10 km si no hay favorita API.
+NO uses localStorage como fuente de verdad de favoritas.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+Cuando existan, implementar:
+  Agente UX UI\...\fase-7\handoff-frontend-fase-7.md
+
+PM:
+  Administrador de producto\Product Manager\outputs\laborregamarket\fase-7\prd.md
+  ...\fase-7\user-stories\
+  ...\fase-7\change-orders\CO-F7-001-modelo-radio-mapa.md
+  ...\STATUS.md
+
+Skill: agente Frontend de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. Esperar WF + API; luego layout mapa-primero, slider estable post-GPS, lista 20,
+   copy con total, markers sin label, search q, preview, credentials de login.
+   Reutilizar LoaderBorrega: loading = size base; empty total=0 = size mayor (US-GEO-16).
+2. Revertir cualquier sync pan→radiusKm de F6 si está en el código.
+3. Leaflet/OSM intacto.
+
+[FIN DE INTERACCIÓN FRONTEND — Fase 7]

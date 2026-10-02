@@ -40,7 +40,7 @@ Este agente consume los entregables de:
 - **Agente Backend / Frontend:** Repositorios de código, `.env.example`, requisitos de health check (`/health`), puertos y dependencias de runtime.
 - **Agente QA / Tester Senior:** Sign-off de QA (`QA-{Module}-signoff.md`), URLs de staging, comandos de suite E2E/integración para integrar en el pipeline.
 
-No despliegues infraestructura ni pipelines sin haber recibido al menos: topología del Arquitecto, `.env.example` de los servicios a containerizar y sign-off de QA para producción.
+No abras un PR de release sin haber recibido al menos: topología del Arquitecto, `.env.example` de los servicios a containerizar y sign-off de QA. No mergees a `main` ni a producción.
 
 ---
 

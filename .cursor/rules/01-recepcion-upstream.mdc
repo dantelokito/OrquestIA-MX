@@ -1,0 +1,276 @@
+---
+description: Checklists de recepción de inputs upstream específicos para cada agente del ecosistema. Validar según el rol del workspace antes de todo trabajo.
+alwaysApply: true
+glob: "**/*"
+---
+
+# Checklists de Recepción por Agente
+
+Estas son las validaciones específicas que **cada agente** debe ejecutar antes de comenzar su trabajo, adicionales al checklist global de `00-validacion-cruzada-global.mdc`.
+
+**Determina tu rol** a partir del workspace donde estás trabajando (el `README.md` de tu carpeta lo define) y aplica el checklist correspondiente.
+
+## Paso 0 Graphify (todos los roles)
+
+Antes de este checklist de recepción, PM, UX/UI, Arquitecto, Backend, Frontend, QA y DevOps deben:
+
+- [ ] Consultar el grafo de orquestación
+- [ ] Consultar el grafo de LaBorregaMarket (`--graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"`)
+- [ ] Si falta el grafo de la app: STOP y regenerar (`graphify update .` en el repo de la app)
+
+Comandos: `.cursor/rules/graphify.mdc`. Recién entonces leer STATUS, PRD, contratos o código.
+
+---
+
+## Agente Product Manager (PM)
+
+### Inputs Esperados
+- Requerimientos del cliente/stakeholder
+- Feedback de usuarios o métricas de productos existentes
+- Restricciones de tiempo y presupuesto
+- Objetivos de negocio
+
+### Checklist de Recepción
+- [ ] Grafo de orquestación **y** grafo de LaBorregaMarket consultados (Paso 0)
+- [ ] Los requerimientos están **documentados** (no solo en chat)
+- [ ] Se identificaron los **stakeholders** clave
+- [ ] Las restricciones están **cuantificadas** (días, presupuesto, usuarios esperados)
+- [ ] El alcance está **delimitado** (qué SÍ y qué NO se incluye)
+- [ ] Se conocen los **módulos o epics** principales del negocio
+
+### Acción si falta información
+- Realizar entrevista de descubrimiento (Discovery Workflow de 4 pasos)
+- Realizar 3-5 preguntas de aclaración antes de definir alcance
+- Documentar vacíos en `outputs/{proyecto}/fase-{N}/gaps-identificados.md`
+
+### Pre-requisitos para generar PRD
+- [ ] Objetivo del negocio definido
+- [ ] Público objetivo identificado
+- [ ] Alcance MVP delimitado (MoSCoW)
+- [ ] Módulos principales identificados
+
+---
+
+## Agente UX/UI Designer
+
+### Inputs Esperados
+- PRD del PM (`prd.md`)
+- User Stories con Criterios de Aceptación (`US-*.md`)
+- Branding del cliente (si existe: manual de marca, paleta, tipografías)
+- Restricciones técnicas del Arquitecto o Frontend
+
+### Checklist de Recepción
+- [ ] Grafo de orquestación **y** grafo de LaBorregaMarket consultados (Paso 0)
+- [ ] PRD existe y tiene sección de **alcance** definida
+- [ ] User Stories usan formato correcto (`Como... / Quiero... / Para...`)
+- [ ] Los Criterios de Aceptación están en formato **Given-When-Then**
+- [ ] Se identificaron los **módulos principales** a diseñar
+- [ ] Existe información de **branding** del cliente (o se documenta su ausencia)
+
+### Acción si falta información
+- Solicitar al PM completar historias ambiguas
+- Documentar dudas en `outputs/{proyecto}/fase-{N}/clarificaciones-pendientes.md`
+- No diseñar sin ACs ni comprensión del flujo de negocio
+
+### Pre-requisitos para generar User Flows y Wireframes
+- [ ] Historias de Usuario disponibles por módulo
+- [ ] Objetivos por pantalla identificados
+- [ ] Restricciones técnicas conocidas (librería UI, componentes)
+
+---
+
+## Agente Arquitecto de Software
+
+### Inputs Esperados
+- PRD y NFRs del PM (`prd.md`)
+- User Flows del UX/UI (`UF-*.md`)
+- Wireframes del UX/UI (`WF-*.md`)
+- Historia de negocio y módulos priorizados
+
+### Checklist de Recepción
+- [ ] Grafo de orquestación **y** grafo de LaBorregaMarket consultados (Paso 0)
+- [ ] PRD tiene sección de **requerimientos no funcionales** (volumen, respuestas, seguridad)
+- [ ] User Flows documentan caminos de usuario principales
+- [ ] Wireframes definen pantallas y estados clave
+- [ ] Se identificaron **integraciones externas** (pagos, maps, SMS, etc.)
+- [ ] Se conocen las **restricciones del stack** preferido
+
+### Acción si falta información
+- Consultar con PM para NFRs faltantes
+- Consultar con UX/UI para flujos incompletos
+- Documentar dependencias en `outputs/{proyecto}/fase-{N}/dependencias-tecnicas.md`
+
+### Pre-requisitos para generar Contratos API / Esquemas BD / ADRs
+- [ ] Módulos técnicos derivados de los módulos de negocio
+- [ ] Topología del sistema definida
+- [ ] Requerimientos no funcionales disponibles
+
+---
+
+## Agente Desarrollador Backend Senior
+
+### Inputs Esperados
+- Contratos API del Arquitecto (`API-{Module}-*.md`)
+- Esquemas de BD del Arquitecto (`DB-{Entity}.md`)
+- ADRs relevantes del Arquitecto (`ADR-{NNN}.md`)
+- User Stories con ACs del PM (`US-*.md`)
+
+### Checklist de Recepción
+- [ ] Grafo de orquestación **y** grafo de LaBorregaMarket consultados (Paso 0)
+- [ ] Cada **contrato API** tiene definiciones completas:
+  - [ ] Método HTTP y ruta
+  - [ ] Autenticación requerida (público/protegido)
+  - [ ] Body de solicitud (request payload) con tipos
+  - [ ] Respuestas exitosas (200/201) con estructura JSON
+  - [ ] Respuestas de error (400, 401, 403, 404, 500)
+- [ ] Cada **esquema BD** tiene:
+  - [ ] Tipos de datos correctos
+  - [ ] Restricciones (PRIMARY KEY, UNIQUE, NOT NULL)
+  - [ ] Relaciones documentadas
+- [ ] Los endpoints están **versionados** (`/api/v1/...`)
+- [ ] Los **ADRs** de decisiones estructurales están aprobados o propuestos
+
+### Acción si falta información
+- Rechazar implementación hasta tener contrato completo
+- Solicitar al Arquitecto completar especificaciones
+- Documentar en `outputs/{proyecto}/fase-{N}/API-INCOMPLETOS.md`
+
+### Pre-requisitos para implementar
+- [ ] Contrato API 100% definido
+- [ ] Esquema BD definido
+- [ ] User Story con ACs claros asociada al módulo
+- [ ] ADR de arquitectura (si aplica) revisado
+
+---
+
+## Agente Desarrollador Frontend Senior
+
+### Inputs Esperados
+- Wireframes del UX/UI (`WF-{Module}-*.md`)
+- Design Tokens del UX/UI (`design-tokens.md`)
+- User Flows del UX/UI (`UF-*.md`)
+- Contratos API del Arquitecto (`API-*.md`)
+- Handoffs del Backend (`MOD-{Module}-handoff.md`)
+- User Stories con ACs del PM (`US-*.md`)
+
+### Checklist de Recepción
+- [ ] Grafo de orquestación **y** grafo de LaBorregaMarket consultados (Paso 0)
+- [ ] Cada **wireframe** define:
+  - [ ] Layout y estructura de la pantalla
+  - [ ] Estados de UI (Empty, Loading, Error, Success)
+  - [ ] Breakpoints (móvil `<640px`, escritorio `>=1024px`)
+- [ ] **Design Tokens** incluyen:
+  - [ ] Paleta de colores (Primary, Secondary, Neutral, Feedback)
+  - [ ] Escala tipográfica
+  - [ ] Sistema de espaciado
+- [ ] **Contratos API** tienen estructura JSON de respuesta confirmada
+- [ ] **Handoffs del Backend** documentan endpoints disponibles
+- [ ] Los **ACs** son claros para validar la implementación
+
+### Acción si falta información
+- No implementar componente sin wireframe aprobado
+- No consumir API sin contrato confirmado
+- Documentar en `outputs/{proyecto}/fase-{N}/DESIGN-PENDIENTE.md`
+
+### Pre-requisitos para implementar
+- [ ] Wireframe aprobado para el feature
+- [ ] Design tokens disponibles
+- [ ] Contrato API confirmado (o mock basado en contrato)
+- [ ] Backend handoff disponible (o se documenta que aún no existe)
+
+---
+
+## Agente QA / Tester Senior
+
+### Inputs Esperados
+- User Stories con ACs del PM (`US-*.md`)
+- Contratos API del Arquitecto (`API-*.md`)
+- Handoffs del Backend (`MOD-{Module}-handoff.md`)
+- Handoffs del Frontend (`FEAT-{Feature}-handoff.md`)
+- Comandos de build/dev/test de ambos desarrolladores
+
+### Checklist de Recepción
+- [ ] Grafo de orquestación **y** grafo de LaBorregaMarket consultados (Paso 0)
+- [ ] **User Stories** tienen ACs **claros y medibles** (Given-When-Then)
+- [ ] **Contratos API** definen código de error y esquema de respuesta
+- [ ] **Handoffs Backend** documentan endpoints implementados y tests corridos
+- [ ] **Handoffs Frontend** documentan componentes implementados y flujos críticos
+- [ ] Se identificaron los **flujos críticos** a probar
+- [ ] Se conocen los **comandos** de build/dev/test de la app
+
+### Acción si falta información
+- Rechazar diseñar matriz de pruebas sin ACs claros
+- Solicitar al PM aclarar historias ambiguas (Shift-Left)
+- Documentar en `outputs/{proyecto}/fase-{N}/AC-AMBIGUOS.md`
+
+### Pre-requisitos para diseñar matriz de pruebas
+- [ ] ACs claros por historia
+- [ ] Contratos API revisados
+- [ ] Flujos críticos identificados
+- [ ] Ambiente de prueba definido
+
+### Awards para emitir sign-off
+- [ ] Zero Blocker Policy (sin bugs Blocker/Critical abiertos)
+- [ ] Happy path 100% ejecutado
+- [ ] Edge/negativos >= 85% ejecutados
+- [ ] Regresión automatizada 100% pass en staging/QA
+
+---
+
+## Agente DevOps / Cloud Engineer Senior
+
+### Inputs Esperados
+- NFRs y topología del Arquitecto (`sad.md`, `architecture-diagram.md`)
+- Repositorios de Backend y Frontend
+- `.env.example` de cada agente (`env-requirements.md`)
+- Sign-off de QA (`QA-{Module}-signoff.md`)
+- Comandos de build y despliegue
+
+### Checklist de Recepción
+- [ ] Grafo de orquestación **y** grafo de LaBorregaMarket consultados (Paso 0)
+- [ ] **NFRs** definen requisitos de disponibilidad, rendimiento y seguridad
+- [ ] **Topología** documenta servicios cloud necesarios (RDS, Redis, S3, colas)
+- [ ] Repositorios tienen config de build (Dockerfile o equivalentes)
+- [ ] `env-requirements.md` documenta **todas** las variables requeridas
+- [ ] QA ha emitido **sign-off** o hay plan de mitigación documentado
+- [ ] Se conocen los **endpoints de health check** (`/health`)
+
+### Acción si falta información
+- No abrir PR de release sin sign-off de QA (o excepción documentada)
+- No containerizar sin `.env.example` completo
+- No hacer `git push` a `main`/`master` ni merge a producción (DoD = PR listo; el humano mergea)
+- Documentar en `outputs/{proyecto}/fase-{N}/DEPLOY-BLOQUEADO.md`
+
+### Pre-requisitos para dejar el PR listo
+- [ ] QA sign-off obtenido (o excepción aprobada por decidente)
+- [ ] UX y Arquitecto documentaron correcciones (`QG-correcciones.md`) si hubo bugs
+- [ ] Variables de entorno completas
+- [ ] Dockerfiles o config de build listos
+- [ ] Health checks definidos
+- [ ] PR abierto, sin merge a `main` ni a producción
+
+---
+
+## Matriz de dependencias entre agentes (resumen)
+
+| Agente receptor | Agentes upstream | Artefactos críticos a validar |
+|-----------------|------------------|-------------------------------|
+| PM | Cliente/Stakeholder | Requerimientos, restricciones |
+| UX/UI | PM | PRD, User Stories, ACs |
+| Arquitecto | PM, UX/UI | PRD, NFRs, User Flows, Wireframes |
+| Backend | Arquitecto, PM | Contratos API, Esquemas BD, ADRs, US |
+| Frontend | UX/UI, Arquitecto, Backend, PM | Wireframes, Tokens, API, MOD-handoff |
+| QA | PM, Arquitecto, Backend, Frontend | US, API, MOD-handoff, FEAT-handoff |
+| DevOps | Arquitecto, Backend, Frontend, QA | NFRs, .env, repos, sign-off |
+
+---
+
+## Regla final
+
+Si el agente no está seguro de **cuál es su rol** o qué inputs debería recibir, debe:
+
+1. Consultar ambos grafos (Paso 0, `graphify.mdc`)
+2. Leer el `README.md` de su carpeta de agente
+3. Leer `outputs/{proyecto}/STATUS.md` para conocer la fase activa
+4. Consultar la sección **"Inputs upstream"** de su README
+5. Documentar cualquier duda antes de comenzar

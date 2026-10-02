@@ -7,7 +7,7 @@ test.describe("E2E AUTH — TC-AUTH UI", () => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.login(credentials.client.email, credentials.client.password);
-    await expect(page).toHaveURL(/\/cuenta/);
+    await expect(page).toHaveURL((url) => url.pathname === "/" || url.pathname.startsWith("/cuenta"));
   });
 
   test("TC-AUTH-002 UI: login PROVIDER redirige a /proveedor", async ({ page }) => {

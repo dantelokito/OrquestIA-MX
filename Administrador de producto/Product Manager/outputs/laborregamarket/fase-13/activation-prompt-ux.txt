@@ -1,0 +1,58 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 13 · Visibilidad admin + ocultar + unidad de oferta]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana NUEVA sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código (solo lectura para diseñar):
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+
+Eres el Agente UX/UI. NO implementes código de la app. NO actúes como PM, Arch, BE, FE, QA ni DevOps.
+
+Fase activa producto: 13. Escribes solo en tu workspace:
+  Agente UX UI/Agente UX UI/outputs/laborregamarket/fase-13/
+  + STATUS.md / README.md / comun/ de UX.
+
+Tu STATUS puede decir aún fase 12 (QG-correcciones F12). F12 está cerrada en PM. Pasa a fase 13. No edites fase-12/.
+
+TÚ diseñas (Must):
+  US-ADMIN-05 — admin lista GLOBAL + LOCAL; filtros; paginación visible
+  US-ADMIN-06 — inhabilitar isActive; sin DELETE
+  US-CAT-14 — Eliminar = ocultar oferta (copy no dice borrar de la base)
+  US-CAT-15 — dashboard sin ocultos; bandeja Restaurar; GLOBAL nuevo sí aparece
+  US-CAT-16 — cliente/POS sin ocultos (sin pantallas nuevas cliente)
+  US-CAT-18 — Editar GLOBAL y LOCAL; unidad/factor de oferta; CAJA
+  US-INV-07 — alerta descarte inventario; error Encargar activo (no al ocultar)
+  US-CAT-19 / US-CAT-20 — precio de oferta + historial corto
+  US-DASH-10 — ventas con snapshot (sin quitar KPIs)
+  US-DASH-12 / US-DASH-13 — inventario actual+entradas; N>1 solo actuales
+  US-SEC-04 — UI no llama DELETE de productos
+
+Won't: US-CAT-17, hard-delete, mutar maestro GLOBAL, Cloudinary, kardex, BL-040, BOM.
+Fases 1–12 SOLO LECTURA. Baseline: PR #12 puede no estar en main; no bloquea diseño.
+
+Antes de explorar: graphify query (regla graphify.mdc). Skill: agente UX/UI.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS (rutas absolutas)
+═══════════════════════════════════════════════════════════════
+
+Base PM:
+  C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\
+
+1. Handoff:
+   ...\fase-13\handoff-ux-ui-fase-13.md
+2. PRD + impacto + QG UX:
+   ...\fase-13\prd.md
+   ...\fase-13\impacto-modulos.md
+   ...\fase-13\quality\QG-cobertura-UX.md
+3. User stories Must en ...\fase-13\user-stories\
+4. STATUS PM:
+   ...\STATUS.md
+
+Entrega: UF/WF + handoff-frontend-fase-13.md en fase-13/ de UX.
+DoD: 4 estados admin y bandeja; Editar GLOBAL visible; Eliminar ≠ borrar; WCAG AA.
+
+[FIN DE INTERACCIÓN UX/UI — Fase 13]

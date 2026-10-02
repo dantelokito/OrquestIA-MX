@@ -1,0 +1,27 @@
+---
+description: Entregables solo en la fase activa de outputs/{proyecto}/. Prohibido documentar en raíz o en otra fase. Complementa las reglas globales de validación cruzada.
+alwaysApply: true
+---
+
+# Outputs por fase activa
+
+La **fase activa N** está en `outputs/{proyecto}/STATUS.md`.
+
+> **Nota global:** Estas reglas de ubicación de archivos se complementan con las reglas de **validación cruzada, calidad y protocolo de handoff** definidas en el `.cursor/rules/` raíz del workspace: `graphify.mdc`, `00-validacion-cruzada-global.mdc`, `01-recepcion-upstream.mdc`, `02-calidad-output.mdc`, `03-protocolo-handoff.mdc` y `05-especifico-rol.mdc`.
+
+## Permitido escribir
+
+- `outputs/{proyecto}/fase-{N}/` (únicos entregables de trabajo de esta sesión)
+- `outputs/{proyecto}/README.md` y `STATUS.md`
+- `outputs/{proyecto}/comun/` (design-tokens, information-architecture)
+- `outputs/{proyecto}/historial/` **solo append**
+
+## Prohibido
+
+- Archivos nuevos en la raíz (`user-flows/`, `wireframes/`, `handoff-*.md` sueltos)
+- Escribir en `fase-{M}` con M distinto de N
+- Actualizar copias restauradas en raíz: editar `fase-N/`
+
+## Destino por rol (este workspace = UX/UI)
+
+`fase-N/user-flows/`, `fase-N/wireframes/`, `fase-N/quality/`, `fase-N/handoff-*.md`. Tokens/IA: `comun/`.

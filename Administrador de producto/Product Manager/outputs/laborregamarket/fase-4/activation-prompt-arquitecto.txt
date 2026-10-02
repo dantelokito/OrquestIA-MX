@@ -1,0 +1,49 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 4]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Stack: Next.js 15 + Prisma 6 + PostgreSQL 15. Envelope ADR-003.
+
+Código: C:\Users\PC GAMER\LaBorregaMarket\
+Arquitectura F3 (referencia, ya implementada): Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\
+
+Fase actual: Fase 4 v0.4.0 — Reseñas (+Google embed), Geo/Google Maps + direcciones, NOTIFY-SCALE (Redis + WhatsApp Business) + ETA, Admin analytics, POS con báscula digital.
+
+Decisiones PM ya cerradas (14/08/2026):
+- Reseñas Google: solo enlace/embed (URL o Place ID), NO importación vía Places API. Exclusivo isVerified=true; backend debe rechazar el PATCH de esos campos si isVerified=false, no solo ocultar en frontend.
+- Mapa: Google Maps JS API reemplaza Leaflet en /explorar (evaluar reemplazo total vs coexistencia; recomendación PM: reemplazo único).
+- ETA: preparationTimeMinutes (config Provider) + fórmula simple de traslado por distancia (Distance Matrix API es Could, no Must).
+- Delivery a domicilio (fulfillmentType) es SHOULD, no Must: diseñar el schema para no bloquear si se pospone.
+- Báscula: arquitectura de drivers WebSerial/WebHID con registry por VID/PID; autodetección con fallback manual.
+
+Schema actual relevante ya en producción: Provider.isVerified/rating/reviewCount/latitude/longitude; Order/OrderItem con quantity Decimal + unitOfMeasure (de CO-001/F3, no tocar ese contrato).
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM:
+   Administrador de producto\Product Manager\outputs\laborregamarket\fase-4\handoff-arquitecto.md
+2. PRD F4:
+   ...\fase-4\prd.md
+3. User stories F4 (US-REV-*, US-GEO-*, US-NOTIFY-06..09, US-ADMIN-01, US-POS-05/06, US-ORDERS-05)
+4. Schema actual: LaBorregaMarket/prisma/schema.prisma
+5. ADR previo: Agente Arquitecto/.../adrs/ADR-008-notification-async.md
+
+Skill: @software-architect
+
+═══════════════════════════════════════════════════════════════
+ENTREGABLES
+═══════════════════════════════════════════════════════════════
+
+ADRs 015-019 (Redis, motor de mapa, ETA, reseñas Google, báscula)
+API-REVIEWS-01, API-GEO-01 (delta), API-ADDRESSES-01, API-ADMIN-ANALYTICS-01, API-PROVIDER-SETTINGS-01 (delta)
+data-model/DB-reviews.md, DB-addresses.md; actualizar DB-providers.md y DB-orders.md (delta Should)
+handoff-backend-fase-4.md
+Actualizar sad.md y OBSERVABILITY.md
+
+NO diseñar pasarela de pagos, CFDI, logística de reparto real, importación de reseñas vía Places API.
+
+[FIN DE INTERACCIÓN ARQUITECTO]

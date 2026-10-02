@@ -1,0 +1,61 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 8 · P1–P4]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código:
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+  CompactAddressBar.tsx, FavoriteAddressSelect.tsx, RadiusSlider.tsx,
+  ExploreMap.tsx, ProviderCard.tsx (botón "Vista rápida" a DESCARTAR),
+  ProviderPreviewSheet.tsx (contenido US-EXPLORE-05 a reanclar),
+  ExplorePageClient.tsx
+
+Fase actual: Fase 8 v0.8.3. TÚ diseñas P1–P4:
+  PARTE 1 — chrome de ubicación (chip → panel)
+  PARTE 2 — overlay de radio más bajo + rango 500 m–10 km
+  PARTE 3 — mapa solo México + encuadre al círculo
+  PARTE 4 — preview hover / long-press anclado a la card; SIN botón
+Fase 7 SOLO LECTURA. Fase 6 CONGELADA.
+CO-F7-001: pan/zoom NO cambian radiusKm.
+CO-F8-001: clamp 0.5–10 km.
+CO-F8-002 opción A: maxBounds México. Pan interno = solo vista.
+CO-F8-003: descartar "Vista rápida". Hover/long-press = preview anclado.
+            Clic/tap corto = /fruteria/[id]. Contenido = US-EXPLORE-05.
+
+Decisiones (24/08/2026):
+P1–P3: ver handoff (ubicación, radio, mapa MX). GPS en FilterBar.
+P4:
+- NO botón de texto. Preview se VE como previsualizado, no como ficha.
+- Delay hover; long-press ≠ scroll; post-long-press no navega.
+- Teclado abre preview sin el botón. Marker abre el mismo preview.
+- Heart y ContactCTA se quedan. Un preview a la vez. Escape cierra.
+- Leaflet/OSM. NO Places. NO recortar campos de US-EXPLORE-05.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM: ...\fase-8\handoff-ux-ui.md
+2. PRD: ...\fase-8\prd.md
+3. CO-F8-001, CO-F8-002, CO-F8-003
+4. User stories: US-GEO-17…23, US-EXPLORE-07
+5. US-EXPLORE-05 (F7, solo lectura — contenido)
+6. STATUS.md + README.md del PM
+
+Skill: agente UX/UI de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. Delta UF-GEO-01 + WF preview anclado a card (delays, z-index, última fila).
+2. WF P1–P3 (ubicación, radio, mapa MX).
+3. Handoff frontend fase-8 (cuatro partes) con tokens y DoD.
+4. Quality Gate cuando FE implemente (no bloquear el handoff inicial).
+
+NO diseñar: FilterBar, recorte de preview, DASH, clustering, Maps JS, Places.
+
+[FIN DE INTERACCIÓN UX/UI — Fase 8]

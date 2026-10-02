@@ -1,0 +1,60 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 13 · Visibilidad admin + archivo + unidad de oferta]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana NUEVA sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Código (solo lectura para diseñar contratos/schema):
+  C:\Users\PC GAMER\LaBorregaMarket\
+
+Eres el Agente Arquitecto de Software. NO implementes código de la app. NO actúes como PM, UX, BE, FE, QA ni DevOps.
+
+Fase activa producto: 13. Escribes solo en tu workspace:
+  Agente Arquitecto de Software/Agente Arquitecto/outputs/laborregamarket/fase-13/
+  + STATUS.md / README.md / comun/ (SAD, ADRs vivos).
+
+Tu STATUS puede decir aún fase 12 (QG-correcciones F12). F12 está cerrada en PM. Pasa a fase 13. No edites fase-12/.
+
+TÚ diseñas (Must):
+  US-ADMIN-05/06 — listado admin GLOBAL+LOCAL; PATCH isActive LOCAL; DELETE 405
+  US-CAT-14/15 — archivo por oferta; crear fila archivada; Restaurar; unique intacto
+  US-CAT-16 — APIs públicas/POS sin archivados; carrito stale 409
+  US-CAT-18 — unidad de oferta por sucursal; no mutar Product.unit GLOBAL
+  US-INV-07 — descarte onHand=0 sin fila de entrada; 409 Encargar activo
+  US-CAT-19/20 — precio oferta + historial
+  US-DASH-10 — reportes ventas = OrderItem
+  US-DASH-12/13 — persistir entradas; sucursal actual+entradas; N>1 solo actuales
+  US-SEC-04 — sin hard-delete; canDelete PRODUCTS false para PROVIDER
+
+Won't: US-CAT-17, DELETE SQL, Cloudinary, kardex, backfill F12, BL-040, BOM.
+ADR-022 intacto. Aislamiento F11 intacto. Formaliza el borrador ADR-038 del PM.
+
+Baseline: PR #12 (inventario F12) merge humano pendiente. Diseña sobre el modelo F12; no asumas main.
+
+Antes de explorar: graphify query (regla graphify.mdc). Skill: agente Arquitecto.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS (rutas absolutas)
+═══════════════════════════════════════════════════════════════
+
+Base PM:
+  C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\
+
+1. Handoff:
+   ...\fase-13\handoff-arquitecto-fase-13.md
+2. PRD + impacto + borrador ADR:
+   ...\fase-13\prd.md
+   ...\fase-13\impacto-modulos.md
+   ...\fase-13\adr-draft-038-archivo-vs-delete.md
+3. User stories Must en ...\fase-13\user-stories\
+4. STATUS PM:
+   ...\STATUS.md
+5. QG BE:
+   ...\fase-13\quality\QG-cobertura-BE.md
+
+Entrega: API-*.md, DB-*, ADR-038, diagrams, handoff-backend-fase-13.md en fase-13/ de Arch.
+Nunca 4xx de stock al vender. 405 DELETE. Unidad de oferta sin mutar maestro GLOBAL.
+
+[FIN DE INTERACCIÓN ARQUITECTO — Fase 13]

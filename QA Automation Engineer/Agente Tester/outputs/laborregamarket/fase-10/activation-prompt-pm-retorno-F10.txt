@@ -1,0 +1,24 @@
+[INICIO DE INTERACCIÓN PM — retorno F10 (histórico; F10 ya cerrada)]
+
+Eres el Product Manager de LaBorregaMarket.
+
+QA cerró F10 el 12/09 (tarde) con APROBADO CON CONDICIONES.
+Ambiente de release = localhost. NO abras fase 11.
+El CO 20 MiB y copy UX quedan en DT-F10-002 (backlog), no como gate de merge.
+
+Leer:
+- Agente Tester / outputs/laborregamarket/STATUS.md
+- Agente Tester / outputs/laborregamarket/fase-10/qa-signoffs/QA-F10-signoff.md
+- DT-F10-001 y DT-F10-002 en fase-10/deuda-tecnica/
+- QA-F10-retorno-pm-ux-arch.md (cabos CO / copy; ya no pide no cerrar F10)
+
+Hechos vigentes:
+1) Backend disco acepta 6 MiB (TC-MED-008 Pass). US-MEDIA-03 sigue 5 MB → DT.
+2) Encargar usable en Chrome+127.0.0.1. Fallback UUID = DT-F10-001.
+3) Copy FE 5MB y oversize API 500 = DT-F10-002.
+
+Cuando toque backlog: confirmar CO 20 MiB (o documentar Won't) y avisar UX + Arquitecto.
+
+No implementes código. Merge GitHub = DevOps. Encargar UUID no es tuyo.
+
+[FIN DE INTERACCIÓN PM — retorno F10]

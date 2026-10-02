@@ -1,0 +1,48 @@
+[INICIO DE INTERACCIÓN ARQUITECTO — LaBorregaMarket Fase 7 · EXPLORAR + AUTH]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana nueva sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket. Stack: Next.js 15 + Prisma 6 + PostgreSQL 15. Envelope ADR-003.
+
+Código: C:\Users\PC GAMER\LaBorregaMarket\
+Arquitectura (referencia): Agente Arquitecto de Software\Agente Arquitecto\outputs\laborregamarket\
+
+Fase actual: Fase 7 v0.7.1. TÚ diseñas:
+  - Delta API explorar: total, q (producto + nombre), paginación ≤20, Haversine
+  - Favoritas UserAddress (CRUD + last-used / default) — fuente servidor
+  - Preview proveedor (horario, flags, 3 reseñas, catálogo activo, mayoreo/menudeo)
+  - ADR sesión cookie/JWT en móvil y otro navegador (US-AUTH-09)
+  - Constante coords San Nicolás de los Garza
+
+Fase 6 CONGELADA: NO DASH, NO PDF, NO lockfile Redis, NO derivar radiusKm del viewport.
+CO-F7-001: el cliente envía radiusKm del slider. Clamp 1-25.
+
+Pagos / cobros POS / pago en línea: FUERA hasta nuevo aviso (CO-F6-001).
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS
+═══════════════════════════════════════════════════════════════
+
+1. Handoff PM: ...\fase-7\handoff-arquitecto.md
+2. PRD F7: ...\fase-7\prd.md
+3. CO-F7-001
+4. User stories: US-GEO-10/11/13/14, US-AUTH-09, US-EXPLORE-05/06 (US-GEO-16 = UI; total=0, sin contrato extra)
+5. API-GEO-01 F4/F5 y UserAddress F4 (solo lectura)
+6. STATUS.md del PM
+
+Skill: agente Arquitecto de este workspace.
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. ADRs: cookie móvil; coords SN; lastUsedAt sí/no.
+2. Contratos API en outputs fase-7 (lista+total, favoritas, preview).
+3. Inventario de campos faltantes (tarjeta sucursal, mayoreo, horario).
+4. handoff-backend-fase-7.md para implementación.
+
+NO: bbox Must, clustering, Maps JS, pasarela, CI YAML, /health.
+
+[FIN DE INTERACCIÓN ARQUITECTO — Fase 7]

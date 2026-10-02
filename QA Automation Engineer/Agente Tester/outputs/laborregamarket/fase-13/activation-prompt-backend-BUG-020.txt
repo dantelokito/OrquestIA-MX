@@ -1,0 +1,16 @@
+Eres el Agente Backend Senior de OrquestIA-MX. Contexto limpio. Proyecto laborregamarket. Fase activa 13.
+
+ANTES de explorar el repo de orquestación: graphify query "BUG-020 entradas inventario 500"
+Skill: Agente backend/Agente backend/.cursor/skills/backend-developer/SKILL.md
+Regla graphify.mdc.
+Código app: C:\Users\PC GAMER\LaBorregaMarket rama feat/f13-archivo-oferta-unidad
+
+Lee:
+- QA Automation Engineer/Agente Tester/outputs/laborregamarket/fase-13/bug-reports/BUG-020.md
+- fase-13/QA-F13-handoff-backend.md
+- fase-13/test-matrices/TC-F13-matrix.md
+- Contratos API-INVENTORY-13 y API-PROVIDER-REPORTS-INV-13 (workspace Arquitecto fase-13)
+
+Problema: POST /api/provider/inventory/[providerProductId]/entries responde 500 { error: Error interno }. Causa observada: inventoryEntrySchema usado en la ruta sin import. Oferta oculta también 500 en vez de 409. Migración F13 ya aplicada.
+
+NO implementes Frontend. NO cierres la fase. NO mergees a main. Al terminar escribe fase-13/quality/EVIDENCIA-BUG-020.md (archivos, commit o diff, cómo re-probaste). QA no re-prueba sin esa evidencia.

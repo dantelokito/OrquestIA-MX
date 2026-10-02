@@ -1,0 +1,83 @@
+[INICIO DE INTERACCIÓN UX/UI — LaBorregaMarket Fase 10 · Admin + catálogo local]
+
+═══════════════════════════════════════════════════════════════
+CONTEXTO DEL PROYECTO (leer primero — ventana NUEVA sin historial previo)
+═══════════════════════════════════════════════════════════════
+
+Producto: LaBorregaMarket — marketplace local de fruterías (Monterrey / AMM).
+
+Stack UI: Next.js 15, React 19, Tailwind CSS 4. Código:
+  C:\Users\PC GAMER\LaBorregaMarket\src\
+  Panel /proveedor (catálogo), /fruteria/[id], /admin (tabs), Admin analytics
+
+Fase actual: Fase 10 v0.10.2. TÚ diseñas (Must):
+  US-CAT-02 — PROVIDER agrega producto LOCAL (nombre, precio, unidad, imagen disco, sección)
+  US-CAT-03 — secciones DINÁMICAS («Nueva sección»; agrupa panel + detalle)
+  US-ADMIN-02 — CRUD catálogo GLOBAL; imagen a disco (US-MEDIA-06)
+  US-ADMIN-03 — tabla Proveedores: isVerified, isActive, mayoreo, domicilio
+  US-SEC-03 — ocultar cuentas demo en producción
+  US-MEDIA-06 — logo, portada y fotos de producto en DISCO (no Cloudinary)
+  US-DASH-07 — tabla venta por producto + checkboxes (ninguno = todos)
+  US-DASH-08 — atajo UN mes + date pickers inicio/fin
+  US-DASH-09 — Imprimir esa vista (sin chrome app)
+  US-ADMIN-04 — Should: promover local → global (no bloquea)
+
+Fase 9 SOLO LECTURA. Fase 8 SOLO LECTURA. fase-6/ SOLO LECTURA (no reescribir WF F6).
+CO-F10-001: revoca A5. CO-F10-002: media disco, SIN cloud. CO-F10-003: DASH D-F10-9.
+Producto local NO comparable, NO auto-global.
+US-CAT-01 intacto (inhabilitar = no vender). US-BRAND-02: ADMIN = marca plataforma.
+US-REV-04: desverificar apaga Google Reviews.
+NO chips de secciones en FilterBar Explorar (D-F10-6 / F9 intacto).
+
+Skill: agente UX/UI de este workspace.
+
+═══════════════════════════════════════════════════════════════
+DOCUMENTOS OBLIGATORIOS (rutas absolutas)
+═══════════════════════════════════════════════════════════════
+
+Base PM:
+  C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Agentes de desarrollo test\Administrador de producto\Product Manager\outputs\laborregamarket\
+
+1. Handoff PM:
+   ...\fase-10\handoff-ux-ui.md
+2. PRD:
+   ...\fase-10\prd.md
+3. Change orders:
+   ...\fase-10\change-orders\CO-F10-001-admin-catalogo-local.md
+   ...\fase-10\change-orders\CO-F10-002-media-disco-local.md
+   ...\fase-10\change-orders\CO-F10-003-dashboard-reportes.md
+4. User stories Must:
+   ...\fase-10\user-stories\US-CAT-02-producto-local.md
+   ...\fase-10\user-stories\US-CAT-03-secciones-dinamicas.md
+   ...\fase-10\user-stories\US-MEDIA-06-almacenamiento-disco.md
+   ...\fase-10\user-stories\US-ADMIN-02-crud-catalogo-global.md
+   ...\fase-10\user-stories\US-ADMIN-03-proveedores-flags.md
+   ...\fase-10\user-stories\US-SEC-03-higiene-entorno.md
+   ...\fase-10\user-stories\US-DASH-07-venta-por-producto.md
+   ...\fase-10\user-stories\US-DASH-08-rango-fechas-mes.md
+   ...\fase-10\user-stories\US-DASH-09-imprimir-vista-filtrada.md
+5. Should (no bloquea):
+   ...\fase-10\user-stories\US-ADMIN-04-promover-local-global.md
+6. US-CAT-01 (F5, solo lectura — inhabilitar canales)
+7. STATUS.md + fase-10\README.md
+
+═══════════════════════════════════════════════════════════════
+HACER
+═══════════════════════════════════════════════════════════════
+
+1. Delta UF/WF:
+   /proveedor — alta local + secciones + logo/portada/foto disco
+   /fruteria/[id] — listado agrupado por sección + hero portada
+   /admin — Catálogos CRUD + Proveedores flags + higiene demo
+   Reportes — mes-atajo, rango inicio/fin, checkboxes, tabla, print
+2. handoff-frontend-fase-10.md con tokens, empty/error, print CSS, DoD por US.
+   OBLIGATORIO antes de activar Frontend.
+3. Quality Gate cuando FE implemente (no bloquear este handoff inicial).
+
+a11y Must: CTA ≥44px; print sin header/SubNav; empty «Aún no hay secciones» y sin ventas en el corte.
+
+NO diseñar: analytics admin redo, reescribir docs F6, usuarios/roles UI, órdenes admin,
+    2FA, impersonation, Maps JS, Places, FilterBar secciones, reopen F9,
+    flujos Cloudinary/CDN, CSV/email/CFDI, multi-mes.
+
+[FIN DE INTERACCIÓN UX/UI — Fase 10]
