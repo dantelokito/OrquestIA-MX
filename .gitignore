@@ -13,11 +13,42 @@ test-results/
 
 # OS junk
 .DS_Store
+Desktop.ini
 Thumbs.db
 
 # Debug session logs
 *.log
+*.tmp
+
+# Local development files (should not be committed)
+*.local.md
+local-config.json
+.vscode/settings.local.json
+.idea/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # Graphify: artefacto local regenerable con `graphify update .`
 # No versionado (26 MB). Mismo criterio que BorregaMarket (commit 5de3cee).
 graphify-out/
+
+# Artefactos de build
+dist/
+build/
+.next/
+out/
+.turbo/
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Temporary files
+*.bak
+*.backup
+.cache/
