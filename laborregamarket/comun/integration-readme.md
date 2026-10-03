@@ -39,6 +39,22 @@ Ver [`.env.example`](./.env.example). Copiar a la raíz de `LaBorregaMarket`.
 - `RESEND_API_KEY` / `EMAIL_FROM` — email de contacto F2 y nuevo pedido F3
 - `UPLOADS_DIR` — directorio de media disco (default `./uploads`). F10 Must. `CLOUDINARY_*` ya no es Must.
 - F10 no agrega variables `NEXT_PUBLIC_*`.
+- F15: `NEXT_PUBLIC_UMAMI_WEBSITE_ID`, `NEXT_PUBLIC_UMAMI_SRC`, `NEXT_PUBLIC_UMAMI_DOMAINS` (opcional) y `PUBLIC_CACHE_DISABLED`. Sin ellas la app funciona y no carga Umami.
+- Build F15: `npm run build` (webpack). No usar `--turbopack`: Serwist no genera el service worker.
+
+## Rutas UI F15
+
+| Ruta | Qué verificar |
+|------|----------------|
+| `/`, `/login`, `/registro`, `/registro/negocio` | `PublicFooter` (enlaces legales + responsable). No está en paneles. |
+| `/legal/privacidad`, `/legal/terminos`, `/legal/cookies` | Documento vigente (markdown del seed). Sin versión: «Documento en actualización». Otro slug: 404. |
+| `/legal/cookies#preferencias` | Guardar medición (`localStorage` `lbm_measurement`: ausente, `on`, `off`). |
+| `/registro`, `/registro/negocio` | Casilla de Términos sin marcar. Alta: opt-in WhatsApp (`whatsappOrderOptIn`). |
+| `/proveedor/perfil` | Bloque «Avisos de pedidos». |
+| `/admin?tab=legal` | Formulario del responsable si el ADMIN tiene permiso `LEGAL`. |
+| Explorar, guardar dirección, WhatsApp | Aviso simplificado. Aviso de cookies no bloqueante en cualquier página. |
+
+Cuentas demo sin cambio (login). Logout hace navegación dura a `/` y limpia cachés `lbm-media-*`.
 
 ## Flujos a verificar (Fase 13)
 

@@ -5,7 +5,7 @@ Fuente única de estado para todos los roles. Cada rol edita **solo su fila** y,
 | Campo | Valor |
 |-------|-------|
 | Fase activa | **15 — Blindaje legal, analítica y caché** (abierta 2026-10-03, autorizada por el humano) |
-| Actúa ahora | **FE** (insumo `fase-15/be.md` + `fase-15/ux.md`) |
+| Actúa ahora | **QA** (insumo `fase-15/fe.md`) |
 | Código app | `C:\Users\PC GAMER\LaBorregaMarket` · `main` @ `1aeac1c` ([PR #14](https://github.com/dantelokito/BorregaMarket/pull/14) mergeado) · rama `feat/f15-legal-cache` |
 | Versión producto | 0.14.0 |
 | Actualizado | 2026-10-03 |
@@ -18,7 +18,7 @@ Fuente única de estado para todos los roles. Cada rol edita **solo su fila** y,
 | UX | F15 listo: 7 UF + 10 WF (footer, `/legal/*`, consentimiento, cookies, opt-in WhatsApp, admin Legal). Espera nombres de campo de Arch | [`fase-15/ux.md`](fase-15/ux.md) |
 | Arch | F15 diseñada: API-LEGAL-01…05, API-AUTH-15-01, API-PROV-15-01/02, API-NOTIFY-15-01, API-CACHE-15-01, API-CONSENT-15-01, API-AUDIT-15-01; DB-LegalSettings/LegalDocument/UserConsent + `whatsappOrderOptIn`; ADR-042 (legal), 043 (caché), 044 (Umami, llave `lbm_measurement`). CO-F15-001…003 pendientes de PM. Siguiente: BE | [`fase-15/arch.md`](fase-15/arch.md) |
 | BE | F15 listo: legal, consentimiento y caché Redis fail-open. Rama `feat/f15-legal-cache` @ `7f9961a`. Siguiente: FE | [`fase-15/be.md`](fase-15/be.md) |
-| FE | Sin pendientes | — |
+| FE | F15 listo: footer, `/legal/*`, consentimiento, cookies, Umami, Serwist, tab Legal, opt-in WhatsApp. Rama `feat/f15-legal-cache` @ `1057046`. Siguiente: QA | [`fase-15/fe.md`](fase-15/fe.md) |
 | QA | F14 APROBADO (Playwright 41/41, Zero Blocker) | — |
 | DevOps | PR #14 listo, CI verde. Post-merge: `npx prisma migrate deploy` | — |
 
