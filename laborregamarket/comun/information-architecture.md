@@ -1,8 +1,9 @@
-# Arquitectura de Información — LaBorregaMarket v0.14.0
+# Arquitectura de Información — LaBorregaMarket v0.15.0
 
 > **Agente:** UX/UI Designer  
-> **Fecha:** 17/09/2026  
-> **Versión diseño:** 0.14.0  
+> **Fecha:** 03/10/2026  
+> **Versión diseño:** 0.15.0  
+> **Changelog Fase 15:** Rutas públicas nuevas `/legal/privacidad`, `/legal/terminos`, `/legal/cookies` (sin login). `PublicFooter` en `/`, `/login`, `/registro`, `/registro/negocio` y `/legal/*` (no en Explorar, vitrina, carrito ni paneles). Aviso de cookies no bloqueante en páginas públicas; preferencias desde footer o `/legal/cookies#preferencias`. `/admin` gana tab **Legal** (solo permiso `LEGAL`) + alerta «Datos legales incompletos». `/proveedor/perfil` gana bloque **Avisos de pedidos** (opt-in WhatsApp). Snapshot F14: changelog siguiente.  
 > **Changelog Fase 14:** Ruta nueva `/proveedor/perfil`. SubNav: Perfil **último** (después de Reportes generales si N>1). Catálogo **solo** productos; `posShowImages` en `/proveedor/pos`. Inventario gana sub-pestaña **Movimientos** (`?tab=movimientos`). Ventas: tres bloques de gráfica unificada + PDF `from`/`to`. Reportes generales N>1 pintan `series`/`products`/`bySource`. Cliente: **cero** rutas nuevas; Explorar/vitrina consumen datos sin rediseño. Snapshot F13: changelog siguiente.  
 > **Changelog Fase 13:** `/admin` Catálogos lista GLOBAL **y** LOCAL (paginación visible); `/proveedor` Editar en GLOBAL+LOCAL, Eliminar=ocultar, pie **Eliminados de la vista**; precio de oferta + historial; `/proveedor/dashboard` Reportes pestaña **Inventario** (actual+entradas); `/proveedor/reportes-generales` bloque solo **saldos actuales**. Cliente: **cero** rutas nuevas; ocultos ausentes. Snapshot F12: changelog siguiente.  
 > **Changelog Fase 12:** Ruta `/proveedor/inventario`; SubNav **Inventario primero**; label Dashboard → **Ventas** (ruta `/proveedor/dashboard` intacta); barra y miniatura en lista catálogo proveedor; toggle fotos POS en `/proveedor`; **cero** existencias en `/fruteria`. Snapshot F11: changelog siguiente.  
@@ -40,7 +41,8 @@ LaBorregaMarket organiza la información en **tres capas de acceso**:
 | `/explorar` | Mapa Leaflet/OSM primero + chrome una barra + círculo 0.5–10 km (pan ≠ radio, viewport MX) + lista ≤20 + preview in-card + typeahead | Clic/tap corto card → detalle; hover/long-press → preview in-card |
 | `/fruteria/[id]` | Detalle negocio + productos **por sección** + encargo + reseñas | **Encargar** (F3); contacto secundario (F2) |
 | `/login` | Autenticación; **sin** atajos demo en producción | "Ingresar" |
-| `/registro` | Alta de cuenta CLIENT o PROVIDER | "Crear cuenta" |
+| `/registro` | Alta de cuenta CLIENT o PROVIDER + casilla obligatoria Términos/Aviso (F15) | "Crear cuenta" |
+| `/legal/privacidad` · `/legal/terminos` · `/legal/cookies` | Documento legal vigente con versión y fecha (F15); cookies incluye `#preferencias` | — (lectura); cookies: Guardar preferencia (secondary) |
 
 ### Rutas CLIENT (`María`)
 
@@ -57,19 +59,19 @@ LaBorregaMarket organiza la información en **tres capas de acceso**:
 |------|-----------|---------------|
 | `/registro` paso 2 | Wizard onboarding negocio | "Continuar" / "Finalizar" |
 | `/proveedor` | Catálogo **solo productos**: secciones + SKUs + Editar GLOBAL/LOCAL + Eliminar/bandeja F13 + precio. Sin identidad ni Google | **Agregar producto** |
-| `/proveedor/perfil` | Identidad visual, Google (lock si no verificado), datos del negocio, horarios, capacidades y operación de la sucursal **activa** | Un Guardar por bloque |
+| `/proveedor/perfil` | Identidad visual, Google (lock si no verificado), datos del negocio, horarios, capacidades y operación, **Avisos de pedidos** (opt-in WhatsApp, F15) de la sucursal **activa** | Un Guardar por bloque |
 | `/proveedor/inventario` | Existencias (F12) + sub-pestaña **Movimientos** (entradas, mermas, ajustes; sin ventas POS) | **Registrar entrada** (Existencias) |
 | `/proveedor/pos` | Punto de venta + báscula; **toggle fotos de card** (`posShowImages`); sin candado de stock | **Cobrar** |
 | `/proveedor/ordenes` | Órdenes activas e historial reciente | Acción según estado |
 | `/proveedor/dashboard` | KPIs + gráfica unificada (tendencia, mix, top) + Reportes rango F10 + Inventario F13 + PDF `from`/`to` en Ventas | Imprimir / Descargar PDF (secondary) |
 | `/proveedor/reportes-generales` | **Solo N>1.** KPIs + sucursales + **series/products/bySource** + inventario actual F13. N=1: redirect | Consultar / Reintentar |
-| `/registro/negocio` | Primer negocio **o** «Nueva frutería» si ya hay sesión PROVIDER | Crear frutería |
+| `/registro/negocio` | Primer negocio **o** «Nueva frutería» si ya hay sesión PROVIDER; opt-in WhatsApp opcional + casilla Términos para fruterías (F15) | Crear frutería |
 
 ### Rutas ADMIN (operador)
 
 | Ruta | Propósito | CTA principal |
 |------|-----------|---------------|
-| `/admin` | Catálogo maestro **GLOBAL y LOCAL**, flags proveedores, bitácora | Tabs; **Nuevo producto** (GLOBAL); Inhabilitar; flags |
+| `/admin` | Catálogo maestro **GLOBAL y LOCAL**, flags proveedores, bitácora, **Legal** (datos del responsable, F15) | Tabs; **Nuevo producto** (GLOBAL); Inhabilitar; flags; Guardar datos legales |
 | `/admin/analytics` | Analítica de plataforma (GMV, split, cancelación) | Periodo Hoy/7d/30d |
 
 ---
@@ -204,6 +206,16 @@ flowchart TB
 | Centro | — (sin búsqueda en MVP) |
 | Derecha | Avatar + "Admin", menú: Panel admin, Analítica, Explorar, Cerrar sesión |
 
+### Footer público y aviso de cookies (F15)
+
+| Elemento | Dónde | Contenido |
+|----------|-------|-----------|
+| `PublicFooter` | `/`, `/login`, `/registro`, `/registro/negocio`, `/legal/*` | Aviso de Privacidad · Términos · Cookies · Preferencias de medición + responsable (nombre, domicilio, correo ARCO, teléfono) o «en actualización» |
+| `CookieNotice` | Cualquier página pública mientras no haya preferencia guardada | Texto breve + Política de Cookies + Entendido / Desactivar medición; no bloquea |
+| Preferencias de medición | Footer (diálogo) o `/legal/cookies#preferencias` (en línea) | Cookies necesarias (fijas) + switch medición anónima |
+
+Paneles autenticados (`/proveedor/*`, `/admin/*`), `/explorar`, `/fruteria/[id]`, `/carrito` y `/cuenta` no llevan footer.
+
 ---
 
 ## 6. Jerarquía de contenido por pantalla
@@ -326,10 +338,12 @@ Sin ruta `/proveedor/reportes`. Distinto de `/admin/analytics`. Grano F6 documen
 
 ```
 Header autenticado ADMIN (marca plataforma)
-└── Tabs: Catálogos | Proveedores | Bitácora | Analítica
+└── LegalIncompleteAlert (F15, si faltan datos obligatorios) → Completar datos legales
+└── Tabs: Catálogos | Proveedores | Bitácora | Legal (F15, solo permiso LEGAL)
 └── Catálogos: tabla GLOBAL+LOCAL + imagen disco GLOBAL; Inhabilitar; Should cola promover
 └── Proveedores: flags isVerified, isActive, Mayoreo, A domicilio
-└── Bitácora / Analítica: sin delta F10
+└── Bitácora: sin delta F10
+└── Legal (`?tab=legal`): tipo persona · nombre/razón social · RFC opc. · teléfono · domicilio · correo ARCO · vigente desde · Guardar datos legales
 ```
 
 ### `/admin/analytics` (nuevo F4)
@@ -364,6 +378,10 @@ Header ADMIN + tab Analítica
 | `/admin` tab Catálogos | **Nuevo producto** (GLOBAL) | Inhabilitar/Reactivar LOCAL y GLOBAL; Should Promover |
 | `/admin` tab Proveedores | Verificar / guardar flags | Revocar (con diálogo Google) |
 | `/admin/analytics` | Periodo (Hoy/7d/30d) | — |
+| `/admin` tab Legal (F15) | **Guardar datos legales** | — |
+| `/legal/*` (F15) | — (lectura) | Otros documentos / Volver al inicio; cookies: Guardar preferencia |
+
+**F15:** el aviso de cookies usa botón `slate-900`, no `--brand`, para no competir con el CTA dominante de la página. En `/registro` y `/registro/negocio` la casilla de Términos no deshabilita el CTA.
 
 **Regla:** Un solo CTA visualmente dominante por pantalla (color `--brand`, tamaño mayor).
 

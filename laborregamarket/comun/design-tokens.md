@@ -1,9 +1,10 @@
-# Design Tokens — LaBorregaMarket v0.14.0
+# Design Tokens — LaBorregaMarket v0.15.0
 
 > **Agente:** UX/UI Designer  
-> **Fecha:** 17/09/2026  
+> **Fecha:** 03/10/2026  
 > **Stack UI:** TailwindCSS 4, Next.js App Router, Lucide icons  
 > **Fuente código:** `LaBorregaMarket/src/app/globals.css`  
+> **Changelog Fase 15:** `PublicFooter`; `LegalDocumentPage` + `LegalVersionMeta` + `LegalToc`; `ConsentCheckbox`; `PrivacyMicrocopy`; `CookieNotice` (no bloqueante, botón slate-900); `MeasurementPreferencesDialog`; bloque Perfil «Avisos de pedidos»; `LegalIncompleteAlert` + `AdminLegalSettingsForm`. Regla nueva: componentes legales usan paleta de plataforma slate fija, **nunca** `var(--brand)`. Variable `--sticky-cta-h` en barras sticky. Paleta F3–F14 **sin cambio**. Snapshot F14: changelog siguiente.  
 > **Changelog Fase 14:** `ProfileNavItem` (Store + Perfil, extremo derecho); `ProfilePageClient` (un GET me); `ProfileIdentityBlock`; `ProfileGoogleBlock` (locked vs editable); `ProfileBusinessForm` (errores inline AMM); `OpeningHoursEditor` (7 días + preview HoursTable); `ProfileCapabilitiesForm`; `CatalogProfileHint` + `ProfileDeepLinkBanner`; `PosImagesToggle` en POS; `PriceRequiredDialog`; `SectionConflictBanner`; `MermaSheet`; `CountAdjustSheet` + `DeltaPreview`; `InventorySubTabs`; `MovementsTable` + `MovementTypeBadge`; `UnifiedProviderChart`; `DocumentActions` PDF from/to visible. Paleta y feedback F3–F13 **sin cambio**. No look slate admin analytics. Snapshot F13: changelog siguiente.  
 > **Changelog Fase 13:** `AdminProductTableF13` (GLOBAL+LOCAL, paginación 50/100); `CatalogRowActionsF13` (Editar GLOBAL+LOCAL + Eliminar); `ArchivedTray` + `RestoreButton`; `OfferUnitSelect` enum CAJA; `BoxFactorField`; `UnitChangeConfirmDialog`; `PriceHistoryList`; `ReportsViewTabs` Inventario; `GlobalOnHandBlock` N>1. Inactivo vs Eliminado: texto+badge, nunca color-only. Snapshot F12: changelog siguiente.  
 > **Changelog Fase 12:** `InventoryCapacityBar` (incluye >100%); `LowStockBadge`; `EncargarReserveChip`; `StockEntrySheet`; `PosImagesToggle` (≥44px, en `/proveedor`); `CatalogRowThumb` 48px; SubNav Inventario primero + label Ventas. Sin barra en `/fruteria`. Snapshot F11: changelog siguiente.  
@@ -1010,6 +1011,44 @@ Marca PROVIDER (sesión) y plataforma ADMIN **siguen** §1. Media F2 (dropzone, 
 
 ---
 
+## 6j. Componentes Fase 15 — legal, consentimiento, medición
+
+Regla F15: todos usan neutros de plataforma (slate). Prohibido `var(--brand)` (override PROVIDER en `/registro/negocio`). Focus `ring-2 ring-slate-900 ring-offset-2`. Detalle en `fase-15/ux.md`.
+
+### PublicFooter
+
+`<footer>` `border-t border-gray-200 bg-slate-50 mt-12`; interior `max-w-7xl px-4 py-8`. Enlaces `text-sm text-slate-700 underline underline-offset-2`, `min-h-11` en móvil. Responsable en `<address>` `text-sm text-slate-600`. Faltan datos o falla BD → «Datos del responsable en actualización». Solo `/`, `/login`, `/registro`, `/registro/negocio`, `/legal/*`.
+
+### LegalDocumentPage / LegalVersionMeta / LegalToc
+
+Artículo `max-w-3xl text-base leading-7 text-slate-800`; H2 `text-xl font-semibold mt-8 scroll-mt-24`. Meta `text-sm text-slate-600` «Versión n · Vigente desde …». Índice: `aside` sticky `top-24 w-64` `>=1024px`; `<details>` «Contenido» `<640px`. Empty/Error = `EmptyState` «Documento en actualización». Print sin chrome.
+
+### ConsentCheckbox
+
+Fila `flex items-start gap-3 min-h-11`; checkbox nativo `h-5 w-5 accent-slate-900`; label `text-sm text-slate-700`; enlaces nueva pestaña + `ExternalLink` 14px + sr-only. Nunca premarcada. Submit no deshabilitado; error `text-sm text-red-600` + `aria-invalid` + foco.
+
+### PrivacyMicrocopy
+
+`text-xs text-slate-600 leading-5`, máx. 2 líneas + enlace «Aviso de Privacidad». Sticky móvil: 1 línea `truncate`.
+
+### CookieNotice
+
+`role="region"`, sin overlay ni focus trap. `fixed z-50 inset-x-3 bottom-3 sm:right-4 sm:max-w-md rounded-xl border-gray-200 bg-white p-4 shadow-lg`. «Entendido» `bg-slate-900 text-white min-h-11` (no brand: no compite con el CTA de la página); «Desactivar medición» Ghost. Sobre barras sticky: `bottom-[calc(var(--sticky-cta-h,0px)+0.75rem)]`.
+
+### MeasurementPreferencesDialog
+
+Patrón `ConfirmDialog` (sheet `<640px`). Fila fija «Cookies necesarias — Siempre activas»; switch medición patrón `PosImagesToggle` `h-11 w-14`; DNT=1 → `disabled` OFF con razón en `aria-describedby`. Guardar `bg-slate-900 text-white`.
+
+### ProfileNotifyBlock «Avisos de pedidos» (F15)
+
+Card F14; `SwitchRow` opt-in WhatsApp; línea de estado; primary «Guardar avisos». Sin teléfono válido → switch `disabled` + razón.
+
+### LegalIncompleteAlert / AdminLegalSettingsForm
+
+Alerta `rounded-lg border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900` + `AlertTriangle`, `role="status"`. Form `grid md:grid-cols-2 gap-4` (patrón `AdminProductForm`), card `border-slate-200`; primary «Guardar datos legales»; errores por campo.
+
+---
+
 ## 7. Micro-interacciones (Fase 3–10)
 
 | Elemento | Transición |
@@ -1052,6 +1091,8 @@ Marca PROVIDER (sesión) y plataforma ADMIN **siguen** §1. Media F2 (dropzone, 
 | AdminFlagSwitch | thumb 150 ms; reduced-motion: instant |
 | MonthShortcut / dates | sin animación de valor |
 | PromoteLocalDialog | ConfirmDialog F3 (overlay 150 ms) |
+| CookieNotice (F15) | fade-out 150 ms al elegir; sin animación de entrada; reduced-motion: instant |
+| MeasurementPreferencesDialog (F15) | ConfirmDialog F3 (overlay 150 ms); switch thumb 150 ms |
 
 ---
 
@@ -1101,6 +1142,10 @@ Marca PROVIDER (sesión) y plataforma ADMIN **siguen** §1. Media F2 (dropzone, 
 | **Admin flags** | `aria-label` negocio+flag; tabla scroll-x móvil |
 | **Reportes F10** | Dates teclado; checklist fieldset; Imprimir ≥44px; print sin chrome |
 | **Higiene demo** | Sin secretos seed en prod; 401/403 ErrorBanner existente |
+| **Legal F15** | Footer `<nav aria-label="Legal">` + `<address>`; enlaces navegables sin JS; enlaces nueva pestaña anuncian «(abre en otra pestaña)» |
+| **Consentimiento F15** | Casilla con `label for`; error `aria-invalid` + `aria-describedby` + foco; submit no se deshabilita por la casilla |
+| **Aviso cookies F15** | `role="region"` no modal, no roba foco, último en tab order; diálogo de preferencias con focus trap y Escape; DNT con razón visible |
+| **Admin legal F15** | Errores por campo + resumen `role="alert"`; foco al primer inválido |
 
 ---
 
@@ -1210,4 +1255,14 @@ UnifiedChart:       svg h-48 w-full; role=img; details tabla; print #report-prin
 PDF button:         DocumentActions secondary; showPdf true solo Ventas sucursal
 Price dialog:       max-w-md; PriceInput; CTA Poner a la venta
 Section 409:        banner bg-red-50 text-red-800 junto al heading; no dentro de NewSectionForm
+
+# Fase 15
+Legal (regla):      neutros slate; nunca var(--brand); focus ring-slate-900
+Footer:             border-t bg-slate-50 py-8; links text-sm text-slate-700 underline
+Legal article:      max-w-3xl leading-7 text-slate-800; TOC lg sticky top-24 w-64
+Consent checkbox:   h-5 w-5 accent-slate-900; fila min-h-11; error text-red-600
+Microcopy privacy:  text-xs text-slate-600 leading-5
+Cookie notice:      fixed z-50 inset-x-3 bottom-3 sm:max-w-md; btn bg-slate-900 text-white
+Sticky offset:      --sticky-cta-h en barras sticky inferiores
+Legal alert admin:  bg-amber-50 border-amber-200 text-amber-900
 ```

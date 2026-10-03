@@ -28,6 +28,10 @@
 | `INNGEST_*` | No (local) | Cola emails; no bloquea HTTP | staging |
 | `UPLOADS_DIR` | Sí (F10) | Directorio de imágenes en disco (`CO-F10-002`). Default app `./uploads`. **No** `CLOUDINARY_*` Must | `./uploads` |
 | `CLOUDINARY_*` | No | Won't F10 — uploads nuevos van a disco | — |
+| `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | No (F15) | Umami (ADR-044). Vacía en QA = sin script; para probar eventos usar un sitio Umami de staging. Se fija en build | — |
+| `NEXT_PUBLIC_UMAMI_SRC` | No (F15) | URL del script Umami | `https://cloud.umami.is/script.js` |
+| `PUBLIC_CACHE_DISABLED` | No (F15) | `1` = bypass de caché Redis en `GET /api/providers*` (ADR-043). Sin `UPSTASH_REDIS_*` también hay bypass; cabecera `X-Cache` | vacío |
+| *(F15)* | — | Service worker solo existe con `npm run build && npm start` (no en `next dev`). Tras migrar: `npm run db:seed:legal` | — |
 
 \* Requeridas para levantar la aplicación bajo prueba, no para el runner Playwright directamente.
 

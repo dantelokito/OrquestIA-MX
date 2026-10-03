@@ -1,7 +1,7 @@
-# Infraestructura — LaBorregaMarket v0.11.0
+# Infraestructura — LaBorregaMarket v0.15.0
 
 > **Agente:** Arquitecto de Software  
-> **Fecha:** 12/09/2026  
+> **Fecha:** 03/10/2026  
 > **Audiencia:** DevOps, Backend Developer, Frontend  
 > **Changelog 0.2.0:** Resend + Cloudinary + rate limit contacto  
 > **Changelog 0.4.0:** Upstash Redis, Inngest, Google Maps JS, WhatsApp Should; Leaflet deprecado en `/explorar`  
@@ -9,7 +9,8 @@
 > **Changelog 0.6.0:** `@upstash/redis` Must en lockfile (DEV-P0-001); CI `build`/`start` + migrate (DEV-P0-002); checklist F4 Maps **superado** por ADR-020 (DEV-P1-006). Sin pasarela.  
 > **Changelog 0.10.2:** Media en **disco** (`UPLOADS_DIR`, ADR-032). Cloudinary **deja de ser Must**. Volumen persistente obligatorio. Sin CI YAML nuevo.  
 > **Changelog 0.11.0:** Segunda cookie `lbm_active_provider` (mismos flags que JWT). Sin env nueva. Sin Cloudinary. Migración unique `user_id` **antes** de seed N=2.  
-> **Changelog 0.14.0:** Sin variables nuevas. Migración Prisma `InventoryEntry.kind` / `receiveAs` nullable viaja en el PR de app. `pdfkit` ya en lockfile. PDF `from`/`to` reusa el mismo runtime. Sin bucket, sin Redis extra.
+> **Changelog 0.14.0:** Sin variables nuevas. Migración Prisma `InventoryEntry.kind` / `receiveAs` nullable viaja en el PR de app. `pdfkit` ya en lockfile. PDF `from`/`to` reusa el mismo runtime. Sin bucket, sin Redis extra.  
+> **Changelog 0.15.0:** `NEXT_PUBLIC_UMAMI_WEBSITE_ID` / `NEXT_PUBLIC_UMAMI_SRC` (opcionales, ADR-044) y `PUBLIC_CACHE_DISABLED` (opcional, ADR-043). Redis reutiliza las mismas credenciales Upstash para caché pública fail-open. npm: `@serwist/next` + `serwist` 9.5. Dos migraciones F15 + `npm run db:seed:legal` post-migrate (ADR-042). Gate humano: revisión legal antes de producción.
 
 ---
 
@@ -112,7 +113,29 @@ Producción: respetar política OSMF (User-Agent identificable). Attribution `©
 | `WHATSAPP_TEMPLATE_ORDER_NEW` | Should | Nombre plantilla nuevo pedido |
 | `WHATSAPP_TEMPLATE_ORDER_READY` | Should | Nombre plantilla listo / en camino |
 
-Sandbox Meta para staging. Sin vars: jobs WA no-op.
+Sandbox Meta para staging. Sin vars: jobs WA no-op. F15: el aviso de pedido nuevo al proveedor solo sale si `Provider.whatsappOrderOptIn = true`.
+
+### Analítica — Umami (Fase 15, ADR-044)
+
+| Variable | Requerida | Descripción |
+|----------|-----------|-------------|
+| `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | No | ID del sitio en Umami. Uno distinto por entorno |
+| `NEXT_PUBLIC_UMAMI_SRC` | No | URL del script (`https://cloud.umami.is/script.js` o self-host) |
+| `NEXT_PUBLIC_UMAMI_DOMAINS` | No | Dominio(s) donde Umami cuenta visitas (`data-domains`); vacío = sin filtro |
+
+Si falta cualquiera, el script no se carga y no hay error. Son públicas (`NEXT_PUBLIC_`), se fijan en **build**. Umami no usa cookies.
+
+### Caché pública Redis (Fase 15, ADR-043)
+
+| Variable | Default | Descripción |
+|----------|---------|-------------|
+| `PUBLIC_CACHE_DISABLED` | vacío | `1` desactiva la caché de `GET /api/providers*` (bypass, `X-Cache: BYPASS`) |
+
+Reusa `UPSTASH_REDIS_REST_URL/TOKEN`. A diferencia del rate limit, es **fail-open**: sin credenciales o con Redis caído se lee la BD (nunca 503/500 por caché). Llaves `lbm:c1:*`, TTL 30–60 s.
+
+### Service worker (Fase 15, ADR-043)
+
+Sin variables. Se genera en `npm run build` (`public/sw.js`, ignorado en git); no se registra con `next dev`. `build` debe seguir siendo webpack (sin `--turbopack`). El proxy/CDN no debe cachear `/sw.js` (la app envía `Cache-Control: no-cache, no-store, must-revalidate`).
 
 ### Archivo de referencia
 
@@ -198,6 +221,17 @@ Nombre sugerido: `add_product_scope_sections_media`
 
 Ver [`../fase-10/data-model/DB-products.md`](../fase-10/data-model/DB-products.md).
 
+### Migración Fase 15
+
+Dos migraciones, en orden (Postgres no deja usar un valor de enum en la transacción que lo crea):
+
+1. `20261003000000_f15_legal_module_enum`: `ALTER TYPE "SystemModule" ADD VALUE 'LEGAL'`.
+2. `20261003000100_f15_legal_consent`: enums `LegalPersonType`, `LegalDocumentType`, `ConsentSource`; tablas `legal_settings`, `legal_documents`, `user_consents`; `providers.whatsapp_order_opt_in` (default `false`) y `whatsapp_order_opt_in_at`; filas base `modules` (LEGAL), `role_permissions` (ADMIN), `legal_settings` (`id = 1`).
+
+Después de `npx prisma migrate deploy`: `npm run db:seed:legal` (idempotente, permitido en producción; crea v1 de PRIVACY/TERMS/COOKIES si no existen). El seed demo sigue prohibido en prod.
+
+Ver [`../fase-15/arch.md`](../fase-15/arch.md) y ADR-042.
+
 ---
 
 ## Despliegue sugerido
@@ -238,7 +272,8 @@ npm start        # next start (producción)
 
 Dependencias npm Fase 2 históricas: `resend`, `cloudinary` (esta última **no** Must F10 para uploads nuevos; `file-type` o equivalente para magic bytes).  
 Dependencias npm Fase 4: `@upstash/redis` (**Must en lockfile F6**, DEV-P0-001), `inngest` (ya instalado).  
-Dependencias npm Fase 5 (FE mapa): `leaflet`, `react-leaflet` (idea ADR-020; cluster opcional Should). **Retirar** `@vis.gl/react-google-maps` / loader Google JS de `/explorar`.
+Dependencias npm Fase 5 (FE mapa): `leaflet`, `react-leaflet` (idea ADR-020; cluster opcional Should). **Retirar** `@vis.gl/react-google-maps` / loader Google JS de `/explorar`.  
+Dependencias npm Fase 15: `@serwist/next@^9.5.12` (dependencia) y `serwist@^9.5.12` (devDependency). Peer `next >=14` (instalado 15.5.22). Sin librería de Markdown ni de analítica.
 
 ### CI / regresión (Fase 6, DEV-P0-002) Must — dueño DevOps
 
@@ -266,7 +301,10 @@ Probes (si hay Compose/K8s): `GET /` o `GET /api/auth/session` (200 invitado). *
 | Disco local | `UPLOADS_DIR` logo/portada/productos | **10** |
 | Upstash Redis | Rate limit contacto distribuido | 4 |
 | Inngest | Worker notificaciones ≤3 retries | 4 |
-| WhatsApp Cloud API | Pedido nuevo / listo (Should) | 4 |
+| WhatsApp Cloud API | Pedido nuevo / listo (Should); pedido nuevo solo con opt-in del proveedor | 4, 15 |
+| Upstash Redis (caché) | Caché fail-open de `GET /api/providers*` | 15 |
+| Umami | Medición sin cookies (encargado declarado en Aviso de Privacidad) | 15 |
+| Nominatim (OSM) | Geocodificación desde el navegador, ≤ 1 req/s | 4+ (declarado F15) |
 | `wa.me` Frontend | CTA manual | 2+ (permanece) |
 
 ---
@@ -351,6 +389,17 @@ Probes (si hay Compose/K8s): `GET /` o `GET /api/auth/session` (200 invitado). *
 - [ ] Rutas admin envueltas en `hasModulePermission`; tests 401/403/IDOR (DEV-P2-011)
 - [ ] `uploads/` en `.gitignore`
 - [ ] **No** CI YAML nuevo; **no** reopen Redis F6
+
+## Checklist pre-deploy Fase 15
+
+- [ ] **Gate humano:** textos legales revisados por abogado mexicano (sin esto no hay despliegue a producción)
+- [ ] Migraciones `f15_legal_module_enum` y `f15_legal_consent` aplicadas en orden; luego `npm run db:seed:legal`
+- [ ] ADMIN captura los datos del responsable en `/admin` (footer deja de decir "en actualización")
+- [ ] `NEXT_PUBLIC_UMAMI_*` por entorno (website-id distinto en staging y prod) o vacías a propósito
+- [ ] `npm run build` genera `public/sw.js`; `/sw.js` responde con `no-cache`; build sin `--turbopack`
+- [ ] Con Redis caído, `GET /api/providers` responde 200 (`X-Cache: BYPASS`); contacto sigue 503 (fail-closed intacto)
+- [ ] Rama Dependabot Prisma 7 **sin** mergear durante F15
+- [ ] Avisar a proveedores existentes que activen el opt-in de WhatsApp en Perfil
 
 ---
 

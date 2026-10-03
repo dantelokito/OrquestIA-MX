@@ -1,8 +1,8 @@
-# System Architecture Document (SAD) — LaBorregaMarket v0.14.0
+# System Architecture Document (SAD) — LaBorregaMarket v0.15.0
 
 > **Producto:** LaBorregaMarket  
-> **Versión:** 0.14.0 (F14: Perfil datos de negocio, merma/ajuste aditivos, series/PDF rango)  
-> **Fecha:** 17/09/2026  
+> **Versión:** 0.15.0 (F15: blindaje legal, consentimiento, Umami, caché Serwist + Redis)  
+> **Fecha:** 03/10/2026  
 > **Agente:** Arquitecto de Software
 
 ---
@@ -32,6 +32,8 @@ El núcleo de dominio es el **catálogo dual** (`Product.scope` GLOBAL \| LOCAL 
 **Fase 13 (diseño, 16/09/2026, v0.13.0):** Admin lista GLOBAL+LOCAL; DELETE HTTP 405. Archivo de oferta `ProviderProduct.archivedAt` (ADR-038). Unidad de venta sucursal `saleUnit` (fallback `Product.unit`; no mutar maestro GLOBAL). Precio por oferta + tabla historial. `InventoryEntry` en cargas (sin backfill F12, sin kardex de ventas). Vendible = `isAvailable` + `product.isActive` + no archivado. Ocultar con Encargar activo permitido; cambio unidad/factor con Encargar = 409. **Solo lectura.**
 
 **Fase 14 (diseño, 17/09/2026, v0.14.0):** PATCH `/api/provider/me` acepta datos de negocio + geo AMM; `isVerified` **no** se resetea (ADR-039). Merma y ajuste en `InventoryEntry.kind` (ADR-040); 400 si el saldo resultante sería negativo; POS sigue blando. GET movimientos ENTRADA+MERMA+AJUSTE. Precio vendible mayor que 0 (sin default 50). PDF sucursal `from`/`to`. Gráficas = SVG unificado (ADR-041), sin npm. N=1 global 403 intacto. Sin Cloudinary. Sin pasarela.
+
+**Fase 15 (diseño, 03/10/2026, v0.15.0):** Módulo `LEGAL`: responsable en `LegalSettings` (singleton, ADMIN + RBAC), documentos `LegalDocument` append-only por versión, `UserConsent` sin IP en registro y alta de negocio (ADR-042). `Provider.whatsappOrderOptIn` condiciona el WhatsApp de pedido nuevo. Service worker Serwist solo para precache `_next/static`, `/brand/*` y `/api/media/*`; navegación y resto de `/api/*` NetworkOnly. Redis fail-open en `GET /api/providers` (generación) y `/api/providers/[id]` (ADR-043). Umami sin cookies con DNT/GPC y opt-out en `localStorage["lbm_measurement"]` (ADR-044). `/api/catalogs` no se cachea (`CO-F15-001`). `/legal` público en middleware.
 
 Delivery a domicilio y WhatsApp Business siguen **Should** F4 a nivel pedidos; el **flag** `whatsappEnabled` de vitrina es Must F7 (no Cloud API). El **filtro** listing `offersDelivery` / `offersWholesale` es Must F9.
 
@@ -68,9 +70,10 @@ Delivery a domicilio y WhatsApp Business siguen **Should** F4 a nivel pedidos; e
 | Email | Resend | F2 — ADR-005 |
 | Imágenes | Disco local (`UPLOADS_DIR`) | F10 — ADR-032 (ADR-006 aparcado) |
 | Rate limit | Upstash Redis REST | F4 — ADR-015 |
+| Caché | Upstash Redis (GET públicos) + Serwist (service worker) | F15 — ADR-043 |
+| Analítica | Umami (script, sin cookies) | F15 — ADR-044 |
 | Jobs | Inngest | F4 — ADR-015 |
 | WhatsApp | Cloud API (Should) | F4 |
-
 **Runtime:** Node.js 20+
 
 ---
@@ -132,7 +135,9 @@ Notify F4: [`../fase-4/diagrams/ARCH-NOTIFY-02.md`](../fase-4/diagrams/ARCH-NOTI
 | Permisos | `PERMISSIONS` | Guards + DB | `Module`, `RolePermission` | ADMIN |
 | POS báscula | `POS` (FE) | Sin API nueva | — | PROVIDER |
 | Inventario | `PRODUCTS` | `/api/provider/inventory`, `.../shrinkage`, `.../adjustments`, `.../movements` | `ProviderProduct.onHand` + `InventoryEntry.kind` | PROVIDER |
-
+| Legal y consentimiento | `LEGAL` | `GET /api/legal/current`, `/api/admin/legal/*`, páginas `/legal/[slug]`, deltas register/providers | `LegalSettings`, `LegalDocument`, `UserConsent` | Público, ADMIN |
+| Caché | `CACHE` (sin RBAC) | `lib/cache/public-cache.ts` en `GET /api/providers*`; `src/app/sw.ts` | Redis | Público |
+| Analítica | `ANALYTICS` (FE) | Sin API; `lib/analytics/track.ts` | — | Público |
 ---
 
 ## 6. Flujos principales
@@ -239,6 +244,12 @@ Ver: [`../fase-13/README.md`](../fase-13/README.md), [ADR-038](./adrs/ADR-038-ar
 
 Ver: [`../fase-14/README.md`](../fase-14/README.md), [ADR-039](./adrs/ADR-039-isverified-coords.md), [ADR-040](./adrs/ADR-040-merma-aditiva.md), [ADR-041](./adrs/ADR-041-graficas-svg.md)
 
+### 6.23 Legal, consentimiento, analítica y caché (Fase 15)
+
+Footer y `/legal/[slug]` leen `LegalSettings` y el `LegalDocument` vigente en server components dinámicos (fallback "en actualización" si falla la BD). Registro y alta de negocio exigen la versión vigente y crean `UserConsent` en la misma transacción. WhatsApp de pedidos solo con `whatsappOrderOptIn`. SW: precache estáticos y `/brand`, CacheFirst `/api/media`, resto NetworkOnly; logout con navegación dura. Redis: detalle 60 s, listado 30 s con generación; invalidación tras cada mutación pública; fail-open. Umami sin cookies, DNT, `data-exclude-search`.
+
+Ver: [`../fase-15/arch.md`](../fase-15/arch.md), [ADR-042](./adrs/ADR-042-documentos-legales-consentimiento.md), [ADR-043](./adrs/ADR-043-cache-sw-redis.md), [ADR-044](./adrs/ADR-044-analitica-umami.md)
+
 ---
 
 ## 7. Modelo de datos
@@ -256,7 +267,9 @@ Fuente de verdad: `LaBorregaMarket/prisma/schema.prisma` (F14 extiende `Inventor
 | `Order`, `OrderItem` | F4 + índice F12 [`../fase-12/data-model/DB-order-items.md`](../fase-12/data-model/DB-order-items.md) |
 | `Review` | [`../fase-4/data-model/DB-reviews.md`](../fase-4/data-model/DB-reviews.md) |
 | `UserAddress` | F4 + delta [`../fase-7/data-model/DB-addresses.md`](../fase-7/data-model/DB-addresses.md) (`lastUsedAt`) |
-| `AuditLog`, `Module`, `RolePermission` | [`../fase-1/data-model/DB-audit-permissions.md`](../fase-1/data-model/DB-audit-permissions.md) + último ADMIN ADR-031 |
+| `AuditLog`, `Module`, `RolePermission` | [`../fase-1/data-model/DB-audit-permissions.md`](../fase-1/data-model/DB-audit-permissions.md) + último ADMIN ADR-031; F15: `SystemModule.LEGAL`, retención IP 12 meses (ADR-042) |
+| `LegalSettings`, `LegalDocument`, `UserConsent` | [`../fase-15/arch.md`](../fase-15/arch.md) (DB-LegalSettings, DB-LegalDocument, DB-UserConsent) |
+| `Provider` (F15) | `whatsappOrderOptIn` — [`../fase-15/arch.md`](../fase-15/arch.md) DB-Provider |
 
 ERD base: [`../fase-1/diagrams/ARCH-ERD-01.md`](../fase-1/diagrams/ARCH-ERD-01.md)
 
@@ -315,7 +328,7 @@ ERD base: [`../fase-1/diagrams/ARCH-ERD-01.md`](../fase-1/diagrams/ARCH-ERD-01.m
 | PREFS POS F12 | [`../fase-12/api/API-PROVIDER-PREFS-12.md`](../fase-12/api/API-PROVIDER-PREFS-12.md) |
 | CAT / INV F13 | [`../fase-13/README.md`](../fase-13/README.md) (solo lectura) |
 | SETTINGS / INV / DASH F14 | [`../fase-14/README.md`](../fase-14/README.md) |
-
+| LEGAL / CONSENT / CACHE F15 | [`../fase-15/arch.md`](../fase-15/arch.md) |
 Envelope: [`adrs/ADR-003-error-envelope.md`](./adrs/ADR-003-error-envelope.md)
 
 ---
@@ -328,7 +341,7 @@ Envelope: [`adrs/ADR-003-error-envelope.md`](./adrs/ADR-003-error-envelope.md)
 | Passwords | bcrypt; nunca en logs |
 | RBAC | `requireRole()` + `hasModulePermission` en catalogs **y** `/api/admin/*` (F10) |
 | Google fields | 403 si `isVerified=false`; no solo UI |
-| APIs públicas | GET providers, detalle, reviews list, ETA, contact, auth, `GET /api/auth/session`, `GET /api/media/[filename]` |
+| APIs públicas | GET providers, detalle, reviews list, ETA, contact, auth, `GET /api/auth/session`, `GET /api/media/[filename]`, `GET /api/legal/current` (F15) |
 | Rate limit | Contacto 5/10min + 20/IP/h — **Redis**; altas locales y uploads F10 |
 | Reportes | Sucursal = activo (F10). Global = todas las del user, **403 si N=1**. PDF F6 no se reabre |
 | Media | Disco + ownership PROVIDER / ADMIN; path opaco; IDOR 403 |
@@ -338,6 +351,11 @@ Envelope: [`adrs/ADR-003-error-envelope.md`](./adrs/ADR-003-error-envelope.md)
 | Favoritas | Solo `userId` de la cookie CLIENT; 401 invitado |
 | Báscula | Datos de periférico no salen del browser |
 | Inventario | IDOR 403; público sin on-hand/reserved; venta nunca 4xx de stock; merma/ajuste 400 si saldo negativo |
+| Legal | `/legal` en `PUBLIC_PATHS`; escritura ADMIN + `LEGAL`; API pública sin RFC; Markdown escapado (sin HTML crudo); versiones inmutables |
+| Consentimiento | Casilla obligatoria validada en servidor; `UserConsent` sin IP en la misma transacción que `User`/`Provider` |
+| Caché | SW sin navegación ni `/api/*` (salvo `/api/media/*`); Redis solo GET anónimos, fail-open, sin `Set-Cookie`; logout limpia carrito y Router Cache |
+| Analítica | Umami sin cookies; DNT/GPC y opt-out local; eventos sin PII; CSP Report-Only Should |
+| Retención | IP en `AuditLog` 12 meses (purga cron Should); IP en Redis = ventana del rate limit |
 
 ---
 
@@ -381,7 +399,9 @@ Envelope: [`adrs/ADR-003-error-envelope.md`](./adrs/ADR-003-error-envelope.md)
 | ADR-039 | [`isVerified` intacto al mudar pin](./adrs/ADR-039-isverified-coords.md) | Aprobado |
 | ADR-040 | [Merma/ajuste en `InventoryEntry`](./adrs/ADR-040-merma-aditiva.md) | Aprobado |
 | ADR-041 | [Gráficas SVG unificado](./adrs/ADR-041-graficas-svg.md) | Aprobado |
-
+| ADR-042 | [Documentos legales y consentimiento](./adrs/ADR-042-documentos-legales-consentimiento.md) | Aprobado |
+| ADR-043 | [Caché SW + Redis](./adrs/ADR-043-cache-sw-redis.md) | Aprobado |
+| ADR-044 | [Analítica Umami](./adrs/ADR-044-analitica-umami.md) | Aprobado |
 ---
 
 ## 11. Infraestructura
@@ -408,6 +428,7 @@ Ver [`infra-requirements.md`](./infra-requirements.md)
 | **F12** | Inventario blando, reservas Encargar, barra CAT, toggle POS | **Diseñada** 14/09/2026 v0.12.0 (solo lectura) |
 | **F13** | Admin GLOBAL+LOCAL, archivo oferta, unidad/precio sucursal, entradas, reportes inv. | **Diseñada** 16/09/2026 v0.13.0 (solo lectura) |
 | **F14** | Perfil datos negocio, merma aditiva, series/PDF rango | **Diseñada** 17/09/2026 v0.14.0 |
+| **F15** | Legal + consentimiento, opt-in WhatsApp proveedor, Umami, SW + Redis | **Diseñada** 03/10/2026 v0.15.0 |
 | **F6+ producto** | Pasarela de pagos, CFDI | Aparcado hasta nuevo aviso (`CO-F6-001`) |
 
 Won't F10: auto-global, secciones anidadas, chips Explorar de sección, Cloudinary/S3, CRUD usuarios, 2FA, impersonation, Maps JS, Places, pan→radio, pasarela, CFDI, editar `fase-6/`, Redis/CI F6, ADMIN DASH ajeno, CSV, multi-mes, reopen F7–F9.

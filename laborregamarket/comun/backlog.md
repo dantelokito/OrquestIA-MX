@@ -1,8 +1,8 @@
 # Backlog — LaBorregaMarket
 
 > Backlog priorizado MoSCoW para Tech Lead y equipo de desarrollo.  
-> **Última actualización:** 18/09/2026 | **Agente:** Product Manager  
-> **Versión:** 0.13.0 en `main` vía [PR #13](https://github.com/dantelokito/BorregaMarket/pull/13); F14 **cerrada documentalmente** (panel PROVIDER; lista DevOps PR); **sin F15**; pagos aparcados
+> **Última actualización:** 03/10/2026 | **Agente:** Product Manager  
+> **Versión:** 0.14.0 en `main` @ `1aeac1c` vía [PR #14](https://github.com/dantelokito/BorregaMarket/pull/14); **F15 abierta** (blindaje legal, analítica y caché); pagos aparcados
 
 ---
 
@@ -348,7 +348,7 @@ Carry-over (no mezclar): `BL-177`, DT-F10-001/002, QA F9, `BL-040`.
 
 ## Fase 14 — Mejoras y deuda panel PROVIDER (BL-230+)
 
-> Discovery cerrado 17/09/2026 (D-F14-1…23). F14 **cerrada documentalmente** 18/09 (QA APROBADO + QG UX/Arch sin deltas). Detalle: [`../fase-14/prd.md`](../fase-14/prd.md). `CO-F14-001`. F13 no se reabre. **No hay F15.** Lista DevOps PR.
+> Discovery cerrado 17/09/2026 (D-F14-1…23). F14 **cerrada** 18/09 (QA APROBADO + QG UX/Arch sin deltas) y mergeada vía PR #14 (`1aeac1c`). Detalle: [`../fase-14/prd.md`](../fase-14/prd.md). `CO-F14-001`. F13 no se reabre.
 
 | ID | Item | Epic | MoSCoW | User Story | Estado |
 |----|------|------|--------|------------|--------|
@@ -398,7 +398,40 @@ Carry-over (no mezclar): `BL-177`, DT-F10-001/002, QA F9, `BL-040`.
 
 Won't F14: kardex VENTA_POS/ENTREGA_PEDIDO, costos/margen, corte de caja, cajeros, lotes, directorio, crédito, BOM, inventario compartido, Cloudinary, `BL-040`, Explorar rediseño, `US-ADMIN-04` como Must, hard-delete, granularidad semanal, comparativa periodo, agrupación por sección, gráficos de margen, reabrir US F13.
 
-Carry-over (no mezclar): `BL-177`, DT-F10-001/002, QA F9, `BL-040`. DevOps F14: PR listo; humano mergea. **Sin F15.**
+Carry-over (no mezclar): `BL-177`, DT-F10-001/002, QA F9, `BL-040`. PR #14 mergeado (`1aeac1c`).
+
+---
+
+## Fase 15 — Blindaje legal, analítica y caché (BL-280+)
+
+> Abierta 03/10/2026 con autorización humana. Detalle: [`../fase-15/pm.md`](../fase-15/pm.md). Rama `feat/f15-legal-cache` desde `main` @ `1aeac1c`. Textos legales = borrador; **gate humano** de revisión por abogado antes de producción.
+
+| ID | Item | Epic | MoSCoW | User Story | Estado |
+|----|------|------|--------|------------|--------|
+| BL-280 | `PublicFooter` con enlaces legales y datos del responsable en `/`, `/login`, `/registro` | LEGAL | M | US-LEGAL-01 | Abierto — UX + Arch |
+| BL-281 | Rutas públicas `/legal/privacidad`, `/legal/terminos`, `/legal/cookies`; `/legal` en `PUBLIC_PATHS` | LEGAL | M | US-LEGAL-02 | Abierto — UX + Arch |
+| BL-282 | `DB-LegalSettings` editable por ADMIN (módulo RBAC `LEGAL` + `AuditLog`) | LEGAL | M | US-LEGAL-03 | Abierto — UX + Arch |
+| BL-283 | `DB-LegalDocument` versionado + `DB-UserConsent` | LEGAL | M | US-LEGAL-04 | Abierto — Arch |
+| BL-284 | Casilla obligatoria en `/registro` y `/registro/negocio`; 400 ADR-003 sin aceptación | CONSENT | M | US-CONSENT-01 | Abierto — UX + Arch |
+| BL-285 | Aviso simplificado en direcciones, geolocalización y contacto WhatsApp | CONSENT | M | US-CONSENT-02 | Abierto — UX |
+| BL-286 | Opt-in WhatsApp del proveedor (política Meta); sin opt-in no se envía | CONSENT | M | US-CONSENT-03 | Abierto — UX + Arch |
+| BL-287 | Términos: mayoría de edad (18+ o tutor) y rol de intermediario | LEGAL | M | US-LEGAL-02, US-CONSENT-01 | Abierto — PM (contenido borrador) |
+| BL-288 | Declarar IP en `AuditLog`/rate limit y plazo de conservación en el Aviso | LEGAL | M | US-LEGAL-02 | Abierto — Arch |
+| BL-289 | Aviso informativo de cookies + "Desactivar medición" (`localStorage`) | COOKIE | M | US-COOKIE-01 | Abierto — UX |
+| BL-290 | Umami sin cookies, eventos sin PII, DNT y opt-out | ANALYTICS | M | US-ANALYTICS-01 | Abierto — Arch |
+| BL-291 | Service worker Serwist solo estáticos/imágenes; NetworkOnly HTML y `/api/*`; limpieza en logout | CACHE | M | US-CACHE-01 | Abierto — Arch |
+| BL-292 | Redis en `GET /api/providers` (30 s) y `GET /api/providers/[id]` (60 s), lat/lng redondeadas a 3 decimales; invalidación por precio/archivo; fail-open. Sin `/api/catalogs` (`CO-F15-001`, `CO-F15-002`) | CACHE | M | US-CACHE-02 | Abierto — BE |
+| BL-293 | Re-aceptación de nueva versión en el siguiente login | CONSENT | S | — | Should |
+| BL-294 | Header CSP con dominio de Umami | ANALYTICS | S | — | Should |
+| BL-295 | Corregir copy del home ("precios en tiempo real", "Seguro y auditado") | LEGAL | S | — | Should |
+| BL-296 | Proxy Nominatim en servidor con caché (1 req/s, identificación) | GEO | W | — | ⛔ Won't F15 — deuda; se declara como remisión en el Aviso (`CO-F15-003`) |
+| BL-297 | Publicar nueva versión de documento legal desde `/admin` | LEGAL | S | — | Should |
+| BL-298 | Purga automática de IP en `AuditLog` según plazo declarado | LEGAL | S | — | Should |
+| BL-299 | Autoservicio ARCO (borrar/exportar cuenta) | LEGAL | W | — | ⛔ Won't F15 — canal por correo |
+
+Won't F15: autoservicio ARCO, casilla de marketing, PWA offline, RGPD, banner opt-in bloqueante, GA4/PostHog/Sentry, datos del responsable en env, caché de HTML o `/api/*` autenticado (incluye `GET /api/catalogs`), proxy Nominatim (BL-296), pagos/PCI/fiscal (`BL-040`), rama Dependabot Prisma 7.
+
+Carry-over (no mezclar): `BL-177`, DT-F10-001/002, QA F9, `BL-040`, `BL-243`.
 
 ---
 
@@ -521,7 +554,8 @@ Fase 14: cerrada documentalmente (18/09). BL-230–235, 237, 239, 240, 244–246
 - Fase 12 (cerrada documentalmente 15/09): `outputs/laborregamarket/fase-12/`
 - Fase 13 (cerrada documentalmente 16/09): `outputs/laborregamarket/fase-13/`
 - CO-F13-001: `outputs/laborregamarket/fase-13/change-orders/CO-F13-001-visibilidad-admin-y-archivo.md`
-- Fase 14 (cerrada documentalmente 18/09; lista DevOps PR; **sin F15**): `outputs/laborregamarket/fase-14/`
+- Fase 14 (cerrada 18/09; mergeada PR #14): `outputs/laborregamarket/fase-14/`
+- Fase 15 (abierta 03/10): `laborregamarket/fase-15/pm.md`
 - CO-F14-001: `outputs/laborregamarket/fase-14/change-orders/CO-F14-001-mejora-panel-proveedor.md`
 - Diagnóstico panel: `comun/MEJORA-PANEL-PROVEEDOR.md`
 - Sign-off QA F12: `QA Automation Engineer/.../fase-12/qa-signoffs/QA-F12-signoff.md`
