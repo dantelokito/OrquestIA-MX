@@ -1,0 +1,38 @@
+---
+description: Núcleo OrquestIA-MX. Fase, escritura, IDs y límites comunes a todos los roles.
+alwaysApply: true
+---
+
+# Núcleo OrquestIA-MX
+
+Orquestador multi-agente de LaBorregaMarket. Código de la app: `C:\Users\PC GAMER\LaBorregaMarket`. Documentación: `laborregamarket/`.
+
+## Fase y estado
+
+- La fase activa N está en `laborregamarket/STATUS.md`. Léelo primero; no asumas la fase desde el chat.
+- Si no te lanzaron como un rol (PM, UX, Arch, BE, FE, QA, DevOps) y te piden orquestar, lee `.cursor/skills/orquestador/SKILL.md`.
+- Abrir la fase N+1 requiere autorización humana.
+
+## Escritura
+
+- Cada rol escribe **solo** `laborregamarket/fase-{N}/{rol}.md` (plantilla `laborregamarket/PLANTILLA-ROL.md`) y **su fila** de `STATUS.md`.
+- Roles: `pm`, `ux`, `arch`, `be`, `fe`, `qa`, `devops`. Un archivo por rol y fase: entregable y handoff van juntos.
+- Documentos vivos en `laborregamarket/comun/` (índice en `comun/README.md`): edita solo la sección que cambia; nunca crees copias versionadas.
+- No crees README de fase, `handoff-*`, `activation-prompt-*`, `EVIDENCIA-*` ni otros archivos sueltos.
+- `archivo/` es solo lectura y solo si la tarea lo pide.
+
+## Al recibir
+
+Tres chequeos, nada más: el archivo upstream existe, no tiene placeholders y los IDs que vas a usar existen. Si falla, escribe el problema en `Pendientes` de tu archivo, marca tu fila de STATUS como `BLOQUEADO: <motivo>` y termina.
+
+## IDs
+
+`US-{MOD}-{NN}`, `UF-`/`WF-{MOD}-{NN}`, `API-{MOD}-{NN}`, `DB-{Entidad}`, `ADR-{NNN}`, `TC-{MOD}-{NNN}`, `BUG-{NNN}` (consecutivo global; el último usado fue BUG-020), `CO-F{N}-{NNN}`.
+
+## Límites
+
+- Español en toda la documentación (términos técnicos en su forma original).
+- Prohibido `git push` a `main`/`master` y merge a producción; el humano mergea.
+- La API no se versiona (ADR-002). El envelope de error sigue ADR-003.
+- Graphify es opcional: úsalo solo para ubicar código de la app (`graphify query "<tema>" --budget 800 --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"`).
+- Al terminar, responde con un resumen de 10 líneas o menos: qué hiciste, archivo escrito, siguiente rol y bloqueos.

@@ -1,86 +1,57 @@
 ---
 name: orquestador
-description: >-
-  Coordina el ciclo multi-agente de OrquestIA-MX: consulta Graphify y
-  comun/PROCESO.md, lanza cada rol en un contexto nuevo, valida handoffs
-  y no avanza si falla la validación cruzada. Usar cuando el usuario pida
-  orquestar, ciclar fases, activar agentes, continuar el flujo PM/UX/Arch/BE/FE/QA/DevOps
-  o reanudar trabajo por fases.
+description: Coordina el ciclo multi-agente de LaBorregaMarket leyendo solo STATUS.md y lanzando un subagente por rol con un prompt mínimo. Usar cuando el usuario pida orquestar, continuar o abrir una fase, o activar un rol (PM, UX, Arch, BE, FE, QA, DevOps).
 ---
 
 # Orquestador
 
-Ciclo de trabajo del workspace raíz. Proceso vivo: `comun/PROCESO.md`. El código de la app no vive aquí: `C:\Users\PC GAMER\LaBorregaMarket`.
+Tu único insumo es `laborregamarket/STATUS.md`. No leas archivos de fase, código ni `comun/`; eso lo hace cada rol. No implementas nada en este hilo.
 
-## Quick start
+## Ciclo
 
-1. `graphify query "quién actúa en la fase activa"` sobre el grafo de orquestación (si no hay grafo de este repo: `comun/PROCESO.md` + `STATUS.md`).
-2. `graphify query` de la tarea sobre el grafo de LaBorregaMarket (`--graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"`). Si falta ese `graph.json`: STOP y `graphify update .` en el repo de la app.
-3. Cruzar STATUS solo para elegir el siguiente rol; no implementar en este hilo.
-4. Lanzar **un subagente / chat limpio por rol**. Prompt mínimo:
-   - resultado de ambos `graphify query`
-   - ruta del handoff anterior
-   - skill del rol
-   - `.cursor/rules/graphify.mdc`
-5. Validar con las reglas `00`–`03`. Si falla: handoff de retorno y no avances.
-6. Actualizar el STATUS del workspace que entregó. `graphify update .` aquí; si el rol tocó código de la app, también `graphify update .` en LaBorregaMarket.
-7. Repetir hasta bloqueo real o DoD de fase.
+1. Lee `STATUS.md`. Si "Actúa ahora" es el Humano (merge, autorización de fase), díselo al usuario y para.
+2. Elige el siguiente rol según la cadena y el ruteo de QA.
+3. Lanza el subagente (Task, `generalPurpose`, `run_in_background: false`; UX y Arch en paralelo en el mismo mensaje) con el **prompt mínimo**.
+4. Recibe su resumen de 10 líneas o menos. No abras sus archivos salvo que reporte `BLOQUEADO` y necesites decidir.
+5. Repite hasta que STATUS diga "Actúa ahora: Humano" o haya un bloqueo real.
 
-Prohibido: implementar FE/BE/QA/UX/Arch/DevOps/PM en la ventana del orquestador.
+## Prompt mínimo
+
+```
+Rol: {pm|ux|arch|be|fe|qa|devops}. Fase: N.
+Skill: .cursor/skills/{rol}/SKILL.md (léela primero).
+Insumo: laborregamarket/fase-N/{archivo upstream}.md
+Tarea: {una línea; solo para PM o si hay algo que el STATUS no dice}
+```
+
+Nada más: el rol ya sabe qué leer y dónde escribir. No pegues contenido de handoffs ni de STATUS.
 
 ## Cadena
 
 ```
-PM → UX/UI + Arquitecto (paralelo)
-   → Backend (tras handoff-backend-fase-N)
-   → Frontend (tras handoff-frontend-fase-N)
-   → QA ↻ FE/BE (solo con EVIDENCIA-BUG-NNN)
-   → QA APROBADO → PM (no cierra)
-   → UX + Arquitecto (QG-correcciones, ventanas nuevas)
-   → PM cierra / promueve
-   → DevOps (PR listo, sin merge)
-   → Humano mergea / prod
+PM -> UX + Arch (paralelo) -> BE -> FE -> QA -> (ruteo) -> DevOps -> Humano
 ```
 
-## Skills por rol
+- Fase sin UI: salta UX. Fase sin cambios de datos ni API: salta Arch. Si el bloque `Arch:` de `pm.md` dice "sin cambios de contrato", BE puede omitirse y FE recibe `pm.md` + `ux.md`.
+- Abrir la fase N+1 solo con autorización humana explícita en el chat: lanza PM con `Tarea: abrir fase N+1: {requerimiento}`.
 
-| Rol | Skill |
-|-----|-------|
-| PM | `Administrador de producto/Product Manager/.cursor/skills/product-manager/SKILL.md` |
-| UX/UI | `Agente UX UI/Agente UX UI/.cursor/skills/ux-ui-designer/SKILL.md` |
-| Arquitecto | `Agente Arquitecto de Software/Agente Arquitecto/.cursor/skills/software-architect/SKILL.md` |
-| Backend | `Agente backend/Agente backend/.cursor/skills/backend-developer/SKILL.md` |
-| Frontend | `Agente frontend/Agente Frontend/.cursor/skills/frontend-developer/SKILL.md` |
-| QA | `QA Automation Engineer/Agente Tester/.cursor/skills/qa-tester-senior/SKILL.md` |
-| DevOps | `Agente DevOps/Agente DevOps/.cursor/skills/devops-cloud-engineer/SKILL.md` |
+## Ruteo QA
 
-Cada subagente escribe solo en su `outputs/laborregamarket/fase-{N}/`.
+Lee la sección "Ruteo QA" de STATUS. Aplica el primer caso que coincida:
 
-## Queries Graphify
+| Condición | Acción |
+|-----------|--------|
+| Falta algún campo | Relanza QA: "completa la cabecera de ruteo" |
+| Deltas de diseño > 0 o de contrato > 0 (C) | UX y/o Arch (`Tarea: QG-correcciones`), después FE/BE con los bugs, después QA |
+| Bugs abiertos > 0 tras las 2 rondas de QA (B) | Pregunta al humano si sigue otra ronda o se difiere como deuda |
+| APROBADO, 0 bugs, 0 deltas (A) | DevOps. Nunca abras PM, UX ni Arch después de un A |
 
-Orquestación:
+En B normal no intervienes: QA lanza a FE/BE, vuelve a probar y te devuelve el resultado final.
 
-```
-graphify query "quién actúa en la fase activa" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
-graphify path "STATUS PM" "STATUS QA" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
-graphify explain "BUG-015" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
-graphify query "handoffs pendientes" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
-```
+## Bloqueos
 
-App (todos los roles, incluido PM y UX):
+Si un rol marca `BLOQUEADO`, lanza el rol upstream con `Tarea: resolver bloqueo de {rol}: {motivo en una línea}`. Si el bloqueo es una decisión de negocio, pregúntale al humano.
 
-```
-graphify query "<módulo o feature>" --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"
-```
+## Al cerrar el turno
 
-## Tras una entrega
-
-- [ ] Archivos del handoff existen y no son placeholder
-- [ ] IDs (`US-*`, `API-*`, `BUG-*`) referenciados existen
-- [ ] Destino = fase activa N
-- [ ] Si fue fix: existe `EVIDENCIA-BUG-{NNN}.md`
-- [ ] Si QA APROBÓ: hay plan para abrir UX y Arch (QG-correcciones) antes de promover
-- [ ] STATUS del emisor actualizado
-- [ ] `graphify update .` (orquestación); si hubo código de app: `graphify update .` en LaBorregaMarket
-
-Si la sesión se corta: el siguiente turno empieza en el paso 1. No inventes fase.
+Responde al usuario en 5 líneas o menos: fase, qué se hizo, quién actúa ahora y bloqueos.

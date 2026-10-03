@@ -1,21 +1,43 @@
 # OrquestIA-MX
 
-Repositorio de orquestación de agentes de desarrollo con Cursor. Este workspace **es el orquestador**: coordina PM, UX/UI, Arquitecto, Backend, Frontend, QA y DevOps.
+Orquestador de agentes de desarrollo con Cursor para LaBorregaMarket. Este workspace solo guarda reglas, skills y documentación; el código vive en `C:\Users\PC GAMER\LaBorregaMarket`.
 
 ## Cómo trabajar
 
-- Skill: `@orquestador` (ciclo de fase, Graphify, handoffs).
-- Proceso vivo (todos los agentes): [`comun/PROCESO.md`](comun/PROCESO.md).
-- Reglas globales: `.cursor/rules/00-` … `06-orquestador.mdc`.
-- Grafo de orquestación: `graphify-out/` (`GRAPH_REPORT.md`, `graph.json`, `graph.html`).
-- Grafo de la app LaBorregaMarket: `C:\Users\PC GAMER\LaBorregaMarket\graphify-out\` (otro corpus; no mezclar).
-- Código de la app: `C:\Users\PC GAMER\LaBorregaMarket`.
+En un chat abierto en esta raíz: `@orquestador continúa` (o `@orquestador abre la fase N+1: <requerimiento>`). El orquestador lee `laborregamarket/STATUS.md` y lanza un subagente por rol.
 
-Paso 0 de **cualquier** rol (PM, UX, Arch, BE, FE, QA, DevOps): consultar ambos grafos antes de explorar.
+## Estructura
 
 ```
-graphify query "quién actúa en la fase activa" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
-graphify path "STATUS PM" "STATUS QA" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
-graphify explain "BUG-015" --graph "C:\Users\PC GAMER\OneDrive - Universidad Autonoma de Nuevo León\Documents\Proyectos desarrollo\Agentes de desarrollo test\graphify-out\graph.json"
-graphify query "<módulo o feature>" --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"
+.cursor/
+  rules/nucleo.mdc            # única regla que se carga siempre
+  skills/{orquestador,pm,ux,arch,be,fe,qa,devops}/SKILL.md
+laborregamarket/
+  STATUS.md                   # estado único de todos los roles
+  PLANTILLA-ROL.md            # formato de fase-N/{rol}.md
+  comun/                      # documentos vivos (índice en comun/README.md)
+  fase-N/{pm,ux,arch,be,fe,qa,devops}.md
+  tests/                      # suite Playwright de QA
+archivo/                      # F1-F14 y configuración anterior (solo lectura)
 ```
+
+## Flujo
+
+```
+PM -> UX + Arch (paralelo) -> BE -> FE -> QA -> DevOps -> Humano mergea
+```
+
+- BE y FE no entregan a QA sin `prisma generate`, `tsc`, lint, tests y build en verde.
+- QA dirige las correcciones: lanza a FE/BE con los bugs y vuelve a probar (máximo 2 rondas).
+- Ruteo QA: **A** cierra la fase y pasa a DevOps; **B** son bugs que QA resuelve con FE/BE; **C** son deltas de spec y convocan a UX y/o Arch.
+- Un archivo por rol y fase sustituye a los handoffs, activation-prompts, README de fase y evidencias sueltas.
+
+## Graphify
+
+Opcional y solo para el código de la app:
+
+```
+graphify query "<tema>" --budget 800 --graph "C:\Users\PC GAMER\LaBorregaMarket\graphify-out\graph.json"
+```
+
+DevOps ejecuta `graphify update .` en el repo de la app una vez por fase.
