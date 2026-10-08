@@ -47,7 +47,9 @@ Ninguno para BE. Revisión legal de los textos v1 antes de producción — Human
 
 ## Verificación
 
-- `npx prisma generate` — exit 0 (Prisma Client v6.19.3; sin EPERM).
+Re-ejecutada el 2026-10-07 en `feat/f15-legal-cache` @ `bdc0301` (sin cambio de código de estos bugs). `next.config.ts` local con `allowedDevOrigins` de LAN se dejó fuera: el test `security-headers` exige solo `localhost`.
+
+- `npx prisma generate` — exit 0 (Prisma Client v6.19.3; el primer intento dio EPERM con `next start` en 8080; se detuvo y se reintentó).
 - `npx tsc --noEmit` — exit 0.
 - `npm run lint` — exit 0 (warnings previos; 0 errores).
 - `npm test` — exit 0. 89 archivos, 446 tests.
@@ -59,4 +61,7 @@ Ninguno.
 
 ## Fixes
 
-Ninguno.
+| BUG | Archivos | Commit | Re-prueba local |
+|-----|----------|--------|-----------------|
+| BUG-025 | `src/app/api/provider/media/route.ts`, `src/lib/services/media.service.ts`, `src/lib/cache/public-cache.ts` | Sin cambio de contrato. `media.service.ts` idéntico a `1aeac1c`. | No corregido. `invalidateProviderCache` corre solo después de `uploadProviderMedia` y no lanza (el `catch` interno registra el fallo de Redis). El tamaño se valida antes, en `validateAndStore`: `MediaValidationError` → 400 ADR-003 `{ error: "Validation failed", details: [{ field: "file", message: "El archivo supera el límite de 20MB" }] }`. El 500 ocurre antes de esa validación: Next 15.5.22 clona el body del middleware con `middlewareClientMaxBodySize` por defecto `10485760` (`config-shared.js`). Un POST de 20 MiB+1 se trunca, `request.formData()` falla y `handleRouteError` responde 500. El matcher de `middleware.ts` ya incluía `/api/` en `1aeac1c`; F15 solo añadió `/legal` a `PUBLIC_PATHS`. Esta rama no lo introdujo. |
+| BUG-026 | `src/app/api/admin/providers/[id]/route.ts`, `src/lib/services/provider.service.ts` | Sin cambio de contrato. El `return` de `updateAdminProvider` es el de `1aeac1c`. | No corregido. F15 solo inserta `invalidateProviderCache([id])` antes de `ok(updated)`. El DTO ya devolvía `id`, `businessName`, `isVerified`, `isActive`, `offersWholesale`, `offersDelivery`, `googleReviewsEnabled`, `verifiedAt`. `primaryColor` y `secondaryColor` se seleccionan para el audit y no salen en el cuerpo, así que `body.data.primaryColor` queda `undefined` con 200. Igual en TC-RBAC-028 (`isVerified: false`). Esta rama no lo introdujo. |
