@@ -24,5 +24,14 @@ export class LoginPage {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.submitButton.click();
+    const dialog = this.page.getByRole("dialog", { name: "Actualizamos nuestros Términos" });
+    const appeared = await dialog
+      .waitFor({ state: "visible", timeout: 1500 })
+      .then(() => true)
+      .catch(() => false);
+    if (!appeared) return;
+    await dialog.getByRole("checkbox").check();
+    await dialog.getByRole("button", { name: "Aceptar y continuar" }).click();
+    await dialog.waitFor({ state: "hidden", timeout: 8000 });
   }
 }

@@ -1,5 +1,5 @@
-import { test, expect } from "@playwright/test";
-import { loginAs, assertResponseTime } from "../../fixtures/auth";
+import { test, expect } from "../../fixtures/suite";
+import { loginAs, assertResponseTime, freeAddressSlot, withAuth } from "../../fixtures/auth";
 import {
   buildMarketplaceOrderPayload,
   getSeedProviderProduct,
@@ -285,8 +285,9 @@ test.describe("API ORDERS F4 — TC-ORD delivery", () => {
     expect(enable.ok()).toBeTruthy();
 
     await loginAs(request, "CLIENT");
+    await freeAddressSlot(request);
     const seed = await getSeedProviderProduct(request);
-    const addr = await request.post("/api/users/me/addresses", {
+    const addr = await request.post("/api/users/me/addresses", withAuth(request, {
       data: {
         label: "Casa Del",
         formattedAddress: "Av. Juárez 123, Monterrey",
@@ -294,7 +295,7 @@ test.describe("API ORDERS F4 — TC-ORD delivery", () => {
         lng: -100.3089,
         isFavorite: true,
       },
-    });
+    }));
     expect(addr.status()).toBe(201);
     const address = await addr.json();
 
@@ -338,7 +339,7 @@ test.describe("API ORDERS F5 — TC-CAT 409", () => {
       });
       expect(response.status()).toBe(409);
       const body = await response.json();
-      expect(body.error).toMatch(/producto no disponible/i);
+      expect(body.error).toMatch(/no está disponible|no disponible/i);
     } finally {
       await loginAs(request, "PROVIDER");
       await restoreProduct(request, target);

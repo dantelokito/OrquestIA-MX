@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import {
   assertResponseTime,
   credentials,
@@ -31,8 +31,12 @@ function hasStockKey(obj: unknown): boolean {
   return Object.values(rec).some((v) => (Array.isArray(v) ? v.some(hasStockKey) : hasStockKey(v)));
 }
 
-async function createSku(request: Parameters<typeof createLocalProduct>[0], unit = "KG") {
-  const sectionId = await ensureOwnSection(request, `Inv F12 ${f10Suffix()}`);
+async function createSku(
+  request: Parameters<typeof createLocalProduct>[0],
+  unit = "KG",
+  opts?: { pinSession?: boolean }
+) {
+  const sectionId = await ensureOwnSection(request, `Inv F12 ${f10Suffix()}`, opts);
   const name = `QA-INV-${f10Suffix()}`;
   const created = await createLocalProduct(request, { name, sectionId, unit, price: 22 });
   expect(created.status(), await created.text()).toBe(201);
@@ -133,7 +137,7 @@ test.describe("API F12 — inventario blando, POS, Encargar, CAT, prefs", () => 
 
   test("TC-F12-005: POS cobra con on-hand 0 y deja negativo; no 4xx stock", async ({ request }) => {
     await loginAs(request, "PROVIDER");
-    const sku = await createSku(request, "PIEZA");
+    const sku = await createSku(request, "PIEZA", { pinSession: true });
     const sale = await request.post(
       "/api/provider/pos/sales",
       withAuth(request, {
@@ -154,7 +158,7 @@ test.describe("API F12 — inventario blando, POS, Encargar, CAT, prefs", () => 
 
   test("TC-F12-006: Encargar reserva; CANCELLED restore; create con saldo 0", async ({ request }) => {
     await loginAs(request, "PROVIDER");
-    const sku = await createSku(request, "PIEZA");
+    const sku = await createSku(request, "PIEZA", { pinSession: true });
     const me = await (await request.get("/api/provider/me", withAuth(request))).json();
     const providerId = me.data.id as string;
 
@@ -185,7 +189,7 @@ test.describe("API F12 — inventario blando, POS, Encargar, CAT, prefs", () => 
 
   test("TC-F12-007: Encargar DELIVERED commit onHand", async ({ request }) => {
     await loginAs(request, "PROVIDER");
-    const sku = await createSku(request, "PIEZA");
+    const sku = await createSku(request, "PIEZA", { pinSession: true });
     await request.post(
       `/api/provider/inventory/${sku.providerProductId}/entries`,
       withAuth(request, { data: { quantity: "10.000", receiveAs: "CATALOG" } })
@@ -348,7 +352,7 @@ test.describe("API F12 — inventario blando, POS, Encargar, CAT, prefs", () => 
 
   test("TC-F12-012: 409 ADR-022 isAvailable=false; no 4xx de stock", async ({ request }) => {
     await loginAs(request, "PROVIDER");
-    const sku = await createSku(request, "PIEZA");
+    const sku = await createSku(request, "PIEZA", { pinSession: true });
     const disable = await request.patch(
       `/api/provider/local-products/${sku.providerProductId}`,
       withAuth(request, { data: { isAvailable: false } })
@@ -373,7 +377,7 @@ test.describe("API F12 — inventario blando, POS, Encargar, CAT, prefs", () => 
     );
     const text = await sale.text();
     expect(sale.status(), text).toBe(409);
-    expect(text.toLowerCase()).toMatch(/no disponible/);
+    expect(text.toLowerCase()).toMatch(/no está disponible|no disponible/);
     expect(text.toLowerCase()).not.toMatch(/stock|agotado|existenc/);
   });
 
@@ -392,7 +396,7 @@ test.describe("API F12 — inventario blando, POS, Encargar, CAT, prefs", () => 
     const b = mine.data.providers[1];
     const actA = await request.post("/api/provider/active", withAuth(request, { data: { providerId: a.id } }));
     rememberSessionCookie(request, actA);
-    const skuA = await createSku(request);
+    const skuA = await createSku(request, "KG", { pinSession: true });
 
     const actB = await request.post("/api/provider/active", withAuth(request, { data: { providerId: b.id } }));
     rememberSessionCookie(request, actB);

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { loginAs, registerUnverifiedProvider, withAuth } from "../../fixtures/auth";
 import {
   createLocalProduct,
@@ -15,9 +15,9 @@ import {
 test.describe("API LOCAL PRODUCTS F10 — TC-CAT", () => {
   test("TC-CAT-011/012: POST local + visible en panel y detalle propio", async ({ request }) => {
     await loginAs(request, "PROVIDER");
+    const sectionId = await ensureOwnSection(request);
     const me = await request.get("/api/provider/me", withAuth(request));
     const providerId = (await me.json()).data.id as string;
-    const sectionId = await ensureOwnSection(request);
     const name = `Papaya QA ${f10Suffix()}`;
     const created = await createLocalProduct(request, { name, sectionId, price: 38.5 });
     expect(created.status()).toBe(201);
@@ -126,9 +126,9 @@ test.describe("API LOCAL PRODUCTS F10 — TC-CAT", () => {
 
   test("TC-CAT-021: local inhabilitado → 409 POS y orders", async ({ request }) => {
     await loginAs(request, "PROVIDER");
+    const sectionId = await ensureOwnSection(request);
     const me = await request.get("/api/provider/me", withAuth(request));
     const providerId = (await me.json()).data.id as string;
-    const sectionId = await ensureOwnSection(request);
     const created = await createLocalProduct(request, {
       name: `Inactivo ${f10Suffix()}`,
       sectionId,

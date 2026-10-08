@@ -24,7 +24,7 @@ export class DashboardPage {
   }
 
   chartTableSummary(): Locator {
-    return this.page.getByText("Ver datos en tabla");
+    return this.page.getByText("Ver datos en tabla").first();
   }
 
   reportsTab(): Locator {

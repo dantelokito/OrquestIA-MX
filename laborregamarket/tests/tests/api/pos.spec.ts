@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { loginAs } from "../../fixtures/auth";
 import {
   buildPosSalePayload,
@@ -219,7 +219,7 @@ test.describe("API POS F5 — TC-CAT 409", () => {
       });
       expect(response.status()).toBe(409);
       const body = await response.json();
-      expect(body.error).toMatch(/producto no disponible/i);
+      expect(body.error).toMatch(/no está disponible|no disponible/i);
     } finally {
       await restoreProduct(request, target);
     }

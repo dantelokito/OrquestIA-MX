@@ -1,5 +1,14 @@
-import { test, expect } from "@playwright/test";
-import { credentials, uniqueEmail, assertResponseTime } from "../../fixtures/auth";
+import { test, expect } from "../../fixtures/suite";
+import {
+  credentials,
+  uniqueEmail,
+  assertResponseTime,
+  legalVersions,
+  forwardedFor,
+  loginAs,
+  withAuth,
+  authHeaders,
+} from "../../fixtures/auth";
 
 test.describe("API AUTH — TC-AUTH", () => {
   test("TC-AUTH-001: login CLIENT exitoso con envelope y cookie", async ({ request }) => {
@@ -59,13 +68,17 @@ test.describe("API AUTH — TC-AUTH", () => {
 
   test("TC-AUTH-008: registro CLIENT exitoso 201", async ({ request }) => {
     const email = uniqueEmail("client");
+    const versions = await legalVersions(request);
     const response = await request.post("/api/auth/register", {
       data: {
         name: "QA Test Client",
         email,
         password: "Test1234!",
         role: "CLIENT",
+        acceptLegal: true,
+        ...versions,
       },
+      headers: forwardedFor(),
     });
     expect(response.status()).toBe(201);
     const body = await response.json();
@@ -75,13 +88,17 @@ test.describe("API AUTH — TC-AUTH", () => {
 
   test("TC-AUTH-009: registro PROVIDER exitoso 201", async ({ request }) => {
     const email = uniqueEmail("provider");
+    const versions = await legalVersions(request);
     const response = await request.post("/api/auth/register", {
       data: {
         name: "QA Test Provider",
         email,
         password: "Test1234!",
         role: "PROVIDER",
+        acceptLegal: true,
+        ...versions,
       },
+      headers: forwardedFor(),
     });
     expect(response.status()).toBe(201);
     const body = await response.json();
@@ -89,13 +106,17 @@ test.describe("API AUTH — TC-AUTH", () => {
   });
 
   test("TC-AUTH-010: email duplicado retorna 409", async ({ request }) => {
+    const versions = await legalVersions(request);
     const response = await request.post("/api/auth/register", {
       data: {
         name: "Duplicado",
         email: credentials.client.email,
         password: "Test1234!",
         role: "CLIENT",
+        acceptLegal: true,
+        ...versions,
       },
+      headers: forwardedFor(),
     });
     expect(response.status()).toBe(409);
     const body = await response.json();
@@ -103,13 +124,17 @@ test.describe("API AUTH — TC-AUTH", () => {
   });
 
   test("TC-AUTH-011: registro password corto retorna 400", async ({ request }) => {
+    const versions = await legalVersions(request);
     const response = await request.post("/api/auth/register", {
       data: {
         name: "QA Short",
         email: uniqueEmail("short"),
         password: "Test12!",
         role: "CLIENT",
+        acceptLegal: true,
+        ...versions,
       },
+      headers: forwardedFor(),
     });
     expect(response.status()).toBe(400);
   });
@@ -138,10 +163,9 @@ test.describe("API AUTH — TC-AUTH", () => {
   });
 
   test("HP-AUTH-09: login + session authenticated", async ({ request }) => {
-    const loginRes = await request.post("/api/auth/login", { data: credentials.client });
-    expect(loginRes.status()).toBe(200);
+    await loginAs(request, "CLIENT");
 
-    const sessionRes = await request.get("/api/auth/session");
+    const sessionRes = await request.get("/api/auth/session", withAuth(request));
     expect(sessionRes.status()).toBe(200);
     const session = await sessionRes.json();
     expect(session.data.authenticated).toBe(true);
@@ -149,12 +173,14 @@ test.describe("API AUTH — TC-AUTH", () => {
   });
 
   test("HP-AUTH-09b: cookies portables en segundo request context", async ({ playwright }) => {
-    const ctx1 = await playwright.request.newContext();
-    const loginRes = await ctx1.post("/api/auth/login", { data: credentials.client });
-    expect(loginRes.status()).toBe(200);
-    const state = await ctx1.storageState();
+    const baseURL = "http://127.0.0.1:8080";
+    const ctx1 = await playwright.request.newContext({ baseURL });
+    await loginAs(ctx1, "CLIENT");
 
-    const ctx2 = await playwright.request.newContext({ storageState: state });
+    const ctx2 = await playwright.request.newContext({
+      baseURL,
+      extraHTTPHeaders: authHeaders(ctx1),
+    });
     const meRes = await ctx2.get("/api/users/me");
     expect(meRes.status()).toBe(200);
     const me = await meRes.json();

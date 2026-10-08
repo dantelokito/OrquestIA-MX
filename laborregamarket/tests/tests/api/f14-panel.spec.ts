@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import {
   assertResponseTime,
   credentials,
@@ -8,7 +8,7 @@ import {
   registerUnverifiedProvider,
   withAuth,
 } from "../../fixtures/auth";
-import { createLocalProduct, ensureOwnSection, f10Suffix, monterreyYmd } from "../../fixtures/f10";
+import { createLocalProduct, createSection, ensureOwnSection, f10Suffix, monterreyYmd } from "../../fixtures/f10";
 import { buildPosSalePayload, randomIdempotencyKey } from "../../fixtures/orders";
 
 type Req = Parameters<typeof createLocalProduct>[0];
@@ -418,10 +418,7 @@ test.describe("API F14 — perfil, catálogo, inventario, reportes, RBAC", () =>
 
   test("TC-F14-026: DELETE sección con productos → 409 visible", async ({ request }) => {
     await loginAs(request, "PROVIDER");
-    const section = await request.post(
-      "/api/provider/sections",
-      withAuth(request, { data: { name: `Con SKU F14 ${f10Suffix()}` } })
-    );
+    const section = await createSection(request, `Con SKU F14 ${f10Suffix()}`);
     expect(section.status(), await section.text()).toBe(201);
     const sectionId = (await section.json()).data.id as string;
     const local = await createLocalProduct(request, {

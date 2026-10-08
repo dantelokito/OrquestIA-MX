@@ -1,8 +1,14 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { LoginPage } from "./pages/LoginPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { PosPage } from "./pages/PosPage";
-import { credentials } from "../../fixtures/auth";
+import {
+  credentials,
+  forwardedFor,
+  legalVersions,
+  rememberSessionCookie,
+  withAuth,
+} from "../../fixtures/auth";
 
 test.describe("E2E DASH — HP-DASH / EC-06", () => {
   test("HP-DASH-01: dashboard con KPIs tras venta", async ({ page }) => {
@@ -28,23 +34,35 @@ test.describe("E2E DASH — HP-DASH / EC-06", () => {
 
   test("EC-06: dashboard sin ventas muestra empty (nuevo proveedor)", async ({ page, request }) => {
     const email = `provider-dash-${Date.now()}@test.laborrega.mx`;
-    await request.post("/api/auth/register", {
+    const versions = await legalVersions(request);
+    const register = await request.post("/api/auth/register", {
       data: {
         name: "Provider Dash QA",
         email,
         password: "Test1234!",
         role: "PROVIDER",
+        acceptLegal: true,
+        ...versions,
       },
+      headers: forwardedFor(),
     });
-    await request.post("/api/providers", {
-      data: {
-        businessName: "Frutería Dash QA",
-        address: "Calle Test 1",
-        city: "Monterrey",
-        latitude: 25.67,
-        longitude: -100.31,
-      },
-    });
+    rememberSessionCookie(request, register);
+    await request.post(
+      "/api/providers",
+      withAuth(request, {
+        data: {
+          businessName: "Frutería Dash QA",
+          address: "Calle Test 1",
+          city: "Monterrey",
+          latitude: 25.67,
+          longitude: -100.31,
+          acceptTerms: true,
+          termsVersion: versions.termsVersion,
+          whatsappOrderOptIn: false,
+        },
+        headers: forwardedFor(),
+      })
+    );
 
     const loginPage = new LoginPage(page);
     await loginPage.goto();

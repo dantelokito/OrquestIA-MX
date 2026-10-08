@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { loginAs, withAuth } from "../../fixtures/auth";
 import {
   createLocalProduct,
@@ -38,7 +38,10 @@ test.describe("API ADMIN PRODUCTS F10 — TC-ADM / TC-SEC", () => {
 
   test("TC-ADM-022 / TC-SEC-002: GET listado solo GLOBAL", async ({ request }) => {
     await loginAs(request, "ADMIN");
-    const response = await request.get("/api/admin/products?page=1&limit=50", withAuth(request));
+    const response = await request.get(
+      "/api/admin/products?page=1&limit=50&scope=GLOBAL",
+      withAuth(request)
+    );
     expect(response.status()).toBe(200);
     const body = await response.json();
     expect(Array.isArray(body.data)).toBe(true);

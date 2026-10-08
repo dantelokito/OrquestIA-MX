@@ -1,15 +1,14 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { LoginPage } from "./pages/LoginPage";
 import { AdminPage } from "./pages/AdminPage";
 import { credentials } from "../../fixtures/auth";
 import { f10Suffix } from "../../fixtures/f10";
 
 test.describe("E2E ADMIN F10 — TC-ADM-030/031 / TC-SEC-009", () => {
-  test("TC-SEC-009: cuentas demo visibles en development", async ({ page }) => {
+  test("TC-SEC-009: npm start no lista cuentas demo", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
-    await expect(page.getByText(/cuentas demo/i)).toBeVisible({ timeout: 10_000 });
-    await expect(page.getByText(credentials.admin.email)).toBeVisible();
+    await expect(page.getByText(/cuentas demo/i)).toHaveCount(0);
   });
 
   test("TC-ADM-030: Catálogos CRUD global", async ({ page }) => {

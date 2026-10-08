@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { LoginPage } from "./pages/LoginPage";
 import { FruteriaPage } from "./pages/FruteriaPage";
 import { credentials, loginAs, withAuth } from "../../fixtures/auth";
@@ -7,12 +7,12 @@ import { createLocalProduct, createSection, f10Suffix } from "../../fixtures/f10
 test.describe("E2E FRUTERIA F10 — HP-CAT-03", () => {
   test("HP-CAT-03: detalle agrupa por heading de sección", async ({ page, request }) => {
     await loginAs(request, "PROVIDER");
-    const me = await request.get("/api/provider/me", withAuth(request));
-    const providerId = (await me.json()).data.id as string;
     const sectionName = `Grupo UI ${f10Suffix()}`;
     const section = await createSection(request, sectionName);
     expect(section.ok()).toBeTruthy();
     const sectionId = (await section.json()).data.id as string;
+    const me = await request.get("/api/provider/me", withAuth(request));
+    const providerId = (await me.json()).data.id as string;
     const productName = `Visible UI ${f10Suffix()}`;
     const created = await createLocalProduct(request, {
       name: productName,

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { loginAs, registerUnverifiedProvider } from "../../fixtures/auth";
 
 const SAMPLE_PLACE_ID = "ChIJN1t_tDeuEmsRUsoyG83frY4";

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { loginAs, registerClient, assertResponseTime, withAuth } from "../../fixtures/auth";
 import { addressPayload, CDMX_PIN, OUTSIDE_MEXICO_PIN } from "../../fixtures/geo";
 

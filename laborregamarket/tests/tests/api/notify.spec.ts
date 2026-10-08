@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { registerUnverifiedProvider, assertResponseTime } from "../../fixtures/auth";
 import { getSeedProviderProduct } from "../../fixtures/orders";
 

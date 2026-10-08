@@ -185,8 +185,45 @@ export class ExplorePage {
   }
 
   async goto(query?: string) {
-    const url = query ? `/explorar?q=${encodeURIComponent(query)}` : "/explorar";
-    await this.page.goto(url);
+    if (!query) {
+      await this.page.goto("/explorar");
+      return;
+    }
+    const center = await this.centerForQuery(query);
+    if (!center) {
+      await this.page.goto(`/explorar?q=${encodeURIComponent(query)}`);
+      return;
+    }
+    const params = new URLSearchParams({
+      q: query,
+      lat: String(center.lat),
+      lng: String(center.lng),
+      radiusKm: "10",
+    });
+    await this.page.goto(`/explorar?${params.toString()}`);
+  }
+
+  /** Centro que sí incluye la frutería. El pin guardado del cliente (10 km) puede dejarla fuera. */
+  private async centerForQuery(query: string): Promise<{ lat: number; lng: number } | null> {
+    const listed = await this.page.request.get(
+      `/api/providers?q=${encodeURIComponent(query)}&limit=20`
+    );
+    if (!listed.ok()) return null;
+    const body = await listed.json();
+    const rows = (body.data ?? []) as {
+      businessName?: string;
+      latitude?: number;
+      longitude?: number;
+    }[];
+    const named = rows.find(
+      (row) =>
+        row.latitude != null &&
+        row.longitude != null &&
+        new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(row.businessName ?? "")
+    );
+    const match = named ?? rows.find((row) => row.latitude != null && row.longitude != null);
+    if (match?.latitude == null || match.longitude == null) return null;
+    return { lat: match.latitude, lng: match.longitude };
   }
 
   async gotoGeo(lat: number, lng: number, radiusKm = 10) {
@@ -220,12 +257,41 @@ export class ExplorePage {
     return this.useMyLocationButton.evaluate((el) => Boolean(el.closest(".leaflet-container")));
   }
 
+  async isDesktopExplore(): Promise<boolean> {
+    const width = this.page.viewportSize()?.width ?? 1280;
+    return width >= 1024;
+  }
+
+  desktopFilterChip(name: "Mayoreo" | "A domicilio" | "Verificado"): Locator {
+    return this.page.getByRole("button", { name, exact: true }).filter({ visible: true });
+  }
+
+  async expectDesktopFiltersVisible() {
+    await expect(this.desktopFilterChip("Mayoreo")).toBeVisible();
+    await expect(this.desktopFilterChip("A domicilio")).toBeVisible();
+    await expect(this.desktopFilterChip("Verificado")).toBeVisible();
+  }
+
   async openHeaderSearch() {
+    if (await this.isDesktopExplore()) {
+      await this.page.getByRole("combobox", { name: /buscar fruterías/i }).waitFor({
+        state: "visible",
+        timeout: 10_000,
+      });
+      return;
+    }
     await this.searchOpenButton.click();
     await this.searchInput.waitFor({ state: "visible", timeout: 10_000 });
   }
 
   async searchFromHeader(query: string) {
+    if (await this.isDesktopExplore()) {
+      const input = this.page.getByRole("combobox", { name: /buscar fruterías/i });
+      await input.fill(query);
+      await input.press("Enter");
+      await this.waitForProvidersLoaded();
+      return;
+    }
     await this.openHeaderSearch();
     await this.searchInput.fill(query);
     await this.searchSubmit.click();

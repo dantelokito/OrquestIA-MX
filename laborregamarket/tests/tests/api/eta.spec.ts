@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { getSeedProviderProduct } from "../../fixtures/orders";
 import { MONTERREY_PIN } from "../../fixtures/geo";
 

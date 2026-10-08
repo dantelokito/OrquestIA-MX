@@ -1,5 +1,5 @@
 import type { APIRequestContext } from "@playwright/test";
-import { withAuth } from "./auth";
+import { registerUnverifiedProvider, withAuth } from "./auth";
 
 /** Unique suffix for F10 mutations (avoid 409 on slug/name). */
 export function f10Suffix(): string {
@@ -46,21 +46,41 @@ export async function listSections(request: APIRequestContext) {
   return request.get("/api/provider/sections", withAuth(request));
 }
 
-export async function createSection(request: APIRequestContext, name: string) {
+/** El Paraíso comparte un bucket en memoria (30/h). Las mutaciones de catálogo usan otra cuenta. */
+export async function avoidSeedBucket(request: APIRequestContext) {
+  const me = await request.get("/api/provider/me", withAuth(request));
+  if (!me.ok()) return;
+  const name = String(((await me.json()).data?.businessName as string | undefined) ?? "");
+  if (/para[ií]so/i.test(name)) {
+    await registerUnverifiedProvider(request, "aislado");
+  }
+}
+
+export async function createSection(
+  request: APIRequestContext,
+  name: string,
+  opts?: { pinSession?: boolean }
+) {
+  if (!opts?.pinSession) await avoidSeedBucket(request);
   return request.post(
     "/api/provider/sections",
     withAuth(request, { data: { name } })
   );
 }
 
-export async function ensureOwnSection(request: APIRequestContext, name?: string): Promise<string> {
+export async function ensureOwnSection(
+  request: APIRequestContext,
+  name?: string,
+  opts?: { pinSession?: boolean }
+): Promise<string> {
+  if (!opts?.pinSession) await avoidSeedBucket(request);
   const listed = await listSections(request);
   if (listed.ok()) {
     const body = await listed.json();
     const first = (body.data as { id: string }[] | undefined)?.[0];
     if (first?.id) return first.id;
   }
-  const created = await createSection(request, name ?? `QA F10 ${f10Suffix()}`);
+  const created = await createSection(request, name ?? `QA F10 ${f10Suffix()}`, { pinSession: true });
   if (!created.ok()) {
     throw new Error(`createSection failed: ${created.status()} ${await created.text()}`);
   }
@@ -69,6 +89,19 @@ export async function ensureOwnSection(request: APIRequestContext, name?: string
 }
 
 export async function createLocalProduct(
+  request: APIRequestContext,
+  input: {
+    name: string;
+    sectionId: string;
+    unit?: string;
+    price?: number;
+    isAvailable?: boolean;
+  }
+) {
+  return postLocalProduct(request, input);
+}
+
+function postLocalProduct(
   request: APIRequestContext,
   input: {
     name: string;

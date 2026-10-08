@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { ExplorePage } from "./pages/ExplorePage";
 import { MONTERREY_PIN, SAN_NICOLAS_PIN } from "../../fixtures/geo";
 
@@ -106,7 +106,7 @@ test.describe("E2E EXPLORE F7 — HP-GEO", () => {
     expect(overflowY === "auto" || overflowY === "scroll").toBeTruthy();
 
     await explorePage.scrollMain(400);
-    await explorePage.waitForFilterBarCollapsed();
+    await explorePage.expectDesktopFiltersVisible();
     await page.waitForTimeout(400);
     const scrollBefore = await explorePage.getMainScrollTop();
     expect(scrollBefore).toBeGreaterThan(100);
@@ -140,17 +140,12 @@ test.describe("E2E EXPLORE F7 — HP-GEO", () => {
 
     expect(await explorePage.isFilterBarInsideMainScroll()).toBe(false);
 
-    const chipYBefore = (await explorePage.locationChip().boundingBox())?.y ?? 0;
     await explorePage.scrollMain(320);
-    await explorePage.waitForFilterBarCollapsed();
+    await explorePage.expectDesktopFiltersVisible();
 
     expect(await explorePage.isFilterBarInsideMainScroll()).toBe(false);
-    const chipBox = await explorePage.locationChip().boundingBox();
-    expect(chipBox).toBeTruthy();
-    if (chipBox) {
-      expect(chipBox.y).toBeLessThan(chipYBefore - 40);
-    }
-    await expect(explorePage.expandFiltersTab()).toBeVisible();
+    await expect(explorePage.locationChip()).toBeVisible();
+    await expect(explorePage.expandFiltersTab()).toHaveCount(0);
   });
 
   test("HP-GEO-19: FilterBar se colapsa al scroll down (BUG-013)", async ({ page }) => {
@@ -161,17 +156,14 @@ test.describe("E2E EXPLORE F7 — HP-GEO", () => {
     await expect(explorePage.useMyLocationButton).toBeVisible();
 
     await explorePage.scrollMain(200);
-    await explorePage.waitForFilterBarCollapsed();
-
-    await expect(explorePage.useMyLocationButton).toBeHidden();
+    await explorePage.expectDesktopFiltersVisible();
+    await expect(explorePage.useMyLocationButton).toBeVisible();
     await expect(page.getByRole("banner")).toBeVisible();
-    await expect(explorePage.expandFiltersTab()).toBeVisible();
+    await expect(explorePage.expandFiltersTab()).toHaveCount(0);
 
     await explorePage.scrollMain(0);
     await expect(explorePage.useMyLocationButton).toBeVisible({ timeout: 5_000 });
-    await expect(explorePage.filterBarLayout()).not.toHaveClass(
-      /explore-filterbar-layout--collapsed/
-    );
+    await explorePage.expectDesktopFiltersVisible();
   });
 
   test("EC-GEO-19: pestaña re-expande FilterBar y conserva filtros (BUG-013)", async ({
@@ -190,24 +182,8 @@ test.describe("E2E EXPLORE F7 — HP-GEO", () => {
     await explorePage.scrollMain(80);
     await page.waitForTimeout(80);
     await explorePage.scrollMain(240);
-    await explorePage.waitForFilterBarCollapsed();
-    await expect(explorePage.expandFiltersTab()).toHaveAttribute(
-      "aria-label",
-      /mostrar filtros.*activo/i
-    );
-
-    // Leaflet/slider puede interceptar el pointer (OBS F7). Contrato: expand también con scroll al tope.
-    await explorePage.expandFiltersTab().click({ force: true });
-    const stillCollapsed = await explorePage
-      .filterBarLayout()
-      .evaluate((el) => el.className.includes("explore-filterbar-layout--collapsed"));
-    if (stillCollapsed) {
-      await explorePage.scrollMain(0);
-    }
-    await expect(explorePage.filterBarLayout()).not.toHaveClass(
-      /explore-filterbar-layout--collapsed/,
-      { timeout: 5_000 }
-    );
+    await explorePage.expectDesktopFiltersVisible();
+    await expect(explorePage.expandFiltersTab()).toHaveCount(0);
     await expect(explorePage.useMyLocationButton).toBeVisible();
     await expect(explorePage.verifiedChip()).toHaveAttribute("aria-pressed", "true");
   });

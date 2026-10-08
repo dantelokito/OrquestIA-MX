@@ -314,3 +314,15 @@ Validación cliente (espejo de la API, la API manda): correo, teléfono 10 dígi
 - `comun/design-tokens.md`: cabecera v0.15.0 + changelog F15; nueva sección `## 6j. Componentes Fase 15`; filas F15 en `## 7` y `## 8`; bloque `# Fase 15` en `## 9`.
 - `comun/information-architecture.md`: cabecera v0.15.0 + changelog F15; rutas públicas `/legal/*`; Perfil con bloque Avisos; `/admin` tab Legal; nueva subsección «Footer público» en `## 5`; jerarquía `/admin`; filas CTA en `## 7`.
 - Contrastes verificados (AA): slate-700/slate-50 9.9:1 · slate-600/blanco 7.6:1 · blanco/slate-900 17.9:1 · amber-900/amber-50 9.7:1 · red-600/blanco 4.8:1.
+
+## QG-correcciones
+
+Insumo: `fase-15/qa.md` (Ruteo C, 2 deltas de diseño, 0 bugs). El código no cambia. Destino: QA (aserciones de HP-POS-01 y de explorar en escritorio).
+
+### δ-diseño-1 · Ticket del POS (`TicketLine`)
+
+HP-POS-01 puede capturar `1.250` KG y la venta se guarda. En el ticket la cantidad se muestra con `formatQty`: sin ceros de relleno. Lo esperado es `1.25 KG`, no `1.250`. Un entero se ve sin decimal (`2 KG`).
+
+### δ-diseño-2 · Explorar, filtros en escritorio (`FilterBarF9` / `ExploreChromeF9`)
+
+En escritorio (`>=1024px`) los chips Mayoreo, A domicilio y Verificado ya están visibles en la barra. No hay control «mostrar filtros» ni «abrir búsqueda»; la aserción no los busca. En móvil se mantiene lo ya escrito en ExploreChromeF9 (`< md`: chips en la barra, wrap o segunda fila, `overflow-x-auto`, target ≥44px). No hay rediseño móvil.

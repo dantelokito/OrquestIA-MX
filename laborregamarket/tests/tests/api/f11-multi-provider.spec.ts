@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import {
   assertResponseTime,
   authHeaders,
@@ -9,6 +9,8 @@ import {
   rememberSessionCookie,
   uniqueEmail,
   withAuth,
+  legalVersions,
+  forwardedFor,
 } from "../../fixtures/auth";
 import { createLocalProduct, ensureOwnSection, f10Suffix } from "../../fixtures/f10";
 
@@ -111,7 +113,9 @@ test.describe("API F11 — sesión 1:N, aislamiento, reportes globales", () => {
     const actA = await request.post("/api/provider/active", withAuth(request, { data: { providerId: a.id } }));
     rememberSessionCookie(request, actA);
     const sku = `QA-F11-${f10Suffix()}`;
-    const sectionId = await ensureOwnSection(request, `Sec F11 ${f10Suffix()}`);
+    const sectionId = await ensureOwnSection(request, `Sec F11 ${f10Suffix()}`, {
+      pinSession: true,
+    });
     const created = await createLocalProduct(request, { name: sku, sectionId, price: 12.5 });
     expect(created.status()).toBe(201);
 
@@ -223,6 +227,7 @@ test.describe("API F11 — sesión 1:N, aislamiento, reportes globales", () => {
   test("TC-F11-011: alta N+1 POST /api/providers mismo user", async ({ request }) => {
     const first = await registerUnverifiedProvider(request, "f11onb");
     expect(first.providerId).toBeTruthy();
+    const versions = await legalVersions(request);
     const second = await request.post(
       "/api/providers",
       withAuth(request, {
@@ -232,7 +237,11 @@ test.describe("API F11 — sesión 1:N, aislamiento, reportes globales", () => {
           city: "Monterrey",
           latitude: 25.68,
           longitude: -100.32,
+          acceptTerms: true,
+          termsVersion: versions.termsVersion,
+          whatsappOrderOptIn: false,
         },
+        headers: forwardedFor(),
       })
     );
     expect(second.status()).toBe(201);

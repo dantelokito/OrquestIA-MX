@@ -1,5 +1,13 @@
-import { test, expect } from "@playwright/test";
-import { loginAs, uniqueEmail, assertResponseTime, rememberSessionCookie, withAuth } from "../../fixtures/auth";
+import { test, expect } from "../../fixtures/suite";
+import {
+  loginAs,
+  uniqueEmail,
+  assertResponseTime,
+  rememberSessionCookie,
+  withAuth,
+  legalVersions,
+  forwardedFor,
+} from "../../fixtures/auth";
 
 test.describe("API PROVIDERS — TC-PROV", () => {
   test("TC-PROV-001: listar proveedores con envelope paginado", async ({ request }) => {
@@ -96,8 +104,17 @@ test.describe("API PROVIDERS — TC-PROV", () => {
 
   test("TC-PROV-011: crear Provider onboarding paso 2", async ({ request }) => {
     const email = uniqueEmail("onboard");
+    const versions = await legalVersions(request);
     const register = await request.post("/api/auth/register", {
-      data: { name: "Onboard Test", email, password: "Test1234!", role: "PROVIDER" },
+      data: {
+        name: "Onboard Test",
+        email,
+        password: "Test1234!",
+        role: "PROVIDER",
+        acceptLegal: true,
+        ...versions,
+      },
+      headers: forwardedFor(),
     });
     rememberSessionCookie(request, register);
 
@@ -111,7 +128,11 @@ test.describe("API PROVIDERS — TC-PROV", () => {
           latitude: 25.6714,
           longitude: -100.3095,
           description: "Test onboarding",
+          acceptTerms: true,
+          termsVersion: versions.termsVersion,
+          whatsappOrderOptIn: false,
         },
+        headers: forwardedFor(),
       })
     );
     expect(response.status()).toBe(201);
@@ -133,8 +154,9 @@ test.describe("API PROVIDERS — TC-PROV", () => {
     expect(response.status()).toBe(401);
   });
 
-  test("TC-PROV-014: Provider duplicado retorna 409", async ({ request }) => {
+  test("TC-PROV-014: otra sucursal del mismo proveedor → 201", async ({ request }) => {
     await loginAs(request, "PROVIDER");
+    const versions = await legalVersions(request);
     const response = await request.post(
       "/api/providers",
       withAuth(request, {
@@ -144,9 +166,12 @@ test.describe("API PROVIDERS — TC-PROV", () => {
           city: "Monterrey",
           latitude: 25.67,
           longitude: -100.31,
+          acceptTerms: true,
+          termsVersion: versions.termsVersion,
         },
+        headers: forwardedFor(),
       })
     );
-    expect(response.status()).toBe(409);
+    expect(response.status()).toBe(201);
   });
 });

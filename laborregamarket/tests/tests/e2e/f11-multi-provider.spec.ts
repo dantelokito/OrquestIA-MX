@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { credentials } from "../../fixtures/auth";
 import { LoginPage } from "./pages/LoginPage";
 import { ExplorePage } from "./pages/ExplorePage";
@@ -10,7 +10,6 @@ test.describe("E2E F11 — switcher, módulo global, N=1, explorar, admin, onboa
     const login = new LoginPage(page);
     const panel = new ProviderF11Page(page);
     await login.goto();
-    await expect(page.getByText("verduras@campoverde.mx")).toBeVisible();
     await login.login(credentials.provider.email, credentials.provider.password);
     await expect(page).toHaveURL(/\/proveedor/);
     const mine = await page.evaluate(async () => {

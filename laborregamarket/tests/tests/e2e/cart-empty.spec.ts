@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 
 test.describe("E2E CART — EC-01", () => {
   test("EC-01: carrito vacío muestra empty + CTA explorar", async ({ page }) => {

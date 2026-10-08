@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { loginAs, registerUnverifiedProvider, withAuth } from "../../fixtures/auth";
 import { buildPosSalePayload, randomIdempotencyKey } from "../../fixtures/orders";
 import {

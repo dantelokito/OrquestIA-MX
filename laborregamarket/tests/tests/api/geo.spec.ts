@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { assertResponseTime } from "../../fixtures/auth";
 import { CDMX_PIN, MONTERREY_PIN, OUTSIDE_MEXICO_PIN } from "../../fixtures/geo";
 

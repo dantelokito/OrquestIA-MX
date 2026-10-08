@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { LoginPage } from "./pages/LoginPage";
 import { PosPage } from "./pages/PosPage";
 import { credentials } from "../../fixtures/auth";
@@ -31,7 +31,7 @@ test.describe("E2E POS — HP-POS / EC-04 / EC-05", () => {
     await posPage.cobrarButton().click();
     await expect(page.getByText(/nueva venta/i)).toBeVisible({ timeout: 15_000 });
     await expect(page.getByText(/venta rápida/i).first()).toBeVisible();
-    await expect(page.getByText(/1\.250/)).toBeVisible();
+    await expect(page.getByText(/1\.25\s+KG/)).toBeVisible();
   });
 
   test("EC-04: buscador sin resultados ofrece venta rápida", async ({ page }) => {

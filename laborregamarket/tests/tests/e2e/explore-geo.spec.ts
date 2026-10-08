@@ -1,4 +1,5 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
+import { freeAddressSlot } from "../../fixtures/auth";
 import { ExplorePage } from "./pages/ExplorePage";
 import { LoginPage } from "./pages/LoginPage";
 import { credentials } from "../../fixtures/auth";
@@ -41,6 +42,7 @@ test.describe("E2E EXPLORE GEO — HP-GEO", () => {
     await loginPage.goto();
     await loginPage.login(credentials.client.email, credentials.client.password);
     await expect(page).not.toHaveURL(/\/login/, { timeout: 15_000 });
+    await freeAddressSlot(page.request);
 
     const explorePage = new ExplorePage(page);
     await explorePage.gotoGeo(MONTERREY_PIN.lat, MONTERREY_PIN.lng, 10);

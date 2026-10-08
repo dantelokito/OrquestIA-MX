@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { LoginPage } from "./pages/LoginPage";
 import { AccountPage } from "./pages/AccountPage";
 import { FruteriaPage } from "./pages/FruteriaPage";
@@ -26,6 +26,6 @@ test.describe("E2E REVIEWS — HP-REV-01", () => {
 
     const fruteriaPage = new FruteriaPage(page);
     await fruteriaPage.goto(providerId);
-    await expect(page.getByText(/QA F4 reseña E2E/i)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText(/QA F4 reseña E2E/i).first()).toBeVisible({ timeout: 15_000 });
   });
 });

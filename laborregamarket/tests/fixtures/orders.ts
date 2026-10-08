@@ -1,4 +1,5 @@
 import type { APIRequestContext } from "@playwright/test";
+import { withAuth } from "./auth";
 
 export type UnitOfMeasure = "PZA" | "KG" | "LT";
 
@@ -81,14 +82,38 @@ export interface SeedProviderProduct {
   name: string;
 }
 
-/** Resolve first verified provider with an available product from public API */
-export async function getSeedProviderProduct(request: APIRequestContext): Promise<SeedProviderProduct> {
-  const listRes = await request.get("/api/providers?verified=true&limit=1");
+/**
+ * Sucursal activa de la sesión PROVIDER. Si la llamada es de cliente o anónima,
+ * la frutería de la sesión demo (Frutas El Paraíso), no el primer verificado público.
+ */
+async function resolveSessionProviderId(request: APIRequestContext): Promise<string | undefined> {
+  const me = await request.get("/api/provider/me", withAuth(request));
+  if (me.ok()) {
+    const business = await me.json();
+    const id = business.data?.id as string | undefined;
+    if (id) return id;
+  }
+
+  const listRes = await request.get(
+    `/api/providers?q=${encodeURIComponent("Paraíso")}&limit=20`
+  );
   if (!listRes.ok()) {
     throw new Error(`providers list failed: ${listRes.status()}`);
   }
   const list = await listRes.json();
-  const providerId = list.data[0]?.id;
+  const rows = (list.data ?? []) as { id: string; businessName: string }[];
+  const sessionBranch = rows.find(
+    (row) => /paraíso/i.test(row.businessName) && !/tecnol/i.test(row.businessName)
+  );
+  return (sessionBranch ?? rows[0])?.id;
+}
+
+/**
+ * Producto vendible del proveedor de la sesión (El Paraíso).
+ * El primer verificado público es Campo Verde: venderlo con la sesión demo responde 403.
+ */
+export async function getSeedProviderProduct(request: APIRequestContext): Promise<SeedProviderProduct> {
+  const providerId = await resolveSessionProviderId(request);
   if (!providerId) {
     throw new Error("No providers in seed data");
   }

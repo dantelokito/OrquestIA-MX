@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../fixtures/suite";
 import { loginAs, assertResponseTime } from "../../fixtures/auth";
 
 test.describe("API SESSION — TC-SESS", () => {
